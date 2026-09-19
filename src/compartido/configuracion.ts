@@ -3,7 +3,7 @@ export const sitio = {
   titulo: 'Radiock | Música local. Escenarios reales.',
   descripcion: 'Radiock impulsa bandas locales con música original creando eventos, escenarios y conexiones para llevar nuestra escena de aquí para el mundo.',
   // URL de la vista privada. Sustituir por el dominio oficial cuando esté disponible.
-  url: 'https://radiock-escena.silky-cove-2847.chatgpt.site',
+  url: 'https://radiock-escena.j3nny153000.chatgpt.site',
   correo: '',
   redes: {
     instagram: 'https://www.instagram.com/radiock_tj/',
