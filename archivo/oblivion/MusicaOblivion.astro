@@ -1,0 +1,117 @@
+---
+import CardHover from "@components/CardHover.astro";
+---
+
+<section id="musica" class="py-12 px-6">
+  <div class="bg-white py-6 sm:py-8 lg:py-12">
+    <div class="container mx-auto">
+      <h2 class="text-3xl font-bold mb-10">Música Original</h2>
+      <div class="swiper centered-slide-carousel swiper-container relative">
+        <div class="swiper-wrapper mb-16">
+          <CardHover
+            title="Fenix"
+            image_src="/canciones/fenix.png"
+            audio_src="/audios/fenix.mp3"
+          />
+          <CardHover
+            title="La Pena"
+            image_src="/canciones/lapena2.jpeg"
+            audio_src="/audios/Lapena.mp3"
+          />
+          <CardHover
+            title="Por fin"
+            image_src="/canciones/porfin2.jpg"
+            audio_src="/audios/Porfin.mp3"
+          />
+          <CardHover
+            title="Life"
+            image_src="/canciones/life.jpg"
+            audio_src="/audios/Life.mp3"
+          />
+          <CardHover
+            title="Circo"
+            image_src="/canciones/circo.png"
+            audio_src="/audios/Circo.mp3"
+          />
+          <CardHover
+            title="Carnita Asada"
+            image_src="/canciones/carnita_asada.jpg"
+            audio_src="/audios/Carnita_asada.mp3"
+          />
+          <CardHover
+            title="Sin Pulmones"
+            image_src="/canciones/vinil.png"
+            audio_src="/audios/Sinpulmones.mp3"
+          />
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </div>
+ 
+</section>
+<style>
+  .swiper-wrapper {
+    width: 100%;
+    height: max-content !important;
+    padding-bottom: 64px !important;
+    -webkit-transition-timing-function: linear !important;
+    transition-timing-function: linear !important;
+    position: relative;
+  }
+
+  .swipe-slide {
+    max-width: 100px !important;
+  }
+
+  .swiper-pagination {
+    .swiper-pagination-bullet {
+      background-color: #000 !important;
+    }
+
+    .swiper-pagination-bullet-active {
+      background-color: #4d4a4a !important;
+    }
+  }
+</style>
+<script>
+  var swiper = new Swiper(".centered-slide-carousel", {
+    centeredSlides: true,
+    paginationClickable: true,
+    loop: true,
+    spaceBetween: 0,
+    slideToClickedSlide: true,
+    pagination: {
+      el: ".centered-slide-carousel .swiper-pagination",
+      clickable: true,
+    },
+
+    effect: "coverflow",
+    coverflowEffect: {
+      rotate: 30,
+      slideShadows: false,
+    },
+    breakpoints: {
+      1920: {
+        slidesPerView: 7,
+        spaceBetween: 0,
+      },
+      1024: {
+        slidesPerView: 5,
+        spaceBetween: 0,
+      },
+      768: {
+        slidesPerView: 4,
+        spaceBetween: 0,
+      },
+      425: {
+        slidesPerView: 2,
+        spaceBetween: 0,
+      },
+      375: {
+        slidesPerView: 1,
+        spaceBetween: 0,
+      },
+    },
+  });
+</script>

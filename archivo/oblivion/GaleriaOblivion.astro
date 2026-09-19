@@ -1,0 +1,56 @@
+---
+import Card from "@components/Card.astro";
+import CardImage from "@components/CardImage.astro";
+---
+
+<section class="py-12 px-6" id="galeria">
+  <div class="bg-white py-6 sm:py-8 lg:py-12">
+    <div class="container mx-auto">
+      <h2 class="text-3xl font-bold mb-8">Galeria</h2>
+      <div class="mx-auto max-w-screen">
+        <div
+          class="grid gap-4
+          lg:grid-cols-2
+          xl:gap-8
+          md:grid-cols-2 md:gap-6
+          sm:grid-cols-1
+          sm:gap-y-4"
+        >
+          <!-- image - start -->
+          <CardImage
+            src="/galeria/barbuka.jpg"
+            title="Darbuka Cafe"
+            classnames="animate__animated left"
+          />
+          <Card
+            src="/galeria/omkara.jpg"
+            title="Om'kara Cafe"
+            classnames="animate__animated right"
+          />
+
+          <Card
+            src="/galeria/jalos/jalos2.jpg"
+            title="Jalos Bar"
+            classnames="animate__animated left"
+          />
+          <CardImage
+            src="/galeria/event-3.jpg"
+            title="Guerra Bandas"
+            classnames="animate__animated right"
+          />
+
+          <CardImage
+            src="/galeria/golosso/1.jpg"
+            title="Golosso Gastro Park"
+            classnames="animate__animated left"
+          />
+          <Card
+            src="/galeria/bar5-1.jpg"
+            title="El Club"
+            classnames="animate__animated right"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,29 @@
+---
+import { primerFest, fechaEvento } from './eventos';
+---
+<section class="section shell event-detail" id="inicio" aria-labelledby="event-title">
+  <a class="text-link" href="/#eventos">← Volver a eventos</a>
+  <p class="eyebrow" style="margin-top:40px">NUESTRO RECORRIDO / EVENTO ANTERIOR</p>
+  <h1 id="event-title">{primerFest.titulo}</h1>
+  <p class="lead">Seis propuestas originales. Un mismo escenario.</p>
+  <div class="event-detail-grid">
+    <img src={primerFest.cartel} width="1000" height="1545" alt="Cartel original de Radiock Fest Vol. 1 con sus seis bandas participantes" />
+    <div>
+      <span class="status">EVENTO FINALIZADO</span>
+      <h2>Música local.<br />Un encuentro real.</h2>
+      <p>Una fecha para encontrarnos, descubrir nuevas propuestas y abrir espacio a la música original.</p>
+      <dl>
+        <dt>FECHA</dt>
+        <dd>
+          <time datetime={primerFest.fecha}>{fechaEvento(primerFest.fecha)}</time> · {primerFest.hora} h</dd>
+        <dt>ESPACIO</dt>
+        <dd>{primerFest.venue}</dd>
+        <dt>CIUDAD</dt>
+        <dd>{primerFest.ciudad}</dd>
+      </dl>
+      <h2>El cartel</h2>
+      <ul>{primerFest.bandas.map((banda) => <li>{banda}</li>)}</ul>
+      <a class="button button-primary" href="/#convocatoria">Sé parte de lo que sigue ↗</a>
+    </div>
+  </div>
+</section>

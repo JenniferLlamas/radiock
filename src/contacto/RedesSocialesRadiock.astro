@@ -1,0 +1,12 @@
+---
+import { sitio } from '../compartido/configuracion';
+const nombres: Record<string, string> = { instagram: 'Instagram', facebook: 'Facebook', youtube: 'YouTube', tiktok: 'TikTok', twitch: 'Twitch' };
+---
+<ul class="social-links" aria-label="Redes de Radiock">
+  {Object.entries(sitio.redes).filter(([, url]) => Boolean(url)).map(([nombre, url]) =>
+  <li>
+    <a href={url} target="_blank" rel="noopener noreferrer" aria-label={nombres[nombre] + ' (abre en otra pestaña)'}>{nombres[nombre]} <span aria-hidden="true">↗</span>
+    </a>
+  </li>
+  )}
+</ul>

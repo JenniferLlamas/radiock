@@ -1,0 +1,42 @@
+---
+import Card from "@components/Integrantes/card.astro";
+---
+
+<section id="integrantes" class="py-12 px-6">
+  <div class="container mx-auto">
+    <h2 class="text-3xl font-bold mb-8 ">Integrantes</h2>
+    <div class="flex-row justify-around justify-items-center ">
+      <div
+        class="grid gap-4 justify-around place-items-center 
+        lg:grid-cols-3 
+        md:grid-cols-3 md:gap-6
+        sm:grid-cols-1 sm:gap-6"
+      >
+        <Card
+          nombre="Leonardo Castillo "
+          posicion="bajista"
+          url="integrantes/LEO.jpg"
+        classnames="animate__animated  animate__delay-1s "
+          />
+        <Card
+          nombre="Rene M. Villar "
+          posicion="guitarra / voz"
+          url="integrantes/RENE.jpg"
+        classnames="animate__animated  animate__delay-1s"
+          />
+        <Card
+          nombre="Jennifer Llamas"
+          posicion="guitarra ritmica"
+          url="integrantes/JENY.jpg"
+        classnames="animate__animated  animate__delay-1s"
+          />
+      </div>
+    </div>
+  </div>
+  <div><img src="/galeria/Vector.svg"  class="svg-background"/></div>
+</section>
+<style>
+  .svg-background {
+    margin-top: 100px;
+  }
+</style>

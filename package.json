@@ -1,0 +1,27 @@
+{
+  "name": "radiock",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/tailwind": "^5.1.1",
+    "astro": "^4.15.8",
+    "tailwindcss": "^3.4.12"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.4",
+    "typescript": "5.6.2"
+  },
+  "overrides": {
+    "@astrojs/check": {
+      "@astrojs/language-server": "2.15.0"
+    }
+  }
+}

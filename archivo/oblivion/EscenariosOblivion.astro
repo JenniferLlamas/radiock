@@ -1,0 +1,93 @@
+---
+import Carouselitem from "@components/Carouselitem.astro";
+---
+
+<section class="bg-black py-12 px-6">
+  <div class="w-full relative">
+    <div class="container mx-auto">
+      <p class="text-xl text-white mb-12 text-center capitalize">
+        Lugares donde hemos compartido grandes momentos
+      </p>
+    </div>
+    <div class="swiper centered-slide-carousel-places swiper-container relative">
+      <div class="swiper-wrapper mb-16 " data-swiper-autoplay="2000">
+        <Carouselitem url="eventos/bar1.png" title="Dragon Rojo" />
+        <Carouselitem url="eventos/bar2.jpg" title="Jalos" />
+        <Carouselitem url="eventos/bar3.png" title="Dali" />
+        <Carouselitem url="eventos/omkara.jpg" title="Om'kara Cafe" />
+        <Carouselitem url="eventos/darbuka.jpg" title="Darbuka Cafe" />
+
+        <Carouselitem url="eventos/bar4.jpg" title="Black Box" />
+        <Carouselitem url="eventos/bar5.jpg" title="El Club" />
+        <Carouselitem url="eventos/bar6.jpg" title="Golosso Gastro" />
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+  <!--HTML CODE-->
+</section>
+<style>
+  .swiper-wrapper {
+    width: 100%;
+    height: max-content !important;
+    padding-bottom: 64px !important;
+    -webkit-transition-timing-function: linear !important;
+    transition-timing-function: linear !important;
+    position: relative;
+  }
+
+  .swipe-slide {
+    max-width: 100px !important;
+  }
+
+  .swiper-pagination {
+    .swiper-pagination-bullet {
+      background-color: #fff !important;
+    }
+
+    .swiper-pagination-bullet-active {
+      background-color: #bdc0bc !important;
+    }
+  }
+</style>
+<script
+  is:inline
+  src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+<script >
+
+  new Swiper(".swiper");
+  var swiper2 = new Swiper(".centered-slide-carousel-places", {
+    centeredSlides: true,
+    paginationClickable: true,
+    loop: true,
+    autoplay:{
+      delay:500
+    },
+    speed: 1000,
+    spaceBetween: 10,
+    slideToClickedSlide: true,
+    pagination: {
+      el: ".centered-slide-carousel .swiper-pagination",
+      clickable: true,
+    },
+   
+    breakpoints: {
+      1920: {
+        slidesPerView: 6,
+        spaceBetween: 30,
+      },
+      1028: {
+        slidesPerView: 5,
+        spaceBetween: 10,
+      },
+      990: {
+        slidesPerView: 3,
+        spaceBetween: 0,
+      },
+      425:{
+        slidesPerView: 1,
+        spaceBetween: 0,
+      }
+    },
+  });
+</script>

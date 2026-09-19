@@ -1,0 +1,42 @@
+---
+import { proximosEventos, eventosAnteriores, fechaEvento } from './eventos';
+import { sitio } from '../compartido/configuracion';
+---
+<section class="section shell" id="eventos" aria-labelledby="events-title">
+  <div class="section-heading" data-reveal>
+    <div>
+      <p class="eyebrow">06 / NOS VEMOS FRENTE AL ESCENARIO</p>
+      <h2 id="events-title">Próximos eventos.</h2>
+    </div>
+    <a class="text-link" href="#eventos-anteriores">Nuestro recorrido ↓</a>
+  </div>
+  {proximosEventos.length ? <div class="event-grid">{proximosEventos.map((evento) => <article class="event-card">
+      <img src={evento.cartel} alt={'Cartel de ' + evento.titulo} width="600" height="800" loading="lazy" />
+      <time datetime={evento.fecha}>{fechaEvento(evento.fecha)}</time>
+      <h3>{evento.titulo}</h3>
+      <p>{evento.venue} / {evento.ciudad}</p>
+      <p>{evento.bandas.join(' · ')}</p>
+      <a class="button button-primary" href={evento.detalles}>Ver detalles ↗</a>
+    </article>)}</div> :
+  <div class="empty-event" data-reveal>
+    <div class="empty-date" aria-hidden="true">PRÓX.<span>ENCUENTRO</span>
+    </div>
+    <div>
+      <span class="status">EL SIGUIENTE ESCENARIO ESTÁ POR ANUNCIARSE</span>
+      <h3>La próxima fecha comienza a tomar forma.</h3>
+      <p>Aún no hay eventos anunciados. Sigue a Radiock para conocer el próximo cartel y descubrir quiénes se subirán al escenario.</p>
+    </div>
+    <a class="button button-outline" href={sitio.redes.instagram} target="_blank" rel="noopener noreferrer">Seguir en Instagram ↗</a>
+  </div>
+  }
+  <div id="eventos-anteriores">
+    <h3 class="past-heading">Eventos anteriores</h3>{eventosAnteriores.map((evento) => <article class="past-event">
+      <img src={evento.miniatura || evento.cartel} alt={'Cartel de ' + evento.titulo} width="600" height="255" loading="lazy" />
+      <div>
+        <p class="eyebrow">ARCHIVO / {fechaEvento(evento.fecha)}</p>
+        <h3>{evento.titulo}</h3>
+        <p>{evento.venue} · {evento.ciudad}</p>
+      </div>
+      <a class="text-link" href={evento.detalles}>Ver el evento ↗</a>
+    </article>)}</div>
+</section>

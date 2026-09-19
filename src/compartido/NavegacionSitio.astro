@@ -1,0 +1,51 @@
+---
+import { navegacion } from './configuracion';
+---
+<header class="site-header">
+  <nav class="shell nav" aria-label="Navegación principal">
+    <a class="brand" href="/#inicio" aria-label="Radiock — inicio">
+      <img src="/marca/radiock.webp" width="48" height="48" alt="" />
+      <span>RADIOCK<span class="brand-dot">.</span>
+      </span>
+    </a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menú">
+      <span>Menú</span>
+      <span class="menu-lines" aria-hidden="true">
+      </span>
+    </button>
+    <div class="nav-links" id="menu-principal">
+      {navegacion.map(([label, id]) => <a href={'/#' + id}>{label}</a>)}
+      <a href="/#convocatoria" class="nav-cta">Hagamos ruido <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </nav>
+</header>
+<script>
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const button = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const menu = document.querySelector<HTMLElement>('#menu-principal');
+  function closeMenu() {
+    button?.setAttribute('aria-expanded', 'false');
+    button?.setAttribute('aria-label', 'Abrir menú');
+    header?.classList.remove('menu-open');
+  }
+  button?.addEventListener('click', () => {
+    const open = button.getAttribute('aria-expanded') !== 'true';
+    button.setAttribute('aria-expanded', String(open));
+    button.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    header?.classList.toggle('menu-open', open);
+  });
+  menu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && button?.getAttribute('aria-expanded') === 'true') {
+      closeMenu(); button.focus();
+    }
+  });
+  document.addEventListener('click', (event) => {
+    if (event.target instanceof Node && !header?.contains(event.target)) closeMenu();
+  });
+  window.matchMedia('(min-width: 1200px)').addEventListener('change', closeMenu);
+  const updateHeader = () => header?.classList.toggle('scrolled', window.scrollY > 24);
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  updateHeader();
+</script>

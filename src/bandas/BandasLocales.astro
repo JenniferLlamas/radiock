@@ -1,0 +1,16 @@
+---
+import TarjetaBanda from './TarjetaBanda.astro';
+import { bandas } from './bandas';
+---
+<section class="section artists-section" id="bandas" aria-labelledby="artists-title">
+  <div class="shell">
+    <div class="section-heading" data-reveal>
+      <div>
+        <p class="eyebrow">07 / TALENTO CON IDENTIDAD</p>
+        <h2 id="artists-title">Bandas que han compartido<br />escenario con Radiock.</h2>
+      </div>
+      <p>Distintas voces. Una misma escena.<br />Conoce los proyectos del cartel de nuestro primer Radiock Fest.</p>
+    </div>
+    <div class="artists">{bandas.map((banda) => <TarjetaBanda banda={banda} />)}</div>
+  </div>
+</section>

@@ -1,0 +1,56 @@
+<section
+  id="home"
+  class="relative bg-black flex-1 flex flex-col items-center justify-center h-screen md:w-screen"
+  style=" background: linear-gradient(to right, rgb(0, 0, 0), rgb(0, 0, 0))"
+>
+  <img
+    src="/galeria/oblivion.jpg"
+    alt="Oblivion logo black"
+    class="absolute inset-0 w-full object-cover object-center opacity-40 bg-black md:object-cover overflow-y-hidden h-screen"
+    style=" filter: grayscale(1);"
+  />
+  <h1
+    class="text-4xl font-bold uppercase mb-4 relative text-center z-1 text-gray-200 typing"
+  >
+    Oblivion
+  </h1>
+  <p class="text-lg mb-8 relative text-center z-1 text-gray-200 px-12">
+    Tenemos un sonido único, una vez que nos escuches tocar ¡no podrás parar!
+  </p>
+  <div class="flex gap-4 relative text-center z-1">
+    <a
+      href="#nosotros"
+      class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border bg-background bg-black border-black h-10 px-4 py-2 text-white hover:bg-white hover:text-black transition duration-200"
+    >
+      Conocer más
+    </a>
+  </div>
+</section>
+<style>
+  :root {
+    --animation-duration: 2s;
+    --text-length: 8;
+  }
+  .typing {
+    animation:
+      typing var(--animation-duration) steps(var(--text-length)),
+      blink 0.5s step-end infinite alternate;
+    border-right: 3px solid;
+    font: 200 clamp(2rem, 4vw, 8rem) monospace;
+    overflow: hidden;
+    white-space: nowrap;
+    width: calc(var(--text-length) * 1ch);
+  }
+
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      border-color: transparent;
+    }
+  }
+</style>

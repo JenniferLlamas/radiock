@@ -1,0 +1,14 @@
+---
+import { proceso } from './contenido';
+---
+<section class="section process-section" aria-labelledby="process-title">
+  <div class="shell">
+    <p class="eyebrow">05 / ASÍ SUCEDE</p>
+    <h2 id="process-title">Cómo funciona Radiock.</h2>
+    <ol class="process">{proceso.map(([titulo, texto], index) => <li data-reveal>
+        <span class="step-number">0{index + 1}</span>
+        <h3>{titulo}</h3>
+        <p>{texto}</p>
+      </li>)}</ol>
+  </div>
+</section>
