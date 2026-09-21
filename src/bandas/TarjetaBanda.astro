@@ -10,7 +10,6 @@ const { banda } = Astro.props;
   <div class="artist-copy">
     <h3>{banda.nombre}</h3>
     {(banda.ciudad || banda.genero) && <p class="artist-meta">{[banda.ciudad, banda.genero].filter(Boolean).join(' / ')}</p>}
-    <p class="artist-edition">RADIOCK FEST VOL. 1</p>
     {banda.redes.length > 0 && <div class="artist-links">{banda.redes.map((red) => <a href={red.url} target="_blank" rel="noopener noreferrer" aria-label={red.nombre + ' de ' + banda.nombre + ' (abre en otra pestaña)'}>{red.nombre} ↗</a>)}</div>}
   </div>
 </article>

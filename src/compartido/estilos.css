@@ -679,13 +679,15 @@ p {
   gap:22px;
   overflow-x:auto;
   scroll-snap-type:x mandatory;
-  scrollbar-width:thin;
-  scrollbar-color:var(--muted) var(--panel);
+  scrollbar-width:none;
   padding-block:8px 22px
 }
 .artists>.artist {
   min-width:0;
   scroll-snap-align:start
+}
+.artists::-webkit-scrollbar {
+  display:none
 }
 .carousel-controls {
   display:flex;

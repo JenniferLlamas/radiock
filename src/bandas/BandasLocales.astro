@@ -18,6 +18,7 @@ import { bandas } from './bandas';
       <div class="carousel-controls" hidden>
         <p class="carousel-status" aria-live="polite" aria-atomic="true"></p>
         <div class="carousel-buttons">
+          <button type="button" class="carousel-arrow" data-autoplay aria-label="Pausar avance automático" aria-controls="band-carousel-track">Ⅱ</button>
           <button type="button" class="carousel-arrow" data-direction="-1" aria-label="Ver bandas anteriores" aria-controls="band-carousel-track">←</button>
           <button type="button" class="carousel-arrow" data-direction="1" aria-label="Ver bandas siguientes" aria-controls="band-carousel-track">→</button>
         </div>
@@ -34,6 +35,27 @@ import { bandas } from './bandas';
     const next = controls.querySelector<HTMLButtonElement>('[data-direction="1"]');
     const status = controls.querySelector<HTMLElement>('.carousel-status');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const carousel = track.closest<HTMLElement>('.band-carousel')!;
+    const playback = controls.querySelector<HTMLButtonElement>('[data-autoplay]');
+    let paused = reducedMotion.matches;
+    let hovered = false;
+    let inView = false;
+    let autoplay: ReturnType<typeof setInterval> | undefined;
+    const syncAutoplay = () => {
+      clearInterval(autoplay);
+      const running = !paused && !hovered && !carousel.contains(document.activeElement)
+        && !document.hidden && inView && track.scrollWidth > track.clientWidth + 2;
+      status?.setAttribute('aria-live', running ? 'off' : 'polite');
+      if (playback) {
+        playback.textContent = paused ? '▶' : 'Ⅱ';
+        playback.setAttribute('aria-label', paused ? 'Iniciar avance automático' : 'Pausar avance automático');
+      }
+      if (running) autoplay = setInterval(() => {
+        if (track.scrollLeft >= track.scrollWidth - track.clientWidth - 2) {
+          track.scrollTo({ left: 0, behavior: reducedMotion.matches ? 'instant' : 'smooth' });
+        } else move(1);
+      }, 4000);
+    };
     const update = () => {
       const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
       if (previous) previous.disabled = track.scrollLeft <= 2;
@@ -52,8 +74,19 @@ import { bandas } from './bandas';
       const step = cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : track.clientWidth;
       track.scrollBy({ left: direction * step, behavior: reducedMotion.matches ? 'instant' : 'smooth' });
     };
-    previous?.addEventListener('click', () => move(-1));
-    next?.addEventListener('click', () => move(1));
+    previous?.addEventListener('click', () => { move(-1); syncAutoplay(); });
+    next?.addEventListener('click', () => { move(1); syncAutoplay(); });
+    playback?.addEventListener('click', () => { paused = !paused; syncAutoplay(); });
+    carousel.addEventListener('mouseenter', () => { hovered = true; syncAutoplay(); });
+    carousel.addEventListener('mouseleave', () => { hovered = false; syncAutoplay(); });
+    carousel.addEventListener('focusin', syncAutoplay);
+    carousel.addEventListener('focusout', () => setTimeout(syncAutoplay, 0));
+    document.addEventListener('visibilitychange', syncAutoplay);
+    reducedMotion.addEventListener('change', () => { paused = reducedMotion.matches; syncAutoplay(); });
+    new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      syncAutoplay();
+    }, { threshold: 0.25 }).observe(carousel);
     track.addEventListener('keydown', (event) => {
       if (event.target !== track) return;
       if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
@@ -66,7 +99,7 @@ import { bandas } from './bandas';
       clearTimeout(timer);
       timer = setTimeout(update, 120);
     }, { passive: true });
-    new ResizeObserver(update).observe(track);
+    new ResizeObserver(() => { update(); syncAutoplay(); }).observe(track);
     controls.hidden = false;
     update();
   }
