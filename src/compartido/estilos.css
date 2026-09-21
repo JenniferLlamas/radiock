@@ -676,7 +676,7 @@ p {
   gap:22px
 }
 .artist {
-  border:1px solid #b71c1c80;
+  border:1px solid var(--line);
   border-radius:12px;
   overflow:hidden;
   background:var(--panel);
@@ -684,14 +684,14 @@ p {
   transition:border-color .2s,transform .2s,box-shadow .2s
 }
 .artist:hover,.artist:focus-within {
-  border-color:var(--accent-text);
+  border-color:#716d6d;
   transform:translateY(-4px);
-  box-shadow:0 12px 30px #b71c1c30
+  box-shadow:0 12px 30px #0005
 }
 .artist-image {
   height:190px;
   background:#f4f2ee;
-  border-bottom:4px solid var(--accent);
+  border-bottom:1px solid var(--line);
   padding:30px;
   display:flex;
   align-items:center;
