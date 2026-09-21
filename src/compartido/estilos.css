@@ -679,7 +679,7 @@ p {
   border:1px solid #b71c1c80;
   border-radius:12px;
   overflow:hidden;
-  background:linear-gradient(135deg,#641818,#301616);
+  background:var(--panel);
   box-shadow:0 6px 22px #0003;
   transition:border-color .2s,transform .2s,box-shadow .2s
 }
@@ -690,7 +690,7 @@ p {
 }
 .artist-image {
   height:190px;
-  background:radial-gradient(ellipse at 50% 35%,#fff7f4,#ffd4cc);
+  background:#f4f2ee;
   border-bottom:4px solid var(--accent);
   padding:30px;
   display:flex;
