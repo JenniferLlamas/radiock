@@ -4,7 +4,8 @@
   --ink:#f4f2ee;
   --muted:#b7b2b2;
   --line:#383434;
-  --accent:#ff5252;
+  --accent:#b71c1c;
+  --accent-text:#ef5350;
   --yellow:#e1ee9b;
   --mono:'JetBrains Mono',monospace;
   --sans:'Montserrat',Arial,sans-serif;
@@ -66,7 +67,7 @@ p {
 }
 ::selection {
   background:var(--accent);
-  color:#101011
+  color:#fff
 }
 [id] {
   scroll-margin-top:100px
@@ -86,7 +87,7 @@ p {
   margin-bottom:24px
 }
 .accent {
-  color:var(--accent)
+  color:var(--accent-text)
 }
 .lead {
   font-size:1.2rem;
@@ -116,10 +117,10 @@ p {
 }
 .button-primary {
   background:var(--accent);
-  color:#171010
+  color:#fff
 }
 .button-primary:hover {
-  background:#ff7575
+  background:#c62828
 }
 .button-outline {
   border-color:#796969;
@@ -134,8 +135,8 @@ p {
   color:white
 }
 .button-dark-outline {
-  border-color:#2c2020;
-  color:#1e1313
+  border-color:#ffffff99;
+  color:#fff
 }
 .button-dark-outline:hover {
   background:#ffffff26
@@ -191,7 +192,7 @@ p {
   object-fit:cover
 }
 .brand-dot {
-  color:var(--accent)
+  color:var(--accent-text)
 }
 .nav-links {
   display:flex;
@@ -204,14 +205,14 @@ p {
   padding-block:14px
 }
 .nav-links>a:hover {
-  color:var(--accent)
+  color:var(--accent-text)
 }
 .nav-links .nav-cta {
   border:1px solid var(--line);
   padding:10px 15px
 }
 .nav-cta span {
-  color:var(--accent);
+  color:var(--accent-text);
   padding-left:12px
 }
 .menu-toggle {
@@ -264,7 +265,7 @@ p {
   max-width:790px
 }
 .hero h1>span {
-  color:var(--accent)
+  color:var(--accent-text)
 }
 .hero-lead {
   font-size:1.05rem;
@@ -348,7 +349,7 @@ p {
   align-items:center;
   gap:20px;
   background:var(--accent);
-  color:#1f1212;
+  color:#fff;
   padding:19px 24px;
   font-size:.875rem;
   font-weight:800;
@@ -373,7 +374,7 @@ p {
 }
 .about blockquote strong {
   display:block;
-  color:var(--accent)
+  color:var(--accent-text)
 }
 .history {
   background:#1c1717
@@ -419,7 +420,7 @@ p {
   letter-spacing:-.05em
 }
 .history-quote span {
-  color:var(--accent)
+  color:var(--accent-text)
 }
 .section-heading {
   display:flex;
@@ -454,7 +455,7 @@ p {
 }
 .pillar-top>span:last-child {
   font-size:2.3rem;
-  color:var(--accent);
+  color:var(--accent-text);
   line-height:1
 }
 .pillar h3 {
@@ -463,11 +464,11 @@ p {
 }
 .roots {
   background:var(--accent);
-  color:#261313;
+  color:#fff;
   padding-block:85px
 }
 .roots .eyebrow,.roots p {
-  color:#301919
+  color:#ffe5e5
 }
 .roots h2 {
   font-size:clamp(2.7rem,6.8vw,6.3rem);
@@ -475,7 +476,7 @@ p {
   letter-spacing:-.065em
 }
 .roots h2>span {
-  color:#471717
+  color:#ffd0d0
 }
 .roots-bottom {
   margin-top:50px;
@@ -535,7 +536,7 @@ p {
 }
 .step-number {
   font:400 2.3rem var(--mono);
-  color:var(--accent);
+  color:var(--accent-text);
   display:block;
   border-bottom:1px solid #775252;
   padding-bottom:20px;
@@ -568,7 +569,7 @@ p {
   display:block
 }
 .band-ticket strong span {
-  color:var(--accent)
+  color:var(--accent-text)
 }
 .ticket-rule {
   border-top:1px dashed #8a5d5d;
@@ -602,7 +603,7 @@ p {
 }
 .empty-date {
   border-right:1px dashed #5f5050;
-  color:var(--accent);
+  color:var(--accent-text);
   font:400 2.7rem var(--mono);
   padding-block:15px
 }
@@ -761,10 +762,10 @@ p {
 .final-cta {
   background:var(--accent);
   padding:95px 0;
-  color:#231313
+  color:#fff
 }
 .final-cta .eyebrow {
-  color:#301919
+  color:#ffe5e5
 }
 .final-cta h2 {
   max-width:1060px;
@@ -772,10 +773,10 @@ p {
   line-height:1.12
 }
 .final-cta h2>span {
-  color:#471717
+  color:#ffd0d0
 }
 .final-cta p {
-  color:#301717;
+  color:#ffe5e5;
   font-size:1.2rem;
   margin-top:28px
 }
@@ -806,7 +807,7 @@ p {
   padding-block:5px
 }
 .social-links a:hover {
-  color:var(--accent)
+  color:var(--accent-text)
 }
 .registration {
   border:1px solid #765353;
@@ -936,7 +937,7 @@ p {
 }
 .event-detail dt {
   font:.875rem var(--mono);
-  color:var(--accent);
+  color:var(--accent-text);
   margin-top:22px
 }
 .event-detail dd {
