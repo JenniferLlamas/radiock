@@ -671,9 +671,55 @@ p {
   border-top:1px solid var(--line)
 }
 .artists {
+  position:relative;
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:22px
+  grid-auto-flow:column;
+  grid-auto-columns:calc((100% - 44px)/3);
+  grid-template-columns:none;
+  gap:22px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:thin;
+  scrollbar-color:var(--muted) var(--panel);
+  padding-block:8px 22px
+}
+.artists>.artist {
+  min-width:0;
+  scroll-snap-align:start
+}
+.carousel-controls {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  margin-top:18px
+}
+.carousel-controls[hidden] {
+  display:none
+}
+.carousel-status {
+  font:.875rem var(--mono)
+}
+.carousel-buttons {
+  display:flex;
+  gap:10px
+}
+.carousel-arrow {
+  width:48px;
+  height:48px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:var(--panel);
+  color:var(--ink);
+  font-size:1.4rem
+}
+.carousel-arrow:hover:not(:disabled) {
+  background:var(--accent);
+  color:#fff
+}
+.carousel-arrow:disabled {
+  opacity:.35;
+  cursor:default
 }
 .artist {
   border:1px solid var(--line);
@@ -1304,7 +1350,7 @@ p {
     grid-column:auto
   }
   .artists {
-    grid-template-columns:repeat(2,1fr);
+    grid-auto-columns:85%;
     gap:14px
   }
   .artist-image {
@@ -1380,7 +1426,7 @@ p {
   .hero h1 {
     font-size:2.45rem
   }
-  .artists,.pillars {
+  .pillars {
     grid-template-columns:1fr
   }
   .pillar:nth-child(n) {
