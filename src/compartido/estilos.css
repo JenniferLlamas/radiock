@@ -2,9 +2,9 @@
   --bg:#101011;
   --panel:#181819;
   --ink:#f4f2ee;
-  --muted:#b4b2b7;
-  --line:#363438;
-  --purple:#bb93ff;
+  --muted:#b7b2b2;
+  --line:#383434;
+  --accent:#ff5252;
   --yellow:#e1ee9b;
   --mono:'JetBrains Mono',monospace;
   --sans:'Montserrat',Arial,sans-serif;
@@ -65,7 +65,7 @@ p {
   outline-offset:6px
 }
 ::selection {
-  background:var(--purple);
+  background:var(--accent);
   color:#101011
 }
 [id] {
@@ -86,7 +86,7 @@ p {
   margin-bottom:24px
 }
 .accent {
-  color:var(--purple)
+  color:var(--accent)
 }
 .lead {
   font-size:1.2rem;
@@ -115,27 +115,27 @@ p {
   transform:translateY(-3px)
 }
 .button-primary {
-  background:var(--purple);
-  color:#141017
+  background:var(--accent);
+  color:#171010
 }
 .button-primary:hover {
-  background:#cbb0ff
+  background:#ff7575
 }
 .button-outline {
-  border-color:#716979;
-  background:#14111666;
+  border-color:#796969;
+  background:#16111166;
   color:var(--ink)
 }
 .button-outline:hover {
-  background:#302835
+  background:#352828
 }
 .button-dark {
   background:#101011;
   color:white
 }
 .button-dark-outline {
-  border-color:#26202c;
-  color:#17131e
+  border-color:#2c2020;
+  color:#1e1313
 }
 .button-dark-outline:hover {
   background:#ffffff26
@@ -191,7 +191,7 @@ p {
   object-fit:cover
 }
 .brand-dot {
-  color:var(--purple)
+  color:var(--accent)
 }
 .nav-links {
   display:flex;
@@ -204,14 +204,14 @@ p {
   padding-block:14px
 }
 .nav-links>a:hover {
-  color:var(--purple)
+  color:var(--accent)
 }
 .nav-links .nav-cta {
   border:1px solid var(--line);
   padding:10px 15px
 }
 .nav-cta span {
-  color:var(--purple);
+  color:var(--accent);
   padding-left:12px
 }
 .menu-toggle {
@@ -246,7 +246,7 @@ p {
   padding-bottom:95px
 }
 .hero .eyebrow {
-  color:#d0c9da;
+  color:#dac9c9;
   margin-bottom:26px
 }
 .live-dot {
@@ -254,7 +254,7 @@ p {
   width:7px;
   height:7px;
   border-radius:50%;
-  background:var(--purple);
+  background:var(--accent);
   margin-right:8px
 }
 .hero h1 {
@@ -264,11 +264,11 @@ p {
   max-width:790px
 }
 .hero h1>span {
-  color:var(--purple)
+  color:var(--accent)
 }
 .hero-lead {
   font-size:1.05rem;
-  color:#e4dfe9;
+  color:#e9dfdf;
   max-width:540px;
   line-height:1.65;
   margin-top:29px
@@ -276,7 +276,7 @@ p {
 .hero-description {
   font-size:1rem;
   max-width:520px;
-  color:#b9b4be;
+  color:#beb4b4;
   margin-top:12px
 }
 .hero .actions {
@@ -286,7 +286,7 @@ p {
   font-size:.875rem;
   display:inline-block;
   margin-top:20px;
-  color:#c7c0cf
+  color:#cfc0c0
 }
 .hero-collab:hover {
   color:white
@@ -306,8 +306,8 @@ p {
   right:8%;
   bottom:130px;
   width:190px;
-  border:1px solid #d7c4f5;
-  background:#1a132b99;
+  border:1px solid #f5c4c4;
+  background:#2b131399;
   backdrop-filter:blur(10px);
   padding:20px;
   transform:rotate(7deg)
@@ -347,8 +347,8 @@ p {
   justify-content:space-around;
   align-items:center;
   gap:20px;
-  background:var(--purple);
-  color:#17121f;
+  background:var(--accent);
+  color:#1f1212;
   padding:19px 24px;
   font-size:.875rem;
   font-weight:800;
@@ -364,19 +364,19 @@ p {
   gap:90px
 }
 .about blockquote {
-  border-left:2px solid var(--purple);
+  border-left:2px solid var(--accent);
   padding-left:25px;
   margin-top:32px;
   font-size:1.05rem;
   line-height:1.65;
-  color:#d8d4dd
+  color:#ddd4d4
 }
 .about blockquote strong {
   display:block;
-  color:var(--purple)
+  color:var(--accent)
 }
 .history {
-  background:#19171c
+  background:#1c1717
 }
 .history-grid {
   display:grid;
@@ -419,7 +419,7 @@ p {
   letter-spacing:-.05em
 }
 .history-quote span {
-  color:var(--purple)
+  color:var(--accent)
 }
 .section-heading {
   display:flex;
@@ -454,7 +454,7 @@ p {
 }
 .pillar-top>span:last-child {
   font-size:2.3rem;
-  color:var(--purple);
+  color:var(--accent);
   line-height:1
 }
 .pillar h3 {
@@ -462,12 +462,12 @@ p {
   margin-bottom:16px
 }
 .roots {
-  background:var(--purple);
-  color:#1b1326;
+  background:var(--accent);
+  color:#261313;
   padding-block:85px
 }
 .roots .eyebrow,.roots p {
-  color:#332242
+  color:#301919
 }
 .roots h2 {
   font-size:clamp(2.7rem,6.8vw,6.3rem);
@@ -475,7 +475,7 @@ p {
   letter-spacing:-.065em
 }
 .roots h2>span {
-  color:#49255e
+  color:#471717
 }
 .roots-bottom {
   margin-top:50px;
@@ -523,7 +523,7 @@ p {
   margin:4px 0
 }
 .process-section {
-  background:#1a181d
+  background:#1d1818
 }
 .process {
   list-style:none;
@@ -535,9 +535,9 @@ p {
 }
 .step-number {
   font:400 2.3rem var(--mono);
-  color:var(--purple);
+  color:var(--accent);
   display:block;
-  border-bottom:1px solid #655277;
+  border-bottom:1px solid #775252;
   padding-bottom:20px;
   margin-bottom:24px
 }
@@ -557,8 +557,8 @@ p {
 }
 .band-ticket {
   padding:32px;
-  background:#1d1826;
-  border:1px solid #644e85;
+  background:#261818;
+  border:1px solid #854e4e;
   transform:rotate(3deg)
 }
 .band-ticket strong {
@@ -568,10 +568,10 @@ p {
   display:block
 }
 .band-ticket strong span {
-  color:var(--purple)
+  color:var(--accent)
 }
 .ticket-rule {
-  border-top:1px dashed #715d8a;
+  border-top:1px dashed #8a5d5d;
   margin-block:25px
 }
 .band-ticket p {
@@ -601,8 +601,8 @@ p {
   padding:35px
 }
 .empty-date {
-  border-right:1px dashed #5a505f;
-  color:var(--purple);
+  border-right:1px dashed #5f5050;
+  color:var(--accent);
   font:400 2.7rem var(--mono);
   padding-block:15px
 }
@@ -631,7 +631,7 @@ p {
   gap:32px;
   align-items:center;
   padding:25px;
-  background:#1b181f
+  background:#1f1818
 }
 .past-event img {
   width:260px;
@@ -657,7 +657,7 @@ p {
   aspect-ratio:3/4;
   object-fit:contain;
   width:100%;
-  background:#17151b;
+  background:#1b1515;
   margin-bottom:24px
 }
 .event-card h3 {
@@ -676,11 +676,11 @@ p {
 }
 .artist {
   border:1px solid var(--line);
-  background:#161517;
+  background:#171515;
   transition:border-color .2s,transform .2s
 }
 .artist:hover {
-  border-color:#8c6cb8;
+  border-color:#b86c6c;
   transform:translateY(-4px)
 }
 .artist-image {
@@ -722,7 +722,7 @@ p {
 .archive-note {
   font:.75rem/1.7 var(--mono);
   margin-top:25px;
-  color:#aaa4b0
+  color:#b0a4a4
 }
 .community {
   padding-top:40px
@@ -759,12 +759,12 @@ p {
   color:var(--muted)
 }
 .final-cta {
-  background:var(--purple);
+  background:var(--accent);
   padding:95px 0;
-  color:#1a1323
+  color:#231313
 }
 .final-cta .eyebrow {
-  color:#332443
+  color:#301919
 }
 .final-cta h2 {
   max-width:1060px;
@@ -772,10 +772,10 @@ p {
   line-height:1.12
 }
 .final-cta h2>span {
-  color:#49255e
+  color:#471717
 }
 .final-cta p {
-  color:#30203f;
+  color:#301717;
   font-size:1.2rem;
   margin-top:28px
 }
@@ -806,10 +806,10 @@ p {
   padding-block:5px
 }
 .social-links a:hover {
-  color:var(--purple)
+  color:var(--accent)
 }
 .registration {
-  border:1px solid #665376;
+  border:1px solid #765353;
   padding:25px;
   scroll-margin-top:110px
 }
@@ -833,15 +833,15 @@ p {
 .field input,.field textarea {
   width:100%;
   margin-top:7px;
-  border:1px solid #59515f;
-  background:#1e1b23;
+  border:1px solid #5f5151;
+  background:#231b1b;
   padding:11px 12px;
   min-height:46px;
   color:white;
   border-radius:0
 }
 .field input::placeholder {
-  color:#a9a2b3
+  color:#b3a2a2
 }
 .field-wide {
   grid-column:1/-1
@@ -857,7 +857,7 @@ p {
 .message-preview {
   margin-top:20px;
   padding:20px;
-  border:1px dashed #80718f
+  border:1px dashed #8f7171
 }
 .message-preview[hidden] {
   display:none
@@ -866,8 +866,8 @@ p {
   margin-block:15px;
   width:100%;
   min-height:230px;
-  background:#17131d;
-  border:1px solid #62556f;
+  background:#1d1313;
+  border:1px solid #6f5555;
   color:white;
   padding:15px;
   font-size:.875rem;
@@ -884,7 +884,7 @@ p {
   gap:10px
 }
 .site-footer {
-  background:#151416;
+  background:#161414;
   border-top:1px solid var(--line)
 }
 .footer-top {
@@ -910,7 +910,7 @@ p {
   gap:20px;
   padding-block:22px;
   font:.75rem/1.7 var(--mono);
-  color:#aba6af
+  color:#afa6a6
 }
 .event-detail {
   padding-top:70px
@@ -936,7 +936,7 @@ p {
 }
 .event-detail dt {
   font:.875rem var(--mono);
-  color:var(--purple);
+  color:var(--accent);
   margin-top:22px
 }
 .event-detail dd {
@@ -996,9 +996,9 @@ p {
     top:100%;
     left:0;
     right:0;
-    background:#171419;
+    background:#191414;
     padding:24px 32px;
-    border-bottom:1px solid #645078;
+    border-bottom:1px solid #785050;
     max-height:calc(100dvh - 78px);
     overflow:auto
   }
@@ -1257,7 +1257,7 @@ p {
   }
   .empty-date {
     border:0;
-    border-bottom:1px dashed #5a505f;
+    border-bottom:1px dashed #5f5050;
     padding:0 0 20px;
     font-size:2rem
   }
