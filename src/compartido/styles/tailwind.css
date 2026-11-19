@@ -1,0 +1,14 @@
+/*
+ * Tailwind se carga a mano (applyBaseStyles: false) para meter cada parte en su capa.
+ * - preflight: el reset de Tailwind, la capa más baja.
+ * - components: shell, section y button (componentes.mjs) cuando se usan tal cual en el
+ *   marcado; van en `global`, junto a base.css.
+ * Las utilidades (p. ej. sr-only) quedan fuera de capa a propósito: deben ganar siempre.
+ */
+@layer preflight {
+  @tailwind base;
+}
+@layer global {
+  @tailwind components;
+}
+@tailwind utilities;

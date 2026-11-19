@@ -1,0 +1,14 @@
+---
+import type { CampoPresentacion } from '../domain/CampoPresentacion';
+interface Props { campo: CampoPresentacion }
+const { campo } = Astro.props;
+---
+<label class="field">{campo.etiqueta}{campo.obligatorio && ' *'}<input
+    name={campo.nombre}
+    type={campo.tipo}
+    autocomplete={campo.autocompletar}
+    required={campo.obligatorio}
+    maxlength={campo.maximo}
+    placeholder={campo.sugerencia}
+  />
+</label>

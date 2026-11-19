@@ -1,0 +1,21 @@
+---
+import '../styles/tarjeta-banda.css';
+import type { Banda } from "../domain/Banda";
+// La tarjeta solo pide los datos que muestra (segregación de interfaces).
+interface Props {
+  banda: Pick<Banda, "nombre" | "logo">;
+}
+const { banda } = Astro.props;
+---
+
+<article class="artist" data-reveal>
+  <div class="artist-image">
+    <img
+      src={banda.logo}
+      alt={"Logo de " + banda.nombre}
+      width="320"
+      height="190"
+      loading="lazy"
+    />
+  </div>
+</article>

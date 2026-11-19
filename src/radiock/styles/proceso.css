@@ -1,0 +1,57 @@
+/* 05 / Así sucede: pasos del proceso */
+@layer funcionalidades {
+  .process-section {
+    @apply section;
+    background:#1d1818
+  }
+  .process {
+    list-style:none;
+    padding:0;
+    margin:50px 0 0;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:30px
+  }
+  .step-number {
+    font:400 2.3rem var(--mono);
+    color:var(--accent-text);
+    display:block;
+    border-bottom:1px solid #775252;
+    padding-bottom:20px;
+    margin-bottom:24px
+  }
+  .process h3 {
+    font-size:1.15rem;
+    margin-bottom:13px
+  }
+  @media(max-width:1199px) {
+    .process {
+      gap:18px
+    }
+  }
+  @media(max-width:767px) {
+    .process {
+      grid-template-columns:1fr;
+      gap:0;
+      margin-top:30px
+    }
+    .process li {
+      display:grid;
+      grid-template-columns:55px 1fr;
+      column-gap:22px;
+      border-bottom:1px solid var(--line);
+      padding:24px 0
+    }
+    .step-number {
+      grid-row:span 2;
+      padding:0;
+      margin:0;
+      border:0;
+      font-size:1.8rem
+    }
+    .process h3 {
+      font-size:1.1rem;
+      margin-bottom:8px
+    }
+  }
+}

@@ -1,0 +1,59 @@
+/* De nuestra ciudad para el mundo */
+@layer funcionalidades {
+  .roots-inner {
+    @apply shell;
+  }
+  .roots {
+    background:var(--accent);
+    color:#fff;
+    padding-block:85px
+  }
+  .roots .eyebrow,.roots p {
+    color:#ffe5e5
+  }
+  .roots h2 {
+    font-size:clamp(2.7rem,6.8vw,6.3rem);
+    font-weight:900;
+    letter-spacing:-.065em
+  }
+  .roots h2>span {
+    color:#ffd0d0
+  }
+  .roots-bottom {
+    margin-top:50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:80px
+  }
+  .roots-mark {
+    font-size:4.5rem;
+    font-weight:900;
+    white-space:nowrap;
+    letter-spacing:-.08em
+  }
+  .roots-bottom>div {
+    max-width:620px
+  }
+  .roots-bottom .lead {
+    font-size:1.2rem;
+    font-weight:700
+  }
+  @media(max-width:767px) {
+    .roots {
+      padding-block:65px
+    }
+    .roots h2 {
+      font-size:clamp(2.4rem,8.5vw,4rem)
+    }
+    .roots-bottom {
+      align-items:flex-start;
+      gap:20px;
+      flex-direction:column;
+      margin-top:35px
+    }
+    .roots-mark {
+      font-size:2.8rem
+    }
+  }
+}

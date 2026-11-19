@@ -1,0 +1,13 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import { agendaEventos, PaginaEvento } from '@/eventos';
+
+export const getStaticPaths = (() =>
+  agendaEventos.todos().map((evento) => ({ params: { id: evento.id }, props: { evento } }))
+) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { evento } = Astro.props as Props;
+---
+
+<PaginaEvento evento={evento} />

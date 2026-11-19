@@ -1,0 +1,15 @@
+---
+import { formatearFecha } from '@/compartido';
+import { imagenArchivo, rutaEvento, type Evento } from '../domain/Evento';
+interface Props { evento: Evento }
+const { evento } = Astro.props;
+---
+<article class="past-event">
+  <img src={imagenArchivo(evento)} alt={'Cartel de ' + evento.titulo} width="600" height="255" loading="lazy" />
+  <div>
+    <p class="eyebrow">ARCHIVO / {formatearFecha(evento.fecha)}</p>
+    <h3>{evento.titulo}</h3>
+    <p>{evento.venue} · {evento.ciudad}</p>
+  </div>
+  <a class="text-link" href={rutaEvento(evento)}>Ver el evento ↗</a>
+</article>

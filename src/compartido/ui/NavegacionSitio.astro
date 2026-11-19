@@ -1,0 +1,29 @@
+---
+import '../styles/marca.css';
+import '../styles/navegacion.css';
+import { navegacion, llamadoNavegacion } from '../data/navegacion';
+import { rutaAncla } from '../helpers/rutas';
+---
+<header class="site-header" data-menu-principal>
+  <nav class="nav" aria-label="Navegación principal">
+    <a class="brand" href="/#inicio" aria-label="Radiock — inicio">
+      <img src="/marca/radiock.webp" width="48" height="48" alt="" />
+      <span>RADIOCK<span class="brand-dot">.</span>
+      </span>
+    </a>
+    <button class="menu-toggle" data-menu-boton aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menú">
+      <span>Menú</span>
+      <span class="menu-lines" aria-hidden="true">
+      </span>
+    </button>
+    <div class="nav-links" id="menu-principal" data-menu-enlaces>
+      {navegacion.map(({ etiqueta, ancla }) => <a href={rutaAncla(ancla)}>{etiqueta}</a>)}
+      <a href={rutaAncla(llamadoNavegacion.ancla)} class="nav-cta">{llamadoNavegacion.etiqueta} <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </nav>
+</header>
+<script>
+  import { useMenuPrincipal } from '../hooks';
+  useMenuPrincipal(document.querySelector<HTMLElement>('[data-menu-principal]'));
+</script>

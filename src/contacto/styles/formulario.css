@@ -1,0 +1,122 @@
+/* 08 / Contacto y formulario de presentación de bandas */
+@layer funcionalidades {
+  .contact-section {
+    @apply section shell;
+  }
+  .contact-grid {
+    display:grid;
+    grid-template-columns:.8fr 1.2fr;
+    gap:85px
+  }
+  .contact-grid h2 {
+    margin-bottom:24px
+  }
+  .contact-grid .social-links {
+    margin-top:28px
+  }
+  .registration {
+    border:1px solid #765353;
+    padding:25px;
+    scroll-margin-top:110px
+  }
+  .registration h3 {
+    font-size:1.3rem;
+    margin-bottom:14px
+  }
+  .registration>p {
+    margin-bottom:25px
+  }
+  .registration fieldset {
+    border:0;
+    padding:0;
+    margin:0;
+    min-width:0
+  }
+  .form-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px
+  }
+  .field {
+    display:block;
+    font-size:.875rem;
+    color:var(--ink)
+  }
+  .field input,.field textarea {
+    width:100%;
+    margin-top:7px;
+    border:1px solid #5f5151;
+    background:#231b1b;
+    padding:11px 12px;
+    min-height:46px;
+    color:white;
+    border-radius:0
+  }
+  .field input::placeholder {
+    color:#b3a2a2
+  }
+  .field-wide {
+    grid-column:1/-1
+  }
+  .registration button {
+    margin-top:22px
+  }
+  .registration button:disabled {
+    opacity:.5;
+    cursor:not-allowed
+  }
+  .registration .form-note {
+    font-size:.875rem;
+    margin-top:15px;
+    margin-bottom:0
+  }
+  .message-preview {
+    margin-top:20px;
+    padding:20px;
+    border:1px dashed #8f7171
+  }
+  .message-preview[hidden] {
+    display:none
+  }
+  .message-preview textarea {
+    margin-block:15px;
+    width:100%;
+    min-height:230px;
+    background:#1d1313;
+    border:1px solid #6f5555;
+    color:white;
+    padding:15px;
+    font-size:.875rem;
+    resize:vertical
+  }
+  .message-preview .actions {
+    gap:10px
+  }
+  .message-preview button {
+    margin:0
+  }
+  .message-preview :is(.button-primary,.button-outline) {
+    font-size:.875rem;
+    gap:10px
+  }
+  @media(max-width:1199px) {
+    .contact-grid {
+      gap:45px
+    }
+  }
+  @media(max-width:767px) {
+    .contact-grid {
+      grid-template-columns:1fr;
+      gap:35px
+    }
+    .registration {
+      padding:20px
+    }
+    .form-grid {
+      grid-template-columns:1fr
+    }
+    .field-wide {
+      grid-column:auto
+    }
+  }
+}

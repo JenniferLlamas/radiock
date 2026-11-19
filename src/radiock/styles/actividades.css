@@ -1,0 +1,40 @@
+/* 04 / Qué hacemos */
+@layer funcionalidades {
+  .activities {
+    @apply section shell;
+    display:grid;
+    grid-template-columns:.9fr 1.1fr;
+    gap:80px
+  }
+  .activities h2 {
+    margin-bottom:28px
+  }
+  .activity-list article {
+    display:grid;
+    grid-template-columns:30px 1fr 20px;
+    gap:18px;
+    padding:25px 0;
+    border-top:1px solid var(--line)
+  }
+  .activity-list article:last-child {
+    border-bottom:1px solid var(--line)
+  }
+  .activity-list h3 {
+    font-size:1.2rem;
+    margin-bottom:10px
+  }
+  .activity-list .eyebrow {
+    margin:4px 0
+  }
+  @media(max-width:1199px) {
+    .activities {
+      gap:45px
+    }
+  }
+  @media(max-width:767px) {
+    .activities {
+      grid-template-columns:1fr;
+      gap:35px
+    }
+  }
+}

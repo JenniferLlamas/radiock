@@ -1,0 +1,34 @@
+---
+import '../styles/detalle-evento.css';
+import type { EstadoEvento, Evento } from '../domain/Evento';
+import { textosEvento } from '../helpers/textosEvento';
+interface Props { evento: Evento; estado: EstadoEvento }
+const { evento, estado } = Astro.props;
+const textos = textosEvento(evento, estado);
+---
+<section class="event-detail" id="inicio" aria-labelledby="event-title">
+  <a class="text-link" href="/#eventos">← Volver a eventos</a>
+  <p class="eyebrow" style="margin-top:40px">{textos.antetitulo}</p>
+  <h1 id="event-title">{evento.titulo}</h1>
+  <p class="lead">{textos.lema}</p>
+  <div class="event-detail-grid">
+    <img src={evento.cartel} width="1000" height="1545" alt={textos.altCartel} />
+    <div>
+      <span class="status">{textos.estado}</span>
+      <h2>Música local.<br />Un encuentro real.</h2>
+      <p>Una fecha para encontrarnos, descubrir nuevas propuestas y abrir espacio a la música original.</p>
+      <dl>
+        <dt>FECHA</dt>
+        <dd>
+          <time datetime={evento.fecha}>{textos.fecha}</time>{evento.hora && ` · ${evento.hora} h`}</dd>
+        <dt>ESPACIO</dt>
+        <dd>{evento.venue}</dd>
+        <dt>CIUDAD</dt>
+        <dd>{evento.ciudad}</dd>
+      </dl>
+      <h2>El cartel</h2>
+      <ul>{evento.bandas.map((banda) => <li>{banda}</li>)}</ul>
+      <a class="button-primary" href="/#convocatoria">Sé parte de lo que sigue ↗</a>
+    </div>
+  </div>
+</section>

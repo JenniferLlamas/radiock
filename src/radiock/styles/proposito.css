@@ -1,0 +1,78 @@
+/* 03 / Lo que nos mueve: pilares */
+@layer funcionalidades {
+  .purpose-section {
+    @apply section shell;
+  }
+  .pillars {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-block:1px solid var(--line)
+  }
+  .pillar {
+    padding:28px 28px 38px 0
+  }
+  .pillar+.pillar {
+    border-left:1px solid var(--line);
+    padding-left:28px
+  }
+  .pillar-top {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:38px
+  }
+  .pillar-top .eyebrow {
+    margin:0
+  }
+  .pillar-top>span:last-child {
+    font-size:2.3rem;
+    color:var(--accent-text);
+    line-height:1
+  }
+  .pillar h3 {
+    min-height:58px;
+    margin-bottom:16px
+  }
+  @media(max-width:1199px) {
+    .pillars {
+      grid-template-columns:repeat(2,1fr)
+    }
+    .pillar:nth-child(3) {
+      border-left:0;
+      padding-left:0
+    }
+    .pillar:nth-child(n+3) {
+      border-top:1px solid var(--line)
+    }
+    .pillar h3 {
+      min-height:0
+    }
+  }
+  @media(max-width:767px) {
+    .pillar {
+      padding:24px 18px 28px 0
+    }
+    .pillar+.pillar {
+      padding-left:18px
+    }
+    .pillar:nth-child(3) {
+      padding-left:0
+    }
+    .pillar h3 {
+      font-size:1.12rem
+    }
+    .pillar-top {
+      margin-bottom:25px
+    }
+  }
+  @media(max-width:359px) {
+    .pillars {
+      grid-template-columns:1fr
+    }
+    .pillar:nth-child(n) {
+      padding:24px 0;
+      border-left:0;
+      border-top:1px solid var(--line)
+    }
+  }
+}

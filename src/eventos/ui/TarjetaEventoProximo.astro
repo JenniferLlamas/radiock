@@ -1,0 +1,14 @@
+---
+import { formatearFecha } from '@/compartido';
+import { rutaEvento, type Evento } from '../domain/Evento';
+interface Props { evento: Evento }
+const { evento } = Astro.props;
+---
+<article class="event-card">
+  <img src={evento.cartel} alt={'Cartel de ' + evento.titulo} width="600" height="800" loading="lazy" />
+  <time datetime={evento.fecha}>{formatearFecha(evento.fecha)}</time>
+  <h3>{evento.titulo}</h3>
+  <p>{evento.venue} / {evento.ciudad}</p>
+  <p>{evento.bandas.join(' · ')}</p>
+  <a class="button-primary" href={rutaEvento(evento)}>Ver detalles ↗</a>
+</article>

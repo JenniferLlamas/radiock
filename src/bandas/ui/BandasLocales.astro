@@ -1,0 +1,34 @@
+---
+import '../styles/bandas-locales.css';
+import TarjetaBanda from './TarjetaBanda.astro';
+import { catalogoBandas } from '../services/catalogo';
+const bandas = catalogoBandas.todos();
+---
+<section class="artists-section" id="bandas" aria-labelledby="artists-title">
+  <div class="shell">
+    <div class="section-heading" data-reveal>
+      <div>
+        <p class="eyebrow">06 / TALENTO CON IDENTIDAD</p>
+        <h2 id="artists-title">Bandas que han compartido<br />escenario con Radiock.</h2>
+      </div>
+      <p>Distintas voces. Una misma escena.<br />Conoce los proyectos del cartel de nuestro primer Radiock Fest.</p>
+    </div>
+    <div class="band-carousel" data-carrusel role="region" aria-roledescription="carrusel" aria-label="Bandas participantes">
+      <div class="artists" id="band-carousel-track" data-carrusel-pista tabindex="0" aria-label="Tarjetas de bandas. Usa las flechas para recorrerlas.">
+        {bandas.map((banda) => <TarjetaBanda banda={banda} />)}
+      </div>
+      <div class="carousel-controls" data-carrusel-controles hidden>
+        <p class="carousel-status" data-carrusel-estado aria-live="polite" aria-atomic="true"></p>
+        <div class="carousel-buttons">
+          <button type="button" class="carousel-arrow" data-direccion="-1" aria-label="Ver bandas anteriores" aria-controls="band-carousel-track">←</button>
+          <button type="button" class="carousel-arrow" data-direccion="1" aria-label="Ver bandas siguientes" aria-controls="band-carousel-track">→</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  import { useCarrusel } from '../hooks/useCarrusel';
+  import { ETIQUETAS_CARRUSEL_BANDAS } from '../constants/carrusel';
+  useCarrusel(document.querySelector<HTMLElement>('#bandas [data-carrusel]'), ETIQUETAS_CARRUSEL_BANDAS);
+</script>

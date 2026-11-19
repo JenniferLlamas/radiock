@@ -1,0 +1,80 @@
+/* Tarjeta de banda */
+@layer funcionalidades {
+  .artist {
+    border:1px solid var(--line);
+    border-radius:12px;
+    overflow:hidden;
+    transition:border-color .2s,transform .2s,box-shadow .2s
+  }
+  .artist:hover,.artist:focus-within {
+    border-color:#716d6d;
+    transform:translateY(-4px);
+  }
+  .artist-image {
+    height:190px;
+    padding:30px;
+    display:flex;
+    align-items:center;
+    justify-content:center
+  }
+  .artist-image img {
+    width:100%;
+    height:100%;
+    object-fit:contain
+  }
+  .artist-copy {
+    padding:22px
+  }
+  .artist-copy h3 {
+    font-size:1.18rem;
+    margin-bottom:9px;
+    text-align:center;
+  }
+  .artist-meta {
+    font:.75rem/1.7 var(--mono);
+    color:var(--muted)
+  }
+  .artist-edition {
+    display:inline-block;
+    margin-top:6px;
+    padding:5px 9px;
+    border:1px solid #e1ee9b55;
+    border-radius:4px;
+    background:#e1ee9b12;
+    color:var(--yellow);
+    font:500 .75rem/1.7 var(--mono);
+    letter-spacing:.035em
+  }
+  .artist-links {
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    font-size:.875rem;
+    margin-top:16px
+  }
+  .artist-links a {
+    color:#ffe5e5;
+    text-decoration:underline;
+    text-underline-offset:5px
+  }
+  .artist-links a:hover {
+    color:var(--yellow)
+  }
+  @media(max-width:767px) {
+    .artist-image {
+      height:140px;
+      padding:20px
+    }
+    .artist-copy {
+      padding:17px 13px
+    }
+    .artist-copy h3 {
+      font-size:1rem
+    }
+  }
+  @media(prefers-reduced-motion:reduce) {
+    .artist:hover,.artist:focus-within {
+      transform:none
+    }
+  }
+}

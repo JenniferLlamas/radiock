@@ -1,0 +1,19 @@
+---
+import '../styles/redes-sociales.css';
+import type { EnlaceExterno } from '../domain/EnlaceExterno';
+import { redesRadiock } from '../helpers/redesSociales';
+interface Props {
+  /** Por defecto, las redes configuradas de Radiock. */
+  redes?: readonly EnlaceExterno[];
+  etiqueta?: string;
+}
+const { redes = redesRadiock(), etiqueta = 'Redes de Radiock' } = Astro.props;
+---
+<ul class="social-links" aria-label={etiqueta}>
+  {redes.map((red) =>
+  <li>
+    <a href={red.url} target="_blank" rel="noopener noreferrer" aria-label={red.nombre + ' (abre en otra pestaña)'}>{red.nombre} <span aria-hidden="true">↗</span>
+    </a>
+  </li>
+  )}
+</ul>

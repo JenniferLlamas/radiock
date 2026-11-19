@@ -1,0 +1,73 @@
+/* 02 / Nuestra historia */
+@layer funcionalidades {
+  .history {
+    @apply section;
+    background:#1c1717
+  }
+  .history-grid {
+    @apply shell;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:65px
+  }
+  .history-image {
+    position:relative;
+    min-height:580px
+  }
+  .history-image img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter:grayscale(1);
+    position:absolute;
+    inset:0
+  }
+  .image-note {
+    position:absolute;
+    bottom:25px;
+    left:25px;
+    right:25px;
+    font:.75rem var(--mono);
+    letter-spacing:.07em;
+    color:#fff;
+    background:#101011cc;
+    padding:15px
+  }
+  .history-copy h2 {
+    margin-bottom:28px
+  }
+  .history-quote {
+    grid-column:1/-1;
+    border-top:1px solid var(--line);
+    padding-top:52px;
+    font-weight:800;
+    font-size:clamp(2rem,4.4vw,4rem);
+    line-height:1.18;
+    letter-spacing:-.05em
+  }
+  .history-quote span {
+    color:var(--accent-text)
+  }
+  @media(max-width:1199px) {
+    .history-grid {
+      gap:45px
+    }
+  }
+  @media(max-width:767px) {
+    .history-grid {
+      grid-template-columns:1fr;
+      gap:35px
+    }
+    .history-image {
+      min-height:320px;
+      order:1
+    }
+    .history-copy {
+      order:0
+    }
+    .history-quote {
+      order:2;
+      padding-top:30px
+    }
+  }
+}

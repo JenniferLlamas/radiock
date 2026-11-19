@@ -1,0 +1,24 @@
+---
+// La landing solo compone secciones: cada funcionalidad expone las suyas desde su API pública.
+import { EstructuraSitio } from '@/compartido/ui';
+import { QueEsRadiock, HistoriaRadiock, PropositoRadiock, RaicesRadiock, ActividadesRadiock } from '@/radiock';
+import { ParticipaRadiock, LlamadoFinal, FormularioContacto } from '@/contacto';
+import { EventosOrganizados } from '@/eventos';
+import { BandasLocales } from '@/bandas';
+import { ComunidadRadiock } from '@/comunidad';
+import PresentacionRadiock from './PresentacionRadiock.astro';
+---
+<EstructuraSitio>
+  <PresentacionRadiock />
+  <QueEsRadiock />
+  <HistoriaRadiock />
+  <PropositoRadiock />
+  <RaicesRadiock />
+  <ActividadesRadiock />
+  <ParticipaRadiock />
+  <EventosOrganizados />
+  <BandasLocales />
+  <ComunidadRadiock />
+  <LlamadoFinal />
+  <FormularioContacto />
+</EstructuraSitio>

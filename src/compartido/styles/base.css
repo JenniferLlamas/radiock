@@ -1,0 +1,213 @@
+/*
+ * Base global: tokens, reset, tipografía y utilidades que usa cualquier funcionalidad
+ * (.section-heading, .eyebrow, .lead, .button-*, .text-link, .status…).
+ * .shell, .section y .button son componentes de Tailwind (componentes.mjs) y se componen
+ * con `@apply`, por ejemplo `.button-primary { @apply button; }`.
+ *
+ * Capas (declaradas en EstructuraSitio): preflight < global < compartido < funcionalidades.
+ * Una regla de una funcionalidad siempre gana a esta base, sin importar el orden en que
+ * se empaquete el CSS ni la especificidad. Cada funcionalidad guarda sus estilos en su
+ * carpeta `styles/`, dentro de `@layer funcionalidades`, y los importa su componente.
+ */
+@layer global {
+  :root {
+    --bg:#101011;
+    --panel:#181819;
+    --ink:#f4f2ee;
+    --muted:#b7b2b2;
+    --line:#383434;
+    --accent:#b71c1c;
+    --accent-text:#b71c1c;
+    --yellow:#e1ee9b;
+    --mono:'JetBrains Mono',monospace;
+    --sans:'Montserrat',Arial,sans-serif;
+    color-scheme:dark
+  }
+  * {
+    box-sizing:border-box
+  }
+  html {
+    scroll-behavior:smooth;
+    scroll-padding-top:100px
+  }
+  body {
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font:400 16px/1.75 var(--sans);
+    overflow-wrap:break-word
+  }
+  a {
+    color:inherit;
+    text-decoration:none
+  }
+  button,input,textarea {
+    font:inherit
+  }
+  button {
+    cursor:pointer
+  }
+  img {
+    max-width:100%;
+    display:block
+  }
+  h1,h2,h3,p,figure,blockquote {
+    margin:0
+  }
+  h1,h2,h3 {
+    line-height:1.06;
+    letter-spacing:-.055em;
+    font-weight:800
+  }
+  h2 {
+    font-size:clamp(2.35rem,4.3vw,4.2rem)
+  }
+  h3 {
+    font-size:1.4rem;
+    letter-spacing:-.035em;
+    line-height:1.22
+  }
+  p+p {
+    margin-top:1.15rem
+  }
+  p {
+    color:var(--muted)
+  }
+  :focus-visible {
+    outline:3px solid var(--yellow);
+    outline-offset:6px
+  }
+  ::selection {
+    background:var(--accent);
+    color:#fff
+  }
+  [id] {
+    scroll-margin-top:100px
+  }
+  .eyebrow {
+    font:500 .75rem/1.65 var(--mono);
+    letter-spacing:.1em;
+    color:var(--muted);
+    display:block;
+    margin-bottom:24px
+  }
+  .accent {
+    color:var(--accent-text)
+  }
+  .lead {
+    font-size:1.2rem;
+    line-height:1.65;
+    color:var(--ink)
+  }
+  .actions {
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px
+  }
+  /* Variantes de botón: cada una es una sola clase en el marcado. */
+  .button-primary {
+    @apply button;
+    background:var(--accent);
+    color:#fff
+  }
+  .button-primary:hover {
+    background:#c62828
+  }
+  .button-outline {
+    @apply button;
+    border-color:#796969;
+    background:#16111166;
+    color:var(--ink)
+  }
+  .button-outline:hover {
+    background:#352828
+  }
+  .button-dark {
+    @apply button;
+    background:#101011;
+    color:white
+  }
+  .button-dark-outline {
+    @apply button;
+    border-color:#ffffff99;
+    color:#fff
+  }
+  .button-dark-outline:hover {
+    background:#ffffff26
+  }
+  .text-link {
+    text-decoration:underline;
+    text-underline-offset:6px;
+    font-size:.9rem;
+    display:inline-block
+  }
+  .skip-link {
+    position:fixed;
+    top:10px;
+    left:10px;
+    z-index:100;
+    background:white;
+    color:black;
+    padding:10px;
+    transform:translateY(-180%)
+  }
+  .skip-link:focus {
+    transform:none
+  }
+  .section-heading {
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:50px;
+    margin-bottom:48px
+  }
+  .section-heading>p {
+    max-width:360px
+  }
+  .status {
+    display:inline-block;
+    color:var(--yellow);
+    font:.75rem var(--mono);
+    letter-spacing:.07em;
+    margin-bottom:18px
+  }
+  @keyframes enter {
+    from {
+      opacity:.4;
+      transform:translateY(18px)
+    }
+    to {
+      opacity:1;
+      transform:none
+    }
+
+  }
+  .revealed {
+    animation:enter .6s ease both
+  }
+  @media(max-width:767px) {
+    html {
+      scroll-padding-top:85px
+    }
+    .section-heading {
+      display:block;
+      margin-bottom:32px
+    }
+    .section-heading>p {
+      margin-top:25px;
+      max-width:100%
+    }
+    .section-heading .text-link {
+      margin-top:20px
+    }
+  }
+  @media(prefers-reduced-motion:reduce) {
+    html {
+      scroll-behavior:auto
+    }
+    *,*:before,*:after {
+      animation:none!important;
+      transition:none!important
+    }
+  }
+}

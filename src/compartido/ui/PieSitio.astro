@@ -1,0 +1,32 @@
+---
+import '../styles/marca.css';
+import '../styles/pie.css';
+import ListaRedesSociales from './ListaRedesSociales.astro';
+import { sitio } from '../constants/sitio';
+---
+<footer class="site-footer">
+  <div class="footer-top">
+    <div>
+      <a class="brand" href="/#inicio" aria-label="Radiock — inicio">
+        <img src="/marca/radiock.webp" width="54" height="54" alt="Logo de Radiock" />
+        <span>RADIOCK<span class="brand-dot">.</span>
+        </span>
+      </a>
+      <p>Música local. Escenarios reales.<br />Un proyecto independiente desde Tijuana.</p>
+    </div>
+    <div>
+      <span class="eyebrow">SIGAMOS CONECTADOS</span>
+      <ListaRedesSociales />
+    </div>
+    <div>
+      <span class="eyebrow">HABLEMOS</span>
+      <a class="text-link" href={sitio.correo ? 'mailto:' + sitio.correo : '/#contacto'}>{sitio.correo || 'Construyamos algo juntos'} ↗</a>
+      <p>Tijuana, Baja California, México.</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© {new Date().getFullYear()} Radiock</span>
+    <span>Hecho desde la escena. Para la escena.</span>
+    <a href="/#inicio">Volver arriba ↑</a>
+  </div>
+</footer>

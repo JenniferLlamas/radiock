@@ -1,0 +1,68 @@
+/* Página de detalle de un evento: portada, ficha y nota de galería */
+@layer funcionalidades {
+  .event-detail {
+    @apply section shell;
+    padding-top:70px
+  }
+  .event-detail h1 {
+    font-size:clamp(3rem,6vw,5rem);
+    margin-block:25px
+  }
+  .event-detail-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:70px;
+    margin-top:40px;
+    align-items:start
+  }
+  .event-detail-grid>img {
+    max-height:850px;
+    width:100%;
+    object-fit:contain
+  }
+  .event-detail dl {
+    margin:25px 0
+  }
+  .event-detail dt {
+    font:.875rem var(--mono);
+    color:var(--accent-text);
+    margin-top:22px
+  }
+  .event-detail dd {
+    margin:8px 0 0
+  }
+  .event-detail h2 {
+    font-size:2rem;
+    margin-block:30px
+  }
+  .event-detail ul {
+    padding-left:20px;
+    color:var(--muted)
+  }
+  .event-detail .button-primary {
+    margin-top:25px
+  }
+  .event-archive-note {
+    @apply section shell;
+    border-top:1px solid var(--line)
+  }
+  .event-archive-note>p:not(.eyebrow) {
+    max-width:650px;
+    margin-block:25px
+  }
+  /* Desde 1199px hacia abajo se usa el espaciado general de .section, igual que en el diseño anterior. */
+  @media(max-width:1199px) {
+    .event-detail {
+      padding-top:80px
+    }
+  }
+  @media(max-width:767px) {
+    .event-detail {
+      padding-top:66px
+    }
+    .event-detail-grid {
+      grid-template-columns:1fr;
+      gap:35px
+    }
+  }
+}

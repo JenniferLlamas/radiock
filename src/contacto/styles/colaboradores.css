@@ -1,0 +1,28 @@
+/* Invitación a espacios y colaboradores */
+@layer funcionalidades {
+  .venue-section {
+    @apply section;
+    background:#191a18;
+    border-block:1px solid var(--line)
+  }
+  .split {
+    @apply shell;
+    display:grid;
+    grid-template-columns:1.15fr 1fr;
+    gap:100px
+  }
+  .split .button-outline {
+    margin-top:25px
+  }
+  @media(max-width:1199px) {
+    .split {
+      gap:45px
+    }
+  }
+  @media(max-width:767px) {
+    .split {
+      grid-template-columns:1fr;
+      gap:35px
+    }
+  }
+}

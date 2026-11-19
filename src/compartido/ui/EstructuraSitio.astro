@@ -1,0 +1,46 @@
+---
+import '../styles/tailwind.css';
+import '../styles/base.css';
+import NavegacionSitio from './NavegacionSitio.astro';
+import PieSitio from './PieSitio.astro';
+import { sitio } from '../constants/sitio';
+interface Props { title?: string; description?: string }
+const { title = sitio.titulo, description = sitio.descripcion } = Astro.props;
+const canonical = sitio.url ? new URL(Astro.url.pathname, sitio.url).href : undefined;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Orden de la cascada. Va en línea y antes de los <link> que Astro añade al final del <head>,
+         así no depende del orden en que Vite empaqueta el CSS de cada funcionalidad. -->
+    <style is:inline>@layer preflight, global, compartido, funcionalidades;</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#101011" />
+    <title>{title}</title>
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:site_name" content={sitio.nombre} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <link rel="icon" type="image/png" href="/marca/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <NavegacionSitio />
+    <main id="contenido">
+      <slot />
+    </main>
+    <PieSitio />
+  </body>
+</html>
+<script>
+  import { useAparicion } from '../hooks';
+  useAparicion();
+</script>

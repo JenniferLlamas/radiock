@@ -1,0 +1,58 @@
+/* Convocatoria para bandas y boleto decorativo */
+@layer funcionalidades {
+  .join-band {
+    @apply section shell;
+    display:grid;
+    grid-template-columns:1.5fr 1fr;
+    gap:100px;
+    align-items:center
+  }
+  .join-band .lead {
+    margin:28px 0;
+    max-width:650px
+  }
+  .band-ticket {
+    padding:32px;
+    background:#261818;
+    border:1px solid #854e4e;
+    transform:rotate(3deg)
+  }
+  .band-ticket strong {
+    font-size:clamp(1.6rem,2.7vw,2.8rem);
+    line-height:1.15;
+    letter-spacing:-.05em;
+    display:block
+  }
+  .band-ticket strong span {
+    color:var(--accent-text)
+  }
+  .ticket-rule {
+    border-top:1px dashed #8a5d5d;
+    margin-block:25px
+  }
+  .band-ticket p {
+    margin-bottom:30px
+  }
+  .band-ticket .eyebrow:last-child {
+    margin:0
+  }
+  @media(max-width:1199px) {
+    .join-band {
+      gap:50px
+    }
+  }
+  @media(max-width:767px) {
+    .join-band {
+      grid-template-columns:1fr;
+      gap:35px
+    }
+    .band-ticket {
+      margin:10px 10px 0;
+      padding:25px;
+      max-width:440px
+    }
+    .band-ticket strong {
+      font-size:2rem
+    }
+  }
+}

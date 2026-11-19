@@ -1,0 +1,59 @@
+/* Hagamos que suceda: opciones para bandas y espacios */
+@layer funcionalidades {
+  .participate {
+    @apply section;
+    background:var(--panel);
+    border-block:1px solid var(--line)
+  }
+  .participate-heading {
+    max-width:850px;
+    margin-bottom:48px
+  }
+  .participate-heading .lead {
+    margin-top:24px
+  }
+  .participate-options {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    border-top:1px solid var(--line)
+  }
+  .participate-option {
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    padding:38px 48px 0 0
+  }
+  .participate-option+.participate-option {
+    border-left:1px solid var(--line);
+    padding:38px 0 0 48px
+  }
+  .participate-option .eyebrow {
+    margin-bottom:18px
+  }
+  .participate-option h3 {
+    font-size:clamp(1.7rem,2.8vw,2.5rem);
+    margin-bottom:20px
+  }
+  .participate-option>p:not(.eyebrow) {
+    margin-bottom:28px
+  }
+  .participate-option .button-primary {
+    margin-top:auto
+  }
+  @media(max-width:767px) {
+    .participate-heading {
+      margin-bottom:32px
+    }
+    .participate-options {
+      grid-template-columns:1fr
+    }
+    .participate-option {
+      padding:28px 0
+    }
+    .participate-option+.participate-option {
+      border-left:0;
+      border-top:1px solid var(--line);
+      padding:28px 0 0
+    }
+  }
+}

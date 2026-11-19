@@ -1,0 +1,22 @@
+---
+import '../styles/proposito.css';
+import { pilares } from '../data/contenido';
+import { numeroOrden } from '../helpers/numeroOrden';
+---
+<section class="purpose-section" aria-labelledby="purpose-title">
+  <div class="section-heading" data-reveal>
+    <div>
+      <p class="eyebrow">03 / LO QUE NOS MUEVE</p>
+      <h2 id="purpose-title">Un escenario.<br />Muchas posibilidades.</h2>
+    </div>
+    <p>Lo que empieza con una canción<br />puede convertirse en una comunidad.</p>
+  </div>
+  <div class="pillars">{pilares.map((pilar, index) => <article class="pillar" data-reveal>
+      <div class="pillar-top">
+        <span class="eyebrow">{numeroOrden(index)}</span>
+        <span aria-hidden="true">{pilar.simbolo}</span>
+      </div>
+      <h3>{pilar.titulo}</h3>
+      <p>{pilar.texto}</p>
+    </article>)}</div>
+</section>

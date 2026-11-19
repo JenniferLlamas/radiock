@@ -1,0 +1,12 @@
+---
+import '../styles/detalle-evento.css';
+import type { Evento } from '../domain/Evento';
+interface Props { evento: Evento }
+const { evento } = Astro.props;
+---
+<section class="event-archive-note" id="galeria" aria-labelledby="gallery-title">
+  <p class="eyebrow">EL ARCHIVO SIGUE CRECIENDO</p>
+  <h2 id="gallery-title">Los momentos se quedan.</h2>
+  <p>Estamos reuniendo las fotografías de {evento.titulo}. Si estuviste ahí y tienes imágenes que quieras compartir con la comunidad, hablemos.</p>
+  <a class="button-outline" href="/#contacto">Compartir mis fotografías ↗</a>
+</section>

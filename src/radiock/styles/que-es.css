@@ -1,0 +1,32 @@
+/* 01 / El proyecto */
+@layer funcionalidades {
+  .about {
+    @apply section shell;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:90px
+  }
+  .about blockquote {
+    border-left:2px solid var(--accent);
+    padding-left:25px;
+    margin-top:32px;
+    font-size:1.05rem;
+    line-height:1.65;
+    color:#ddd4d4
+  }
+  .about blockquote strong {
+    display:block;
+    color:var(--accent-text)
+  }
+  @media(max-width:1199px) {
+    .about {
+      gap:45px
+    }
+  }
+  @media(max-width:767px) {
+    .about {
+      grid-template-columns:1fr;
+      gap:35px
+    }
+  }
+}

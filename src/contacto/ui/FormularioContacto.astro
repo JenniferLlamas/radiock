@@ -1,0 +1,18 @@
+---
+import '../styles/formulario.css';
+import { sitio } from '@/compartido';
+import { ListaRedesSociales } from '@/compartido/ui';
+import PresentacionPorMensaje from './PresentacionPorMensaje.astro';
+---
+<section class="contact-section" id="contacto" aria-labelledby="contact-title">
+  <div class="contact-grid">
+    <div data-reveal>
+      <p class="eyebrow">08 / CONSTRUYAMOS LO QUE SIGUE</p>
+      <h2 id="contact-title">Todo empieza<br />con una<br />
+        <span class="accent">conversación.</span>
+      </h2>
+      <p>¿Tienes un espacio, una idea o ganas de apoyar? Escríbenos por nuestras redes. Queremos conocerte y encontrar una forma de sumar.</p>
+      <ListaRedesSociales />{sitio.correo && <a class="text-link" href={'mailto:' + sitio.correo}>{sitio.correo}</a>}</div>
+    <PresentacionPorMensaje />
+  </div>
+</section>

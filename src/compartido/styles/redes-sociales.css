@@ -1,0 +1,18 @@
+/* Lista de redes sociales (pie y contacto). */
+@layer compartido {
+  .social-links {
+    list-style:none;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px 22px;
+    font-size:.875rem
+  }
+  .social-links a {
+    display:inline-block;
+    padding-block:5px
+  }
+  .social-links a:hover {
+    color:var(--accent-text)
+  }
+}

@@ -1,6 +1,9 @@
 # build output
 dist/
 
+# imágenes originales en alta resolución (en el sitio van las versiones WebP de public/)
+originales/
+
 # generated types
 .astro/
 

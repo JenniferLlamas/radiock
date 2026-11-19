@@ -1,0 +1,134 @@
+/* 05 / Próximos eventos y archivo de eventos anteriores */
+@layer funcionalidades {
+  .events-section {
+    @apply section shell;
+  }
+  .empty-event {
+    border:1px solid var(--line);
+    display:grid;
+    grid-template-columns:140px 1fr auto;
+    gap:38px;
+    align-items:center;
+    padding:35px
+  }
+  .empty-date {
+    border-right:1px dashed #5f5050;
+    color:var(--accent-text);
+    font:400 2.7rem var(--mono);
+    padding-block:15px
+  }
+  .empty-date span {
+    display:block;
+    font-size:.75rem;
+    letter-spacing:.14em
+  }
+  .empty-event h3 {
+    margin-bottom:10px
+  }
+  .empty-event p {
+    max-width:540px
+  }
+  .past-event {
+    margin-top:32px;
+    display:grid;
+    grid-template-columns:260px 1fr auto;
+    gap:32px;
+    align-items:center;
+    padding:25px;
+    background:#1f1818
+  }
+  .past-event img {
+    width:260px;
+    aspect-ratio:2.35;
+    object-fit:cover
+  }
+  .past-event .eyebrow {
+    margin-bottom:12px
+  }
+  .past-event h3 {
+    margin-bottom:8px
+  }
+  .event-grid {
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:24px
+  }
+  .event-card {
+    padding:25px;
+    border:1px solid var(--line)
+  }
+  .event-card img {
+    aspect-ratio:3/4;
+    object-fit:contain;
+    width:100%;
+    background:#1b1515;
+    margin-bottom:24px
+  }
+  .event-card h3 {
+    margin-block:12px
+  }
+  .event-card p {
+    margin-bottom:20px
+  }
+  .past-heading {
+    margin-top:45px;
+    font-size:1.1rem
+  }
+  @media(max-width:1199px) {
+    .empty-event {
+      grid-template-columns:100px 1fr;
+      gap:25px
+    }
+    .empty-event>.button-outline {
+      grid-column:2;
+      justify-self:start
+    }
+    .past-event {
+      grid-template-columns:200px 1fr
+    }
+    .past-event>.text-link {
+      grid-column:2
+    }
+    .past-event img {
+      grid-row:span 2
+    }
+  }
+  @media(max-width:767px) {
+    .empty-event {
+      padding:24px;
+      grid-template-columns:1fr;
+      gap:20px
+    }
+    .empty-date {
+      border:0;
+      border-bottom:1px dashed #5f5050;
+      padding:0 0 20px;
+      font-size:2rem
+    }
+    .empty-date span {
+      display:inline;
+      margin-left:18px
+    }
+    .empty-event>.button-outline {
+      grid-column:auto;
+      width:100%;
+      padding-inline:15px
+    }
+    .past-event {
+      grid-template-columns:1fr;
+      padding:22px;
+      gap:20px
+    }
+    .past-event img {
+      width:100%;
+      grid-row:auto;
+      aspect-ratio:2.5
+    }
+    .past-event>.text-link {
+      grid-column:auto
+    }
+    .event-grid {
+      grid-template-columns:1fr
+    }
+  }
+}

@@ -1,0 +1,16 @@
+---
+import { EstructuraSitio } from '@/compartido/ui';
+import type { Evento } from '../domain/Evento';
+import { agendaEventos } from '../services/agenda';
+import PortadaEvento from './PortadaEvento.astro';
+import GaleriaEvento from './GaleriaEvento.astro';
+import { textosEvento } from '../helpers/textosEvento';
+interface Props { evento: Evento }
+const { evento } = Astro.props;
+const estado = agendaEventos.estado(evento);
+const { tituloPagina, descripcion } = textosEvento(evento, estado);
+---
+<EstructuraSitio title={tituloPagina} description={descripcion}>
+  <PortadaEvento evento={evento} estado={estado} />
+  {estado === 'finalizado' && <GaleriaEvento evento={evento} />}
+</EstructuraSitio>

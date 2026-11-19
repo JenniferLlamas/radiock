@@ -1,0 +1,42 @@
+/* Llamado final antes del contacto */
+@layer funcionalidades {
+  .final-cta {
+    background:var(--accent);
+    padding:95px 0;
+    color:#fff
+  }
+  .final-cta .eyebrow {
+    color:#ffe5e5
+  }
+  .final-cta h2 {
+    max-width:1060px;
+    font-size:clamp(2.4rem,4.7vw,4.4rem);
+    line-height:1.12
+  }
+  .final-cta h2>span {
+    color:#ffd0d0
+  }
+  .final-cta p {
+    color:#ffe5e5;
+    font-size:1.2rem;
+    margin-top:28px
+  }
+  .final-cta .actions {
+    margin-top:35px
+  }
+  @media(max-width:767px) {
+    .final-cta {
+      padding-block:66px
+    }
+    .final-cta h2 {
+      font-size:clamp(2.1rem,7.8vw,3.5rem)
+    }
+    .final-cta .actions {
+      gap:10px
+    }
+    .final-cta :is(.button-dark,.button-dark-outline) {
+      padding-inline:16px;
+      gap:12px
+    }
+  }
+}
