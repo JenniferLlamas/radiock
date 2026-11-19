@@ -155,6 +155,12 @@ function validarSolicitud_(solicitud, config, decodificar) {
       errores.push('El archivo "' + nombreSeguro_(archivo.nombre) + '" supera ' + megas_(regla.maxBytes) + '.');
       return;
     }
+    // El tipo lo declara el navegador (o quien llame a la URL): se comprueba el contenido real.
+    const problema = revisarContenido_(bytes, regla.tipos);
+    if (problema) {
+      errores.push('El archivo "' + nombreSeguro_(archivo.nombre) + '" ' + problema);
+      return;
+    }
     total += bytes.length;
     archivos.push({ campo: archivo.campo, nombre: nombreSeguro_(archivo.nombre), tipo: archivo.tipo, bytes: bytes });
   });
@@ -167,6 +173,111 @@ function validarSolicitud_(solicitud, config, decodificar) {
   if (total > config.MAX_BYTES_TOTAL) errores.push('Los archivos suman más de ' + megas_(config.MAX_BYTES_TOTAL) + '.');
 
   return { errores: errores, campos: campos, archivos: archivos };
+}
+
+/** Variantes de un mismo formato que usan los navegadores → nombre canónico. */
+const TIPO_CANONICO = {
+  'audio/mp3': 'audio/mpeg',
+  'audio/x-m4a': 'audio/mp4',
+  'audio/x-wav': 'audio/wav',
+  'audio/wave': 'audio/wav',
+};
+const canonico_ = function (tipo) { return TIPO_CANONICO[tipo] || tipo; };
+
+/**
+ * Formatos reales según los primeros bytes del archivo ("firma" o "número mágico").
+ * Devuelve los tipos canónicos posibles; vacío si no se reconoce. Los bytes de Apps Script
+ * vienen con signo (-128…127), por eso se normalizan con & 0xFF.
+ */
+function detectarTipos_(bytes) {
+  const b = function (i) { return i < bytes.length ? bytes[i] & 0xff : -1; };
+  const ascii = function (desde, texto) {
+    for (let i = 0; i < texto.length; i++) if (b(desde + i) !== texto.charCodeAt(i)) return false;
+    return true;
+  };
+
+  if (b(0) === 0xff && b(1) === 0xd8 && b(2) === 0xff) return ['image/jpeg'];
+  if (ascii(0, '\u0089PNG\r\n\u001a\n')) return ['image/png'];
+  if (ascii(0, 'RIFF') && ascii(8, 'WEBP')) return ['image/webp'];
+  if (ascii(0, 'RIFF') && ascii(8, 'WAVE')) return ['audio/wav'];
+  if (ascii(0, 'OggS')) return ['audio/ogg'];
+  if (ascii(4, 'ftyp')) return ['audio/mp4'];
+  // Etiqueta ID3 al inicio: la usan MP3 y algunos AAC.
+  if (ascii(0, 'ID3')) return ['audio/mpeg', 'audio/aac'];
+  if (ascii(0, 'ADIF')) return ['audio/aac'];
+  if (b(0) === 0xff) {
+    // Cabecera ADTS de AAC: capa 00. Trama MPEG de MP3: capa distinta de 00.
+    if ((b(1) & 0xf6) === 0xf0) return ['audio/aac'];
+    if ((b(1) & 0xe0) === 0xe0 && ((b(1) >> 1) & 3) !== 0) return ['audio/mpeg'];
+  }
+  if (pareceSvg_(textoDeBytes_(bytes, 2048))) return ['image/svg+xml'];
+  return [];
+}
+
+/** Bytes → texto (latin1). Basta para buscar marcas y atributos, que son ASCII. */
+function textoDeBytes_(bytes, limite) {
+  const fin = Math.min(bytes.length, limite || bytes.length);
+  let texto = '';
+  for (let i = 0; i < fin; i += 8192) {
+    const trozo = [];
+    for (let j = i; j < Math.min(fin, i + 8192); j++) trozo.push(bytes[j] & 0xff);
+    texto += String.fromCharCode.apply(null, trozo);
+  }
+  return texto.replace(/^ï»¿/, ''); // BOM de UTF-8
+}
+
+/** Un SVG empieza (tras la declaración XML, comentarios y doctype) con la etiqueta <svg. */
+function pareceSvg_(texto) {
+  const inicio = texto
+    .replace(/^\s*<\?xml[\s\S]*?\?>/i, '')
+    .replace(/^(\s*<!--[\s\S]*?-->)+/, '')
+    .replace(/^\s*<!doctype[^>[]*(\[[\s\S]*?\])?\s*>/i, '')
+    .replace(/^(\s*<!--[\s\S]*?-->)+/, '');
+  return /^\s*<svg[\s>]/i.test(inicio);
+}
+
+/**
+ * Un SVG es texto y puede llevar código que se ejecuta al abrirlo en el navegador.
+ * Devuelve el motivo del rechazo, o '' si es un logo simple: formas, colores, degradados,
+ * texto e imágenes incrustadas, sin scripts, eventos, contenido HTML ni enlaces externos.
+ */
+function problemaSvg_(svg) {
+  const texto = svg.toLowerCase();
+  if (/<!entity|<!doctype[^>]*\[/.test(texto)) return 'declara entidades XML';
+  if (/<script[\s>/]/.test(texto)) return 'contiene scripts';
+  // Atributos on… (onload, onclick…) dentro de una etiqueta; el texto visible no cuenta.
+  const etiquetas = texto.match(/<[^>]*>/g) || [];
+  if (etiquetas.some(function (etiqueta) { return /[\s/"']on[a-z]+\s*=/.test(etiqueta); })) return 'contiene eventos de JavaScript';
+  if (/<(foreignobject|iframe|embed|object|audio|video|handler|listener)[\s>/]/.test(texto)) return 'contiene contenido incrustado';
+  if (/javascript:|vbscript:|data:text\/html/.test(texto)) return 'contiene enlaces de código';
+  // Una animación podría cambiar un enlace a código después de cargar.
+  if (/attributename\s*=\s*["']\s*(xlink:)?href/.test(texto)) return 'anima enlaces';
+  if (/@import/.test(texto)) return 'importa estilos externos';
+
+  // Solo se permiten referencias internas (#id) e imágenes incrustadas en base64.
+  const permitido = /^\s*(#|data:image\/(png|jpe?g|gif|webp);base64,)/;
+  const enlaces = /(?:xlink:)?href\s*=\s*(["'])([\s\S]*?)\1/g;
+  let enlace;
+  while ((enlace = enlaces.exec(texto))) if (!permitido.test(enlace[2])) return 'tiene enlaces externos';
+  const urls = /url\(\s*(["']?)([\s\S]*?)\1\s*\)/g;
+  let url;
+  while ((url = urls.exec(texto))) if (!permitido.test(url[2])) return 'carga recursos externos';
+  return '';
+}
+
+/**
+ * Comprueba que el contenido corresponde a uno de los tipos permitidos de su sección.
+ * Devuelve el final del mensaje de error, o '' si el archivo es válido.
+ */
+function revisarContenido_(bytes, tiposPermitidos) {
+  const permitidos = tiposPermitidos.map(canonico_);
+  const detectados = detectarTipos_(bytes).filter(function (tipo) { return permitidos.indexOf(tipo) !== -1; });
+  if (!detectados.length) return 'no es un archivo de un formato permitido o está dañado.';
+  if (detectados[0] === 'image/svg+xml') {
+    const motivo = problemaSvg_(textoDeBytes_(bytes));
+    if (motivo) return 'no se aceptó: el SVG ' + motivo + '. Expórtalo como SVG simple o súbelo en PNG.';
+  }
+  return '';
 }
 
 /**

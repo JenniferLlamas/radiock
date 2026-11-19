@@ -57,6 +57,8 @@ Para audios más grandes (WAV largos, varias canciones) el siguiente paso es la 
 - La URL `/exec` es pública (va en el código del sitio). Se protege así:
   - **Campo trampa:** los bots que lo rellenan reciben "ok" y no se guarda nada.
   - **Validación en el servidor:** campos obligatorios, longitudes, tipos y tamaños de archivo, y número de archivos.
+  - **Contenido real de cada archivo:** el formato que declara el navegador se puede falsificar, así que el script lee los primeros bytes (la "firma") y comprueba que sea de verdad JPG, PNG, WebP, SVG, MP3, M4A, AAC, WAV u OGG, y de un formato permitido en su sección. Un ejecutable renombrado a `.mp3` o una imagen subida como canción se rechazan. Un PNG con extensión `.jpg` se acepta, porque sigue siendo una imagen permitida.
+  - **Logos SVG revisados:** un SVG es texto y puede llevar código que se ejecuta al abrirlo en el navegador. Se rechaza si contiene scripts, eventos (`onload`, `onclick`…), contenido incrustado (`foreignObject`, `iframe`…), enlaces `javascript:`, animaciones que cambian enlaces, entidades XML, estilos importados o cualquier enlace o recurso externo. Se aceptan formas, colores, degradados, texto, estilos internos e imágenes incrustadas en base64, que es lo que exportan Illustrator, Inkscape o Figma para un logo. La banda ve el motivo y la sugerencia de exportarlo como SVG simple o en PNG.
   - **Nombres limpios:** se quitan barras, rutas y caracteres de control de los nombres de archivos y carpetas.
   - **Sin fórmulas:** si un texto empieza con `=`, `+`, `-` o `@`, se le antepone `'` para que no se ejecute en la hoja.
   - **Errores genéricos:** los errores internos se registran en *Ejecuciones* del proyecto y la banda solo ve un mensaje genérico.
