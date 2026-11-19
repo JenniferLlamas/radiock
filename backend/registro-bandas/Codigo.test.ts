@@ -23,7 +23,21 @@ interface CarpetaFalsa {
 /** Valores creados dentro del contexto vm tienen otros prototipos: se normalizan con JSON. */
 const plano = <T>(valor: T): T => JSON.parse(JSON.stringify(valor));
 
-function entorno() {
+/** Imitación de PropertiesService.getScriptProperties(). */
+function propiedadesFalsas(iniciales: Record<string, string> = {}) {
+  const datos = new Map(Object.entries(iniciales));
+  return {
+    datos,
+    getProperty: (k: string) => datos.get(k) ?? null,
+    setProperty: (k: string, v: string) => { datos.set(k, v); },
+    getKeys: () => [...datos.keys()],
+    deleteProperty: (k: string) => { datos.delete(k); },
+  };
+}
+
+function entorno({ propiedades = propiedadesFalsas() } = {}) {
+  /** Reloj controlable: cambia `reloj.hora` o `reloj.dia` para simular el paso del tiempo. */
+  const reloj = { dia: '2026-11-18', hora: '20' };
   const carpetas: CarpetaFalsa[] = [];
   const archivos: { carpeta: string; nombre: string; tipo: string; bytes: number }[] = [];
   const filas: unknown[][] = [];
@@ -41,12 +55,16 @@ function entorno() {
     return carpeta;
   };
   const contexto = createContext({
-    console: { error: () => {} },
+    console: { error: () => {}, warn: () => {} },
     Utilities: {
       base64Decode: (texto: string) => Array.from(Buffer.from(texto, 'base64')),
       newBlob: (bytes: number[], tipo: string, nombre: string) => ({ bytes, tipo, nombre }),
-      formatDate: () => '2026-11-18 20.00',
+      formatDate: (_fecha: Date, _zona: string, formato: string) =>
+        formato === "yyyy-MM-dd'T'HH" ? `${reloj.dia}T${reloj.hora}`
+          : formato === 'yyyy-MM-dd' ? reloj.dia
+            : `${reloj.dia} ${reloj.hora}.00`,
     },
+    PropertiesService: { getScriptProperties: () => propiedades },
     DriveApp: { getFolderById: () => ({ createFolder: (n: string) => { const c = crearCarpeta(n); carpetas.push(c); return c; } }) },
     SpreadsheetApp: {
       openById: () => ({
@@ -59,7 +77,7 @@ function entorno() {
   });
   runInContext(CODIGO, contexto);
   const post = (cuerpo: unknown) => plano(contexto.doPost({ postData: { contents: JSON.stringify(cuerpo) } })) as { ok: boolean; error?: string };
-  return { post, carpetas, archivos, filas, contexto };
+  return { post, carpetas, archivos, filas, contexto, reloj, propiedades };
 }
 
 const b64 = (bytes: number) => Buffer.alloc(bytes, 7).toString('base64');
@@ -140,6 +158,70 @@ describe('backend: protección', () => {
     const { contexto } = entorno();
     expect(plano(contexto.doPost({ postData: { contents: 'no es json' } }))).toEqual({ ok: false, error: 'No pudimos guardar el registro. Inténtalo de nuevo en unos minutos.' });
     expect(plano(contexto.doGet())).toEqual({ ok: true, servicio: 'registro-bandas' });
+  });
+});
+
+describe('backend: límites contra spam', () => {
+  const limitar = (contexto: ReturnType<typeof entorno>['contexto'], limites: Record<string, number>) =>
+    runInContext(`Object.assign(CONFIG.LIMITES, ${JSON.stringify(limites)})`, contexto);
+  const MB = 1024 * 1024;
+
+  it('rechaza al pasar los envíos por hora y vuelve a aceptar la hora siguiente', () => {
+    const { post, contexto, reloj, carpetas } = entorno();
+    limitar(contexto, { ENVIOS_POR_HORA: 2 });
+    expect(post({ campos, archivos: [] }).ok).toBe(true);
+    expect(post({ campos, archivos: [] }).ok).toBe(true);
+    const r = post({ campos, archivos: [] });
+    expect(r).toEqual({ ok: false, error: expect.stringContaining('Recibimos muchos registros') });
+    expect(carpetas).toHaveLength(2);
+
+    reloj.hora = '21';
+    expect(post({ campos, archivos: [] }).ok).toBe(true);
+  });
+
+  it('rechaza al pasar los envíos por día aunque cambie la hora, y se reinicia al día siguiente', () => {
+    const { post, contexto, reloj } = entorno();
+    limitar(contexto, { ENVIOS_POR_DIA: 2 });
+    post({ campos, archivos: [] });
+    reloj.hora = '21';
+    post({ campos, archivos: [] });
+    reloj.hora = '22';
+    expect(post({ campos, archivos: [] }).ok).toBe(false);
+    reloj.dia = '2026-11-19';
+    expect(post({ campos, archivos: [] }).ok).toBe(true);
+  });
+
+  it('cuenta los megas del día: rechaza el envío que no cabe, pero acepta uno más chico', () => {
+    const { post, contexto } = entorno();
+    limitar(contexto, { MEGAS_POR_DIA: 20 });
+    const cancion = (mb: number) => adjunto('canciones', 'c.mp3', 'audio/mpeg', mb * MB);
+    expect(post({ campos, archivos: [cancion(12)] }).ok).toBe(true);
+    expect(post({ campos, archivos: [cancion(10)] }).ok).toBe(false);
+    expect(post({ campos, archivos: [cancion(8)] }).ok).toBe(true);
+  });
+
+  it('los envíos inválidos y los del campo trampa no gastan cupo', () => {
+    const { post, contexto } = entorno();
+    limitar(contexto, { ENVIOS_POR_HORA: 1 });
+    post({ campos: { ...campos, banda: '' }, archivos: [] });
+    post({ campos, archivos: [], sitioWeb: 'http://spam' });
+    expect(post({ campos, archivos: [] }).ok).toBe(true);
+  });
+
+  it('borra los contadores viejos y no toca otras propiedades del script', () => {
+    const propiedades = propiedadesFalsas({ 'limite:hora:2026-11-17T09': '5', 'limite:dia:2026-11-17': '{"envios":5,"bytes":0}', OTRA: 'x' });
+    const { post } = entorno({ propiedades });
+    post({ campos, archivos: [] });
+    expect([...propiedades.datos.keys()].sort()).toEqual(['OTRA', 'limite:dia:2026-11-18', 'limite:hora:2026-11-18T20']);
+  });
+
+  it('REGISTRO_PAUSADO = "si" rechaza todo sin guardar; al borrarla se reanuda', () => {
+    const propiedades = propiedadesFalsas({ REGISTRO_PAUSADO: ' Si ' });
+    const { post, carpetas } = entorno({ propiedades });
+    expect(post({ campos, archivos: [] })).toEqual({ ok: false, error: expect.stringContaining('pausado') });
+    expect(carpetas).toHaveLength(0);
+    propiedades.deleteProperty('REGISTRO_PAUSADO');
+    expect(post({ campos, archivos: [] }).ok).toBe(true);
   });
 });
 

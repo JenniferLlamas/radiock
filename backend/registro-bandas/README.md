@@ -60,7 +60,17 @@ Para audios más grandes (WAV largos, varias canciones) el siguiente paso es la 
   - **Nombres limpios:** se quitan barras, rutas y caracteres de control de los nombres de archivos y carpetas.
   - **Sin fórmulas:** si un texto empieza con `=`, `+`, `-` o `@`, se le antepone `'` para que no se ejecute en la hoja.
   - **Errores genéricos:** los errores internos se registran en *Ejecuciones* del proyecto y la banda solo ve un mensaje genérico.
-- Si llega spam, puedes revisar *Ejecuciones*, borrar las filas y carpetas, y, si hace falta, añadir un límite por minuto con `CacheService` o un captcha (por ejemplo, Cloudflare Turnstile).
+  - **Límites de envío** (`CONFIG.LIMITES`), para que nadie llene tu Drive enviando en bucle:
+
+    | Límite | Valor | Por qué |
+    | --- | --- | --- |
+    | `ENVIOS_POR_HORA` | 15 | Frena ráfagas automáticas |
+    | `ENVIOS_POR_DIA` | 60 | Frena el spam lento (también el de registros sin archivos) |
+    | `MEGAS_POR_DIA` | 500 | En el peor caso, un ataque sostenido tardaría un mes en llenar 15 GB, y lo notarías antes |
+
+    Son **globales**: Apps Script no conoce la IP de quien envía, así que cuentan todos los envíos juntos. Solo cuentan los registros válidos que se guardan; los rechazados y los del campo trampa no gastan cupo. Al pasar un límite, la banda ve "Recibimos muchos registros en este momento…" y el aviso queda en *Ejecuciones*. Los contadores se guardan en las *Propiedades del script* (claves `limite:…`) y los de horas y días anteriores se borran solos. Si tu convocatoria recibe más registros legítimos, sube los valores y vuelve a implementar.
+  - **Interruptor de pausa:** en ⚙️ *Configuración del proyecto → Propiedades del script*, añade `REGISTRO_PAUSADO` con el valor `si`. Desde ese momento se rechazan todos los envíos con un mensaje que invita a escribir por redes. Para reanudar, borra la propiedad. No hace falta volver a implementar.
+- Si llega spam: pausa el registro, revisa *Ejecuciones*, borra las filas y carpetas, y considera un captcha (por ejemplo, Cloudflare Turnstile).
 - Los archivos quedan **privados** en tu Drive; los enlaces de la hoja solo los abre quien tenga acceso a la carpeta.
 
 ## Probar sin desplegar

@@ -52,6 +52,29 @@ const CONFIG = {
   },
   /** Tope del total de archivos, para no superar el límite de ~50 MB por petición de Apps Script. */
   MAX_BYTES_TOTAL: 30 * 1024 * 1024,
+
+  /**
+   * Límites globales contra spam (Apps Script no conoce la IP de quien envía, así que cuentan
+   * todos los envíos juntos). Protegen el espacio de tu Drive y las cuotas diarias del script.
+   * Solo cuentan los registros válidos que se van a guardar.
+   */
+  LIMITES: {
+    ENVIOS_POR_HORA: 15,
+    ENVIOS_POR_DIA: 60,
+    MEGAS_POR_DIA: 500,
+  },
+  /**
+   * Interruptor de emergencia: en ⚙️ Configuración del proyecto → Propiedades del script, crea
+   * la propiedad REGISTRO_PAUSADO con el valor "si" para rechazar todos los envíos sin volver
+   * a implementar. Bórrala para reanudar.
+   */
+  PROPIEDAD_PAUSA: 'REGISTRO_PAUSADO',
+};
+
+const MENSAJES = {
+  pausado: 'El registro está pausado por ahora. Escríbenos por nuestras redes y te respondemos.',
+  limite: 'Recibimos muchos registros en este momento. Inténtalo de nuevo más tarde o escríbenos por nuestras redes.',
+  error: 'No pudimos guardar el registro. Inténtalo de nuevo en unos minutos.',
 };
 
 /** Punto de entrada del Web App: recibe el JSON que envía el sitio (Content-Type text/plain). */
@@ -61,14 +84,28 @@ function doPost(e) {
     // Campo trampa: los humanos no lo ven; si viene lleno es un bot. Se responde "ok" sin guardar.
     if (solicitud.sitioWeb) return responder_({ ok: true });
 
+    const propiedades = PropertiesService.getScriptProperties();
+    if (String(propiedades.getProperty(CONFIG.PROPIEDAD_PAUSA) || '').trim().toLowerCase() === 'si') {
+      return responder_({ ok: false, error: MENSAJES.pausado });
+    }
+
     const resultado = validarSolicitud_(solicitud, CONFIG);
     if (resultado.errores.length) return responder_({ ok: false, error: resultado.errores.join(' ') });
+
+    const bytes = resultado.archivos.reduce(function (suma, archivo) { return suma + archivo.bytes.length; }, 0);
+    const cupo = conBloqueo_(function () {
+      return reservarCupo_(almacenDePropiedades_(propiedades), clavesDeTiempo_(new Date()), bytes, CONFIG.LIMITES);
+    });
+    if (!cupo.ok) {
+      console.warn('Límite alcanzado (' + cupo.motivo + '). Revisa Ejecuciones por si es spam.');
+      return responder_({ ok: false, error: MENSAJES.limite });
+    }
 
     guardarRegistro_(resultado);
     return responder_({ ok: true });
   } catch (error) {
     console.error(error && error.stack ? error.stack : error);
-    return responder_({ ok: false, error: 'No pudimos guardar el registro. Inténtalo de nuevo en unos minutos.' });
+    return responder_({ ok: false, error: MENSAJES.error });
   }
 }
 
@@ -160,13 +197,58 @@ function guardarRegistro_(registro) {
     .concat([carpeta.getUrl()]);
 
   // El bloqueo evita que dos envíos simultáneos escriban los encabezados a la vez.
+  conBloqueo_(function () { hojaDeRegistros_().appendRow(fila); });
+}
+
+/** Ejecuta `accion` sin que otro envío simultáneo entre a la vez (contadores, encabezados). */
+function conBloqueo_(accion) {
   const bloqueo = LockService.getScriptLock();
   bloqueo.waitLock(20000);
   try {
-    hojaDeRegistros_().appendRow(fila);
+    return accion();
   } finally {
     bloqueo.releaseLock();
   }
+}
+
+/** Claves de los contadores: la hora y el día actuales en la zona horaria de Radiock. */
+function clavesDeTiempo_(ahora) {
+  return {
+    hora: 'limite:hora:' + Utilities.formatDate(ahora, CONFIG.ZONA_HORARIA, "yyyy-MM-dd'T'HH"),
+    dia: 'limite:dia:' + Utilities.formatDate(ahora, CONFIG.ZONA_HORARIA, 'yyyy-MM-dd'),
+  };
+}
+
+/** Adapta las propiedades del script a un almacén simple de texto. */
+function almacenDePropiedades_(propiedades) {
+  return {
+    leer: function (clave) { return propiedades.getProperty(clave); },
+    escribir: function (clave, valor) { propiedades.setProperty(clave, valor); },
+    claves: function () { return propiedades.getKeys(); },
+    borrar: function (clave) { propiedades.deleteProperty(clave); },
+  };
+}
+
+/**
+ * Comprueba los límites y, si hay cupo, cuenta este envío. Función pura sobre `almacen`
+ * (se prueba sin servicios de Google). Borra los contadores de horas y días anteriores.
+ * Devuelve { ok: true } o { ok: false, motivo }.
+ */
+function reservarCupo_(almacen, claves, bytes, limites) {
+  almacen.claves().forEach(function (clave) {
+    if (clave.indexOf('limite:') === 0 && clave !== claves.hora && clave !== claves.dia) almacen.borrar(clave);
+  });
+
+  const hora = Number(almacen.leer(claves.hora) || 0);
+  const dia = JSON.parse(almacen.leer(claves.dia) || '{"envios":0,"bytes":0}');
+
+  if (hora >= limites.ENVIOS_POR_HORA) return { ok: false, motivo: 'envíos por hora' };
+  if (dia.envios >= limites.ENVIOS_POR_DIA) return { ok: false, motivo: 'envíos por día' };
+  if (dia.bytes + bytes > limites.MEGAS_POR_DIA * 1024 * 1024) return { ok: false, motivo: 'megas por día' };
+
+  almacen.escribir(claves.hora, String(hora + 1));
+  almacen.escribir(claves.dia, JSON.stringify({ envios: dia.envios + 1, bytes: dia.bytes + bytes }));
+  return { ok: true };
 }
 
 function hojaDeRegistros_() {

@@ -187,7 +187,7 @@ Herramientas de desarrollo: `@astrojs/check`, TypeScript 5.6.2 (modo estricto), 
 | --- | --- |
 | `src/**/*.test.ts` | Agenda de eventos (próximos y anteriores según la fecha), textos de cada evento, fechas y zona horaria, repositorio, validación de fotos, logos y canciones, mensaje para redes y helpers |
 | `src/bandas/data/bandas.test.ts` | Ids únicos, logos que existen en `public/`, redes con `https` |
-| `backend/registro-bandas/Codigo.test.ts` | El Apps Script ejecutado en Node con imitaciones de Drive y Hojas de cálculo: subcarpetas, filas, validaciones, campo trampa, fórmulas y nombres peligrosos. También comprueba que **sus límites coinciden con los del sitio**: si cambias uno y olvidas el otro, falla |
+| `backend/registro-bandas/Codigo.test.ts` | El Apps Script ejecutado en Node con imitaciones de Drive y Hojas de cálculo: subcarpetas, filas, validaciones, campo trampa, límites de envío por hora y por día, pausa, fórmulas y nombres peligrosos. También comprueba que **sus límites coinciden con los del sitio**: si cambias uno y olvidas el otro, falla |
 | `tests/unit/arquitectura.test.ts` | Las reglas de capas y funcionalidades de este README. Si un import las rompe, indica el archivo y el import |
 
 **De interfaz (`npm run test:ui`)**: en `tests/e2e/`. Compilan dos versiones del sitio en `.e2e/`, una sin backend y otra con una URL de Apps Script ficticia, y las sirven con `astro preview`. Así se prueba lo mismo que se publica. Usan el Chrome instalado (no descargan navegadores) en dos tamaños: escritorio (1440 px) y móvil (Pixel 7). Una prueba también falla si la página lanza cualquier error de JavaScript.
