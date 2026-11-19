@@ -99,6 +99,49 @@
     font-size:.875rem;
     gap:10px
   }
+  /* Registro con envío (RegistroBanda.astro). El material de la banda está en material-banda.css */
+  .field-hint {
+    display:block;
+    margin-top:6px;
+    font:.75rem/1.6 var(--mono);
+    color:#b3a2a2
+  }
+  .trap-field {
+    position:absolute;
+    left:-9999px;
+    width:1px;
+    height:1px;
+    overflow:hidden
+  }
+  .form-status {
+    margin-top:15px;
+    font-size:.875rem
+  }
+  .form-status:empty {
+    display:none
+  }
+  .form-status[data-estado=enviando] {
+    color:var(--ink)
+  }
+  .form-status[data-estado=error] {
+    color:#ff8a80
+  }
+  .registration [aria-busy=true] button[type=submit] {
+    cursor:progress
+  }
+  .registration-success {
+    padding:20px;
+    border:1px dashed #8f7171
+  }
+  .registration-success[hidden] {
+    display:none
+  }
+  .registration-success .lead {
+    margin-bottom:12px
+  }
+  .registration-success .button-outline {
+    margin-top:22px
+  }
   @media(max-width:1199px) {
     .contact-grid {
       gap:45px

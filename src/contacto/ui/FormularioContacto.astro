@@ -2,6 +2,7 @@
 import '../styles/formulario.css';
 import { sitio } from '@/compartido';
 import { ListaRedesSociales } from '@/compartido/ui';
+import RegistroBanda from './RegistroBanda.astro';
 import PresentacionPorMensaje from './PresentacionPorMensaje.astro';
 ---
 <section class="contact-section" id="contacto" aria-labelledby="contact-title">
@@ -13,6 +14,6 @@ import PresentacionPorMensaje from './PresentacionPorMensaje.astro';
       </h2>
       <p>¿Tienes un espacio, una idea o ganas de apoyar? Escríbenos por nuestras redes. Queremos conocerte y encontrar una forma de sumar.</p>
       <ListaRedesSociales />{sitio.correo && <a class="text-link" href={'mailto:' + sitio.correo}>{sitio.correo}</a>}</div>
-    <PresentacionPorMensaje />
+    {sitio.urlRegistro ? <RegistroBanda url={sitio.urlRegistro} /> : <PresentacionPorMensaje />}
   </div>
 </section>

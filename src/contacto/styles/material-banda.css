@@ -1,0 +1,370 @@
+/* Material de la banda (CampoArchivo.astro): zonas para arrastrar, vistas previas y reproductor */
+@layer funcionalidades {
+  .band-material {
+    margin-top:28px;
+    display:grid;
+    gap:16px
+  }
+  .band-material-header {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap
+  }
+  .band-material-header .eyebrow {
+    margin:0
+  }
+
+  /* Medidor del total: --uso va de 0 a 1 (FormularioRegistro.ts) */
+  .usage-meter {
+    --uso:0;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font:500 .72rem var(--mono);
+    color:var(--muted)
+  }
+  .usage-meter-bar {
+    position:relative;
+    width:120px;
+    height:6px;
+    border-radius:3px;
+    background:#3a2c2c;
+    overflow:hidden
+  }
+  .usage-meter-bar::after {
+    content:'';
+    position:absolute;
+    inset:0;
+    transform-origin:left;
+    transform:scaleX(var(--uso));
+    background:#8a7a7a;
+    transition:transform .3s,background .3s
+  }
+  .usage-meter[data-nivel=alto] .usage-meter-bar::after {
+    background:var(--yellow)
+  }
+  .usage-meter[data-nivel=excedido] .usage-meter-bar::after {
+    background:#ff5252
+  }
+  .usage-meter[data-nivel=excedido] {
+    color:#ff8a80
+  }
+
+  /* Sección por tipo. ".registration .file-section" gana a ".registration fieldset" (sin borde ni relleno) */
+  .registration .file-section {
+    border:1px solid #3d3030;
+    border-radius:10px;
+    padding:16px 18px 18px;
+    margin:0;
+    background:#1a1414
+  }
+  .file-section legend {
+    padding:0 8px;
+    margin-left:-8px;
+    font-size:1rem;
+    font-weight:700;
+    color:var(--ink)
+  }
+  .file-limit {
+    margin-left:6px;
+    font:500 .7rem var(--mono);
+    letter-spacing:.06em;
+    color:var(--accent-text);
+    text-transform:uppercase
+  }
+
+  /* Sin mejora (sin JavaScript o navegador antiguo): selector nativo con estilo */
+  .file-section:not(.is-enhanced) .dropzone-icon,
+  .file-section:not(.is-enhanced) .dropzone-text,
+  .file-section:not(.is-enhanced) .dropzone-full {
+    display:none
+  }
+  .file-section:not(.is-enhanced) .dropzone-input {
+    width:100%;
+    margin-top:12px;
+    border:1px solid #5f5151;
+    background:#231b1b;
+    padding:9px 12px;
+    color:white;
+    font-size:.875rem
+  }
+
+  /* Zona para arrastrar */
+  .is-enhanced .dropzone {
+    position:relative;
+    margin-top:14px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:18px 20px;
+    border:1.5px dashed #6f5555;
+    border-radius:8px;
+    background:#211919;
+    cursor:pointer;
+    transition:border-color .2s,background .2s
+  }
+  .is-enhanced .dropzone:hover,
+  .is-enhanced .dropzone.is-dragging {
+    border-color:var(--accent);
+    background:#2a1a1a
+  }
+  .is-enhanced .dropzone.is-dragging {
+    border-style:solid
+  }
+  .is-enhanced .dropzone:focus-within {
+    outline:3px solid var(--yellow);
+    outline-offset:3px
+  }
+  /* El input real queda accesible (teclado y lector de pantalla) pero invisible */
+  .is-enhanced .dropzone-input {
+    position:absolute;
+    width:1px;
+    height:1px;
+    opacity:0;
+    pointer-events:none
+  }
+  .dropzone-icon {
+    flex:none;
+    display:grid;
+    place-items:center;
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:#2f2222;
+    color:var(--accent-text)
+  }
+  .dropzone-icon svg {
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.8;
+    stroke-linecap:round;
+    stroke-linejoin:round
+  }
+  .dropzone-text {
+    display:grid;
+    gap:2px;
+    font-size:.875rem;
+    color:var(--muted)
+  }
+  .dropzone-text strong {
+    color:var(--ink);
+    font-size:.95rem
+  }
+  .dropzone-text u {
+    color:var(--ink);
+    text-underline-offset:4px
+  }
+  .dropzone-full {
+    display:none;
+    font-size:.875rem;
+    color:var(--muted)
+  }
+  .is-enhanced.is-full .dropzone {
+    border-style:solid;
+    border-color:#3d3030;
+    background:transparent;
+    cursor:default
+  }
+  .is-enhanced.is-full .dropzone-text {
+    display:none
+  }
+  .is-enhanced.is-full .dropzone-full {
+    display:block
+  }
+  .is-enhanced.is-full .dropzone-icon {
+    color:var(--muted)
+  }
+  .file-message {
+    margin-top:10px;
+    font-size:.8rem;
+    color:#ff8a80
+  }
+  .file-message:empty {
+    display:none
+  }
+
+  /* Vistas previas */
+  .file-previews {
+    list-style:none;
+    padding:0;
+    margin:14px 0 0;
+    display:grid;
+    gap:12px
+  }
+  .file-previews:empty {
+    display:none
+  }
+  .file-previews--foto,
+  .file-previews--logo {
+    grid-template-columns:repeat(3,minmax(0,1fr))
+  }
+  .file-card {
+    position:relative;
+    border:1px solid #3d3030;
+    border-radius:8px;
+    background:#231b1b;
+    overflow:hidden;
+    animation:aparecer-archivo .25s ease both
+  }
+  .file-card-thumb {
+    aspect-ratio:1;
+    background:#120e0e
+  }
+  .file-card-thumb img {
+    width:100%;
+    height:100%;
+    object-fit:cover
+  }
+  /* Los logos se ven completos sobre cuadrícula, para notar la transparencia */
+  .file-card--logo .file-card-thumb {
+    padding:14px;
+    background:
+      repeating-conic-gradient(#2c2424 0 25%,#1c1616 0 50%) 0 0/16px 16px
+  }
+  .file-card--logo .file-card-thumb img {
+    object-fit:contain
+  }
+  .file-card-info {
+    display:grid;
+    gap:2px;
+    padding:9px 34px 10px 11px;
+    min-width:0
+  }
+  .file-card-name {
+    font-size:.8rem;
+    font-weight:600;
+    color:var(--ink);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis
+  }
+  .file-card-size {
+    font:.7rem var(--mono);
+    color:var(--muted)
+  }
+  .registration .file-remove {
+    position:absolute;
+    top:6px;
+    right:6px;
+    display:grid;
+    place-items:center;
+    width:28px;
+    height:28px;
+    margin:0;
+    padding:0;
+    border:0;
+    border-radius:50%;
+    background:#000000b3;
+    color:#fff;
+    font-size:1.1rem;
+    line-height:1;
+    transition:background .2s
+  }
+  .registration .file-remove:hover {
+    background:var(--accent)
+  }
+
+  /* Canciones: tarjeta horizontal con reproductor */
+  .file-card--audio {
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr);
+    align-items:center;
+    gap:14px;
+    padding:12px 44px 12px 12px
+  }
+  .file-card--audio .file-card-info {
+    padding:0
+  }
+  .file-card--audio .file-remove {
+    top:50%;
+    transform:translateY(-50%)
+  }
+  .file-card-icon {
+    display:grid;
+    place-items:center;
+    width:44px;
+    height:44px;
+    border-radius:8px;
+    background:linear-gradient(135deg,var(--accent),#5a1010);
+    color:#fff;
+    font-size:1.3rem
+  }
+  .player {
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr) auto;
+    align-items:center;
+    gap:10px;
+    margin-top:8px
+  }
+  .registration .player-toggle {
+    display:grid;
+    place-items:center;
+    width:32px;
+    height:32px;
+    margin:0;
+    padding:0;
+    border:1px solid #796969;
+    border-radius:50%;
+    background:#352828;
+    color:var(--ink);
+    font-size:.7rem;
+    letter-spacing:-.1em
+  }
+  .registration .player-toggle:hover:not(:disabled),
+  .player.is-playing .player-toggle {
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff
+  }
+  .player-progress {
+    --avance:0%;
+    width:100%;
+    height:4px;
+    margin:0;
+    appearance:none;
+    border-radius:2px;
+    background:linear-gradient(to right,var(--accent-text) var(--avance),#4a3a3a var(--avance));
+    cursor:pointer
+  }
+  .player-progress::-webkit-slider-thumb {
+    appearance:none;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:var(--ink)
+  }
+  .player-progress::-moz-range-thumb {
+    width:12px;
+    height:12px;
+    border:0;
+    border-radius:50%;
+    background:var(--ink)
+  }
+  .player-time {
+    font:.7rem var(--mono);
+    color:var(--muted);
+    white-space:nowrap
+  }
+  .player.is-unplayable .player-progress,
+  .player.is-unplayable .player-toggle {
+    opacity:.35
+  }
+
+  @keyframes aparecer-archivo {
+    from {
+      opacity:0;
+      transform:translateY(6px)
+    }
+  }
+  @media(max-width:767px) {
+    .is-enhanced .dropzone {
+      padding:16px
+    }
+    .file-previews--foto,
+    .file-previews--logo {
+      grid-template-columns:repeat(2,minmax(0,1fr))
+    }
+  }
+}

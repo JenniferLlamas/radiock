@@ -28,19 +28,19 @@ src/
     hooks/useCarrusel.ts         #   Carrusel accesible
     services/catalogo.ts         #   Composición: repositorio de bandas
     styles/  ui/  index.ts
-  contacto/                      # Participación, contacto y presentación de bandas
-    constants/mensajes.ts        #   Textos fijos del formulario
-    data/camposPresentacion.ts   #   Campos del formulario
-    domain/                      #   CampoPresentacion, Portapapeles
-    helpers/                     #   componerPresentacion, validarObligatorios
-    hooks/                       #   useFormularioPresentacion
-    services/portapapeles.ts     #   Adaptador del portapapeles del navegador
+  contacto/                      # Participación, contacto y registro de bandas
+    constants/                   #   archivos.ts (límites en MB), mensajes.ts (textos fijos)
+    data/                        #   camposPresentacion.ts, archivosPresentacion.ts
+    domain/                      #   CampoPresentacion, ReglaArchivos, validacionArchivos, EnvioRegistro, Portapapeles
+    helpers/                     #   archivos (peso, base64), componerPresentacion, tiempo, validarObligatorios
+    hooks/                       #   useFormularioRegistro, useFormularioPresentacion, useSelectorArchivos, useReproductorAudio
+    services/                    #   envioAppsScript, portapapeles
     styles/  ui/  index.ts
   comunidad/                     # Momentos de la escena: data/ domain/ styles/ ui/ index.ts
   radiock/                       # Historia y propósito: data/ domain/ helpers/ styles/ ui/ index.ts
   inicio/                        # Hero y composición de la landing: styles/ ui/ index.ts
   compartido/                    # Núcleo común
-    constants/                   #   sitio.ts (SEO, redes, zona horaria), redesSociales, interfaz, fechas
+    constants/                   #   sitio.ts (SEO, redes, zona horaria, urlRegistro), redesSociales, interfaz, fechas
     data/navegacion.ts           #   Enlaces del menú
     domain/                      #   Repositorio, EnlaceExterno, EnlaceNavegacion, FechaIso
     helpers/                     #   fechas, numeros, redesSociales, rutas, preferencias
@@ -59,12 +59,12 @@ archivo/oblivion/                # Plantillas preexistentes incompletas, fuera d
 | `domain/` | Tipos, interfaces (puertos) y reglas de negocio puras, sin Astro ni DOM | `constants/`, `data/`, `helpers/`, `@/compartido` |
 | `data/` | Contenido y listas editables (arreglos tipados) | `domain/` (tipos), `constants/` |
 | `helpers/` | Funciones utilitarias sin estado: formatos, cálculos, utilidades del navegador | `constants/`, `domain/` (tipos) |
-| `services/` | Composición e implementaciones concretas: repositorios y adaptadores (portapapeles) | todo lo anterior |
+| `services/` | Composición e implementaciones concretas: repositorios y adaptadores (Apps Script, portapapeles) | todo lo anterior |
 | `hooks/` | `useX()`: conectan comportamiento a un elemento de la página; los llaman los `<script>` | todo lo anterior y `@/compartido/hooks` |
 | `ui/` y `styles/` | Componentes `.astro` y su CSS | todo lo anterior y `@/compartido/ui` |
 | `index.ts` | API pública de la funcionalidad | — |
 
-**Hooks.** Astro no usa React, así que aquí un *hook* es una función `useX(elemento, …)` que activa un comportamiento sobre el marcado ya renderizado y devuelve su controlador, o `null` si falta el marcado. La lógica vive en una clase dentro del mismo archivo (por ejemplo, `useCarrusel` → `Carrusel`). Las dependencias se inyectan: `useFormularioPresentacion(raiz, portapapelesNavegador)`.
+**Hooks.** Astro no usa React, así que aquí un *hook* es una función `useX(elemento, …)` que activa un comportamiento sobre el marcado ya renderizado y devuelve su controlador, o `null` si falta el marcado. La lógica vive en una clase dentro del mismo archivo (por ejemplo, `useCarrusel` → `Carrusel`). Las dependencias se inyectan: `useFormularioRegistro(raiz, envioAppsScript(url))`.
 
 ### Estilos por funcionalidad
 
@@ -135,13 +135,32 @@ Patrones: **Repository** (`RepositorioEnMemoria`), **Facade/API pública** (`ind
 | `src/bandas/data/bandas.ts` | Nombre, logo, ciudad, género y redes de cada banda |
 | `src/comunidad/data/momentos.ts` | Fotografías, textos alternativos y pies de foto |
 | `src/contacto/data/camposPresentacion.ts` | Campos del formulario de presentación de bandas |
-| `src/contacto/constants/mensajes.ts` | Textos fijos del formulario (saludo y avisos) |
+| `src/contacto/data/archivosPresentacion.ts` | Fotos, logos y canciones que se pueden adjuntar: cantidad, formatos y tamaños |
+| `src/contacto/constants/archivos.ts` | Límite total por envío (30 MB) |
+| `src/contacto/constants/mensajes.ts` | Textos fijos del formulario (saludo, estados del envío, avisos) |
 
 Los eventos pasados y futuros van en la misma lista. La agenda los separa en próximos o anteriores al comparar su fecha con el día actual en `America/Tijuana`; el día del evento todavía cuenta como próximo. Cada evento genera `/eventos/<id>`, con título, descripción y textos derivados de sus datos. Como el sitio es estático, la clasificación se calcula al compilar: después de un evento hay que volver a publicar para que pase al archivo. La compilación falla si una fecha no tiene formato `YYYY-MM-DD` o si un `id` está repetido. Las fechas se formatean en UTC para evitar que cambien de día según la zona horaria. `miniatura` es opcional; si falta, se utiliza el cartel. Las ciudades y géneros de bandas no confirmados se omiten. La participación en el primer festival proviene del cartel existente; las redes de Oblivion proceden de las plantillas originales.
 
-## Presentación de bandas
+## Registro de bandas
 
-El formulario prepara un mensaje con los datos de la banda para copiarlo y enviarlo por Instagram o Facebook. No envía ni guarda datos. Sin JavaScript los campos permanecen desactivados y las redes siguen disponibles. Los campos se definen en `src/contacto/data/camposPresentacion.ts`, que genera tanto el formulario como el mensaje.
+El formulario tiene dos modos y elige uno según `urlRegistro` en `src/compartido/constants/sitio.ts`:
+
+- **Con backend (URL configurada):** la banda llena sus datos y adjunta su material en tres secciones: **Fotos** (hasta 3), **Logos** (hasta 2) y **Canciones** (hasta 3). Todo se envía a un **Google Apps Script** que guarda los archivos en tu Drive, en una carpeta por banda con subcarpetas `Fotos/`, `Logos/` y `Canciones/`, y añade una fila a una hoja de cálculo. Instalación y publicación: [`backend/registro-bandas/README.md`](backend/registro-bandas/README.md).
+- **Sin backend (URL vacía):** prepara un mensaje para copiarlo y enviarlo por Instagram o Facebook. No envía ni guarda datos.
+
+En ambos modos, sin JavaScript los campos permanecen desactivados y las redes siguen disponibles.
+
+| Pieza | Archivo |
+| --- | --- |
+| Campos y material (data) | `src/contacto/data/camposPresentacion.ts`, `archivosPresentacion.ts` |
+| Tipos y reglas (domain) | `src/contacto/domain/CampoPresentacion.ts`, `ReglaArchivos.ts`, `validacionArchivos.ts` |
+| Puertos y adaptadores | `domain/EnvioRegistro.ts` → `services/envioAppsScript.ts`; `domain/Portapapeles.ts` → `services/portapapeles.ts` |
+| Hooks | `hooks/useFormularioRegistro.ts` (con backend), `hooks/useFormularioPresentacion.ts` (mensaje) |
+| Zonas de arrastre y vistas previas | `hooks/useSelectorArchivos.ts` (agrega, quita y valida cada archivo, y lo copia al `<input type="file">` real), `hooks/useReproductorAudio.ts` |
+| Componentes | `RegistroBanda.astro`, `PresentacionPorMensaje.astro`, `CampoArchivo.astro` (+ `styles/material-banda.css`) |
+| Backend | `backend/registro-bandas/Codigo.js`, `appsscript.json` |
+
+El adaptador envía JSON como `text/plain`. Así es una petición CORS "simple", sin preflight, que Apps Script no admite. Para cambiar de backend (por ejemplo, a una función serverless) basta con otro adaptador que implemente `EnvioRegistro`; el formulario no cambia.
 
 ## Desarrollo y validación
 
@@ -162,6 +181,7 @@ Herramientas de desarrollo: `@astrojs/check` y TypeScript 5.6.2 (modo estricto).
 - Fechas, carteles, venues y carteles de bandas para próximos eventos.
 - Ciudad, género y redes confirmadas de cada banda.
 - Fotografías de cada evento con autorización de uso y créditos. Las fotos actuales se presentan como archivo de bandas, sin atribuirlas a una fecha específica.
+- Publicar el Apps Script del registro y pegar su URL en `sitio.urlRegistro` (ver `backend/registro-bandas/README.md`).
 
 ## Archivos de esta adaptación
 

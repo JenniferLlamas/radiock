@@ -7,6 +7,10 @@ export const sitio = {
   // URL de la vista privada. Sustituir por el dominio oficial cuando esté disponible.
   url: 'https://radiock-escena.j3nny153000.chatgpt.site',
   correo: '',
+  // URL del Web App de Apps Script que guarda los registros en Drive (backend/registro-bandas).
+  // Vacía: el formulario prepara un mensaje para enviarlo por redes, sin backend.
+  // La variable PUBLIC_REGISTRO_URL, si existe al compilar, tiene prioridad (útil para pruebas).
+  urlRegistro: import.meta.env?.PUBLIC_REGISTRO_URL || '',
   // Determina qué eventos son próximos y cuáles ya pasaron.
   zonaHoraria: 'America/Tijuana',
   // Una red sin URL no se muestra en el sitio.
