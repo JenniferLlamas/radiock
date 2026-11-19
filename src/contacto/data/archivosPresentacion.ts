@@ -3,7 +3,7 @@ import type { ReglaArchivos } from '../domain/ReglaArchivos';
 
 /**
  * Material que una banda puede adjuntar al registro, una sección por tipo.
- * Debe coincidir con CONFIG.ARCHIVOS de backend/registro-bandas/Codigo.js,
+ * Debe coincidir con ARCHIVOS de backend/registro-bandas/data/archivos.js,
  * que vuelve a validar los archivos al recibirlos.
  */
 export const archivosPresentacion: readonly ReglaArchivos[] = [

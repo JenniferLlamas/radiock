@@ -4,7 +4,7 @@ import type { CampoPresentacion } from '../domain/CampoPresentacion';
  * Campos de la presentación de una banda. El formulario, el mensaje para redes y el
  * registro se construyen a partir de esta lista: para añadir, quitar o reordenar un
  * campo solo se edita aquí. Si el registro se envía al backend, actualiza también
- * CONFIG.CAMPOS en backend/registro-bandas/Codigo.js.
+ * CAMPOS en backend/registro-bandas/data/campos.js.
  */
 export const camposPresentacion: readonly CampoPresentacion[] = [
   { nombre: 'banda', etiqueta: 'Nombre de la banda', etiquetaMensaje: 'Banda', obligatorio: true, maximo: 120, sugerencia: 'Así nos llamamos', autocompletar: 'organization' },

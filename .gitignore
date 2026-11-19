@@ -28,3 +28,6 @@ pnpm-debug.log*
 
 # pruebas de interfaz (Playwright): compilaciones, resultados y reporte
 .e2e/
+
+# clasp: ID del proyecto de Apps Script de tu cuenta
+.clasp.json

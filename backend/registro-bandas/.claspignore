@@ -1,0 +1,4 @@
+# clasp sube solo el código de Apps Script y el manifiesto (no las pruebas ni la documentación).
+**/**
+!**/*.js
+!appsscript.json

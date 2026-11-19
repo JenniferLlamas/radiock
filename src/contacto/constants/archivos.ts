@@ -4,7 +4,7 @@ export const MB = 1024 * KB;
 /**
  * Límite total por envío (fotos + logos + canciones): Apps Script admite unos 50 MB
  * por petición y el base64 añade un 33 %. Debe coincidir con CONFIG.MAX_BYTES_TOTAL
- * de backend/registro-bandas/Codigo.js.
+ * de backend/registro-bandas/constants/configuracion.js.
  */
 export const MAX_BYTES_TOTAL = 30 * MB;
 
