@@ -171,8 +171,36 @@ El adaptador envía JSON como `text/plain`. Así es una petición CORS "simple",
 | `npm run check` | Diagnósticos y tipos de los componentes Astro y TypeScript |
 | `npm run build` | Compilar la landing y una página por evento en `dist/` |
 | `npm run preview` | Revisar la compilación localmente |
+| `npm test` | Pruebas unitarias (Vitest): lógica, backend y arquitectura; unos 5 s |
+| `npm run test:watch` | Pruebas unitarias en modo vigilancia mientras se programa |
+| `npm run test:ui` | Pruebas de interfaz (Playwright) en Chrome, escritorio y móvil; unos 3 min |
+| `npm run test:ui:reporte` | Abrir el reporte HTML de la última ejecución de `test:ui` |
+| `npm run test:todo` | `check` + `test` + `test:ui`: lo recomendado antes de publicar |
 
-Herramientas de desarrollo: `@astrojs/check` y TypeScript 5.6.2 (modo estricto). El override del servidor de lenguaje mantiene la comprobación compatible con Node 20.12.0. No existe un script de lint en el proyecto.
+Herramientas de desarrollo: `@astrojs/check`, TypeScript 5.6.2 (modo estricto), Vitest 2.1.9 (la línea compatible con Vite 5 de Astro 4), Playwright 1.49.1 y `@types/node` 20. El override del servidor de lenguaje mantiene la comprobación compatible con Node 20.12.0. `npm run check` revisa también los tipos de las pruebas. No existe un script de lint en el proyecto.
+
+### Pruebas
+
+**Unitarias (`npm test`)**: cada prueba vive junto al archivo que prueba (`*.test.ts`), dentro de su funcionalidad. Las pruebas no forman parte del sitio y Tailwind las ignora.
+
+| Archivo | Qué comprueba |
+| --- | --- |
+| `src/**/*.test.ts` | Agenda de eventos (próximos y anteriores según la fecha), textos de cada evento, fechas y zona horaria, repositorio, validación de fotos, logos y canciones, mensaje para redes y helpers |
+| `src/bandas/data/bandas.test.ts` | Ids únicos, logos que existen en `public/`, redes con `https` |
+| `backend/registro-bandas/Codigo.test.ts` | El Apps Script ejecutado en Node con imitaciones de Drive y Hojas de cálculo: subcarpetas, filas, validaciones, campo trampa, fórmulas y nombres peligrosos. También comprueba que **sus límites coinciden con los del sitio**: si cambias uno y olvidas el otro, falla |
+| `tests/unit/arquitectura.test.ts` | Las reglas de capas y funcionalidades de este README. Si un import las rompe, indica el archivo y el import |
+
+**De interfaz (`npm run test:ui`)**: en `tests/e2e/`. Compilan dos versiones del sitio en `.e2e/`, una sin backend y otra con una URL de Apps Script ficticia, y las sirven con `astro preview`. Así se prueba lo mismo que se publica. Usan el Chrome instalado (no descargan navegadores) en dos tamaños: escritorio (1440 px) y móvil (Pixel 7). Una prueba también falla si la página lanza cualquier error de JavaScript.
+
+| Archivo | Qué comprueba |
+| --- | --- |
+| `navegacion.spec.ts` | Secciones y un solo H1, sin desbordamiento horizontal, menú móvil (Escape, foco, cerrar al navegar), carrusel, página de cada evento con sus textos, redirección `/evento` |
+| `registro-mensaje.spec.ts` | Formulario sin backend: obligatorios, mensaje generado, copiar al portapapeles, ocultar al editar |
+| `registro-envio.spec.ts` | Registro con archivos: tres secciones, agregar por tandas, duplicados, máximos, quitar con foco, rechazos al agregar, arrastrar y soltar, vista previa de logos SVG y PNG, reproductor, tope de 30 MB, envío con los archivos byte a byte, error del backend con reintento, campo trampa, limpieza al registrar otra banda |
+
+El Apps Script se simula interceptando la red (`tests/e2e/soporte/appsScriptFalso.ts`), así que **las pruebas nunca escriben en tu Drive**. La simulación responde directamente con `200` en lugar de la redirección `302` del servicio real, porque Chrome no sigue una redirección simulada por Playwright entre dominios. Seguir la redirección lo hace el navegador; el formato del envío, el CORS y el manejo de errores sí quedan probados.
+
+Si una prueba de interfaz falla, el reporte (`npm run test:ui:reporte`) incluye una captura y una traza paso a paso. Las pruebas no reemplazan una revisión visual antes de publicar a 320, 768, 1024 y 1920 px, con zoom al 200 % y con movimiento reducido.
 
 ## Información pendiente
 

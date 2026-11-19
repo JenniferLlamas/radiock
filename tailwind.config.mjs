@@ -2,7 +2,8 @@ import { componentesRadiock } from './src/compartido/styles/componentes.mjs';
 
 /** @type {import('tailwindcss').Config} */
 export default {
-	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+	// Las pruebas no forman parte del sitio: sus textos no deben generar utilidades.
+	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}', '!./src/**/*.test.ts'],
 	theme: {
 		// Breakpoints del sitio (de mayor a menor, porque son max-width).
 		// Disponibles como variantes: `@apply tablet:hidden`, `theme('screens.movil.max')`.

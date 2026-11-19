@@ -2,12 +2,17 @@
   "extends": "astro/tsconfigs/base",
   "include": [
     "src/**/*",
-    ".astro/types.d.ts"
+    ".astro/types.d.ts",
+    "tests/**/*",
+    "backend/**/*.test.ts",
+    "playwright.config.ts",
+    "vitest.config.ts"
   ],
   "exclude": [
     "dist",
     "archivo",
-    "node_modules"
+    "node_modules",
+    ".e2e"
   ],
   "compilerOptions": {
     "strict": true,

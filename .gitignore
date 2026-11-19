@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# pruebas de interfaz (Playwright): compilaciones, resultados y reporte
+.e2e/

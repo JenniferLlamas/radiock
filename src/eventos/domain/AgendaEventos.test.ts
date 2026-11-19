@@ -1,0 +1,51 @@
+import { describe, expect, it } from 'vitest';
+import { RepositorioEnMemoria } from '@/compartido';
+import { eventos } from '../data/eventos';
+import { AgendaEventos } from './AgendaEventos';
+import { estadoEvento, imagenArchivo, rutaEvento } from './Evento';
+
+const agendaEl = (hoy: string) => new AgendaEventos(new RepositorioEnMemoria(eventos), () => hoy);
+const ids = (lista: { id: string }[]) => lista.map((e) => e.id);
+
+describe('AgendaEventos', () => {
+  it('con la fecha actual del proyecto, todos los fest ya pasaron', () => {
+    const agenda = agendaEl('2026-11-18');
+    expect(agenda.proximos()).toEqual([]);
+    expect(ids(agenda.anteriores())).toEqual(['radiock-fest-vol-1', 'radiock-fest-vol-2', 'radiock-fest-vol-3', 'radiock-fest-vol-4']);
+  });
+
+  it('el día del evento todavía cuenta como próximo', () => {
+    const agenda = agendaEl('2025-04-05');
+    expect(ids(agenda.proximos())).toEqual(['radiock-fest-vol-3', 'radiock-fest-vol-4']);
+    expect(ids(agenda.anteriores())).toEqual(['radiock-fest-vol-1', 'radiock-fest-vol-2']);
+  });
+
+  it('consulta el reloj en cada llamada (no guarda la fecha)', () => {
+    let hoy = '2024-01-01';
+    const agenda = new AgendaEventos(new RepositorioEnMemoria(eventos), () => hoy);
+    expect(agenda.proximos()).toHaveLength(4);
+    hoy = '2030-01-01';
+    expect(agenda.proximos()).toHaveLength(0);
+  });
+});
+
+describe('Evento', () => {
+  const [vol1] = eventos;
+  it('calcula estado, ruta e imagen del archivo', () => {
+    expect(estadoEvento(vol1, '2024-08-10')).toBe('proximo');
+    expect(estadoEvento(vol1, '2024-08-11')).toBe('finalizado');
+    expect(rutaEvento(vol1)).toBe('/eventos/radiock-fest-vol-1');
+    expect(imagenArchivo(vol1)).toBe(vol1.miniatura);
+    expect(imagenArchivo({ ...vol1, miniatura: undefined })).toBe(vol1.cartel);
+  });
+});
+
+describe('datos de eventos', () => {
+  it('tienen ids únicos, fechas ISO y al menos una banda', () => {
+    expect(new Set(ids([...eventos])).size).toBe(eventos.length);
+    for (const evento of eventos) {
+      expect(evento.fecha).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(evento.bandas.length).toBeGreaterThan(0);
+    }
+  });
+});
