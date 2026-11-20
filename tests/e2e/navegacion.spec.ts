@@ -13,6 +13,22 @@ test.describe('página de inicio', () => {
     expect(desborde).toBeLessThanOrEqual(0);
   });
 
+  test('los botones para registrar una banda o un espacio llevan a su formulario', async ({ page }) => {
+    await page.goto(URL_SITIO);
+    const destinos = await page.locator('main a').evaluateAll((enlaces: HTMLAnchorElement[]) => enlaces
+      .map((a) => ({ texto: a.textContent!.replace(/\s+/g, ' ').trim(), href: a.getAttribute('href') ?? '' }))
+      .filter(({ texto }) => /tocar|soy una banda|espacio|colaborar/i.test(texto)));
+    const esperado = (texto: string) => (/tocar|banda/i.test(texto) ? '#registro-banda' : '#registro-local');
+    expect(destinos.length).toBeGreaterThanOrEqual(5);
+    for (const { texto, href } of destinos) expect(href, texto).toBe(esperado(texto));
+
+    // Al pulsar, la página llega al formulario.
+    await page.getByRole('link', { name: /Tengo un espacio \/ Quiero colaborar/ }).click();
+    await expect(page.locator('#registro-local')).toBeInViewport();
+    await page.getByRole('link', { name: /Quiero tocar con Radiock/ }).first().click();
+    await expect(page.locator('#registro-banda')).toBeInViewport();
+  });
+
   test('menú móvil: abre, cierra con Escape y devuelve el foco', async ({ page, isMobile }) => {
     test.skip(!isMobile, 'el menú desplegable solo existe en pantallas pequeñas');
     await page.goto(URL_SITIO);
