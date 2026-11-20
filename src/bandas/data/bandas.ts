@@ -21,13 +21,10 @@ export const bandas: readonly Banda[] = [
   { id: 'infortunio', nombre: 'Infortunio', logo: '/bandas/infortunio/logo.png', redes: [], fotos: [
     foto('infortunio', 'infortunio-1', 'Integrantes de Infortunio de pie en una calle industrial', 1600, 1087),
     foto('infortunio', 'infortunio-2', 'Retrato de Infortunio junto a un barandal', 1066, 1600),
-    foto('infortunio', 'infortunio-3', 'Infortunio posando sobre fondo oscuro', 1067, 1600),
   ] },
   { id: 'bluesfire', nombre: 'Bluesfire', logo: '/bandas/bluesfire/logo.png', redes: [], fotos: [
     foto('bluesfire', 'bluesfire-1', 'Bluesfire tocando en vivo bajo luces moradas', 1600, 1067),
     foto('bluesfire', 'bluesfire-2', 'Bluesfire en el escenario de República de Hops', 1600, 1067),
-    foto('bluesfire', 'bluesfire-3', 'Integrantes de Bluesfire frente a un mural de flores', 1080, 720),
-    foto('bluesfire', 'bluesfire-4', 'Bluesfire tocando en vivo bajo luces rosas', 1080, 720),
   ] },
   { id: 'jumpingbeans', nombre: 'Jumping Beans', logo: '/bandas/jumpingbeans/logo.png', redes: [
     { nombre: 'Instagram', url: 'https://www.instagram.com/losjumpingbeans/' },
@@ -41,7 +38,6 @@ export const bandas: readonly Banda[] = [
   ], fotos: [
     foto('oblivion', 'oblivion-1', 'Oblivion tocando en vivo bajo luces verdes', 1600, 900),
     foto('oblivion', 'oblivion-2', 'Integrantes de Oblivion posando sobre fondo negro', 1600, 881),
-    foto('oblivion', 'oblivion-3', 'Oblivion en una sesión de fotos con sus instrumentos', 1600, 1191),
   ] },
   { id: 'stridulus', nombre: 'Stridulus', logo: '/bandas/stridulus/logo.png', redes: [
     { nombre: 'Facebook', url: 'https://www.facebook.com/Stridulus' },
@@ -49,17 +45,14 @@ export const bandas: readonly Banda[] = [
   ], fotos: [
     foto('stridulus', 'stridulus-1', 'Baterista de Stridulus en el escenario de República de Hops', 1066, 1600),
     foto('stridulus', 'stridulus-2', 'Vocalista de Stridulus cantando bajo luz azul', 1067, 1600),
-    foto('stridulus', 'stridulus-3', 'Integrantes de Stridulus posando al aire libre', 1600, 899),
   ] },
   { id: 'antarex', nombre: 'Antarex', logo: '/bandas/antarex/logo.png', redes: [], fotos: [
     foto('antarex', 'antarex-1', 'Integrantes de Antarex posando en un bar', 1600, 1200),
     foto('antarex', 'antarex-2', 'Antarex tocando en vivo bajo luces azules y rojas', 1351, 898),
-    foto('antarex', 'antarex-3', 'Antarex en el escenario con luces moradas', 1600, 1067),
   ] },
   { id: 'eternika', nombre: 'Eternika', logo: '/bandas/eternika/logo.png', redes: [], fotos: [
     foto('eternika', 'eternika-1', 'Eternika tocando en vivo en Sci-Hop Brewing', 960, 960),
     foto('eternika', 'eternika-2', 'Guitarristas de Eternika en el escenario con luz roja', 1600, 1066),
-    foto('eternika', 'eternika-3', 'Guitarrista de Eternika bajo luces verdes', 1080, 810),
   ] },
   { id: 'bisonz', nombre: 'Bisonz', logo: '/bandas/bisonz/logo.png', redes: [], fotos: [] },
   { id: '5to-tripulante', nombre: '5to Tripulante', logo: '/bandas/5to-tripulante/logo.png', redes: [], fotos: [
@@ -72,17 +65,14 @@ export const bandas: readonly Banda[] = [
   { id: 'westwolf', nombre: 'WestWolf', logo: '/bandas/westwolf/logo.png', redes: [], fotos: [
     foto('westwolf', 'westwolf-1', 'WestWolf tocando en vivo en un bar lleno de bocinas', 1600, 1066),
     foto('westwolf', 'westwolf-2', 'WestWolf en el escenario bajo luz azul', 1600, 900),
-    foto('westwolf', 'westwolf-3', 'Vocalista de WestWolf cantando', 1066, 1600),
   ] },
   { id: 'voces-sin-rostro', nombre: 'Voces Sin Rostro', logo: '/bandas/voces-sin-rostro/logo.png', redes: [], fotos: [
     foto('voces-sin-rostro', 'voces-sin-rostro-1', 'Baterista de Voces Sin Rostro en blanco y negro', 1273, 963),
     foto('voces-sin-rostro', 'voces-sin-rostro-2', 'Bajista de Voces Sin Rostro en blanco y negro', 1260, 1600),
-    foto('voces-sin-rostro', 'voces-sin-rostro-3', 'Guitarrista de Voces Sin Rostro con capucha', 1271, 1600),
   ] },
   { id: 'instinto-animal', nombre: 'Instinto Animal', logo: '/bandas/instinto-animal/logo.png', redes: [], fotos: [
     foto('instinto-animal', 'instinto-animal-1', 'Integrantes de Instinto Animal frente a una pared de guitarras', 1600, 1067),
     foto('instinto-animal', 'instinto-animal-2', 'Instinto Animal en una sesión de fotos con guitarras', 1595, 1600),
-    foto('instinto-animal', 'instinto-animal-3', 'Instinto Animal bajo luz azul', 1067, 1600),
   ] },
   { id: 'the-aprils', nombre: 'The Aprils', logo: '/bandas/the-aprils/logo.png', redes: [], fotos: [
     foto('the-aprils', 'the-aprils-1', 'Integrantes de The Aprils en blanco y negro', 1280, 960),
@@ -97,7 +87,6 @@ export const bandas: readonly Banda[] = [
   { id: 'morfina', nombre: 'Morfina', logo: '/bandas/morfina/logo.png', redes: [], fotos: [
     foto('morfina', 'morfina-1', 'Morfina tocando en vivo bajo luces verdes', 1600, 900),
     foto('morfina', 'morfina-2', 'Integrantes de Morfina posando bajo luces de colores', 1500, 842),
-    foto('morfina', 'morfina-3', 'Morfina en un cerro al atardecer', 1600, 900),
   ] },
   { id: 'cadejo', nombre: 'Cadejo', logo: '/bandas/cadejo/logo.png', redes: [], fotos: [
     foto('cadejo', 'cadejo-1', 'Cadejo tocando en vivo frente a un mural', 1600, 1067),

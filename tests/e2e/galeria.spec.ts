@@ -23,9 +23,9 @@ test.describe('galería de bandas', () => {
   test('filtra por banda y vuelve a todas', async ({ page }) => {
     const galeria = page.locator('#galeria');
     await galeria.getByRole('button', { name: 'Morfina', exact: true }).click();
-    await expect(galeria.locator('li:not([hidden])')).toHaveCount(3);
-    await expect(galeria.locator('li:not([hidden]) .band-gallery-name')).toHaveText(['Morfina', 'Morfina', 'Morfina']);
-    await expect(galeria.locator('[data-galeria-conteo]')).toHaveText('3 fotos de Morfina');
+    await expect(galeria.locator('li:not([hidden])')).toHaveCount(2);
+    await expect(galeria.locator('li:not([hidden]) .band-gallery-name')).toHaveText(['Morfina', 'Morfina']);
+    await expect(galeria.locator('[data-galeria-conteo]')).toHaveText('2 fotos de Morfina');
     await expect(galeria.getByRole('button', { name: 'Morfina', exact: true })).toHaveAttribute('aria-pressed', 'true');
     await galeria.getByRole('button', { name: 'Todas' }).click();
     await expect(galeria.locator('li:not([hidden])')).toHaveCount(12);
@@ -38,13 +38,14 @@ test.describe('galería de bandas', () => {
     const visor = page.locator('dialog[data-galeria-visor]');
     await expect(visor).toBeVisible();
     await expect(visor.locator('[data-visor-titulo]')).toHaveText('Bluesfire');
-    await expect(visor.locator('[data-visor-posicion]')).toHaveText('1 de 4');
+    await expect(visor.locator('[data-visor-posicion]')).toHaveText('1 de 2');
     await expect.poll(() => visor.locator('img').evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
     await page.keyboard.press('ArrowRight');
-    await expect(visor.locator('[data-visor-posicion]')).toHaveText('2 de 4');
+    await expect(visor.locator('[data-visor-posicion]')).toHaveText('2 de 2');
+    await page.keyboard.press('ArrowRight');
+    await expect(visor.locator('[data-visor-posicion]')).toHaveText('1 de 2');
     await page.getByRole('button', { name: 'Foto anterior' }).click();
-    await page.getByRole('button', { name: 'Foto anterior' }).click();
-    await expect(visor.locator('[data-visor-posicion]')).toHaveText('4 de 4');
+    await expect(visor.locator('[data-visor-posicion]')).toHaveText('2 de 2');
     await page.keyboard.press('Escape');
     await expect(visor).toBeHidden();
   });

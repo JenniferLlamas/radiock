@@ -19,6 +19,10 @@ describe('datos de bandas', () => {
     for (const banda of bandas) expect(banda.logo, banda.nombre).toBe(`/bandas/${banda.id}/logo.png`);
   });
 
+  it('cada banda tiene como máximo 2 fotos', () => {
+    for (const banda of bandas) expect(banda.fotos.length, banda.nombre).toBeLessThanOrEqual(2);
+  });
+
   it('cada foto existe en su carpeta, con miniatura, texto alternativo y medidas', () => {
     for (const banda of bandas) {
       for (const foto of banda.fotos) {
