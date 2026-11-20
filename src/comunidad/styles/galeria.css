@@ -1,0 +1,182 @@
+/* 07 / Comunidad: galería de fotos de las bandas (GaleriaBandas.astro + hooks/useGaleria.ts) */
+@layer funcionalidades {
+  .band-gallery {
+    margin-top:80px;
+    scroll-margin-top:110px
+  }
+  .band-gallery-heading {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:10px 25px;
+    margin-bottom:22px
+  }
+  .band-gallery-heading h3 {
+    font-size:clamp(1.4rem,2.2vw,2rem)
+  }
+  .band-gallery-count {
+    font:.75rem/1.7 var(--mono);
+    color:var(--muted);
+    margin:0
+  }
+  .band-gallery-filters {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:24px
+  }
+  .band-gallery-filters[hidden] {
+    display:none
+  }
+  .band-gallery-filters button {
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:transparent;
+    color:var(--muted);
+    padding:7px 14px;
+    font:.75rem/1.4 var(--mono);
+    cursor:pointer;
+    transition:border-color .2s,color .2s,background .2s
+  }
+  .band-gallery-filters button:hover {
+    border-color:#716d6d;
+    color:var(--ink)
+  }
+  .band-gallery-filters button[aria-pressed=true] {
+    border-color:var(--accent);
+    background:var(--accent);
+    color:white
+  }
+  .band-gallery-grid {
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px
+  }
+  .band-gallery-grid li[hidden] {
+    display:none
+  }
+  .band-gallery-grid a {
+    position:relative;
+    display:block;
+    aspect-ratio:4/3;
+    overflow:hidden;
+    border-radius:8px;
+    background:var(--panel)
+  }
+  .band-gallery-grid img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter:grayscale(.2);
+    transition:transform .35s,filter .35s
+  }
+  .band-gallery-grid a:hover img,.band-gallery-grid a:focus-visible img {
+    transform:scale(1.04);
+    filter:none
+  }
+  .band-gallery-name {
+    position:absolute;
+    inset:auto 0 0;
+    padding:28px 12px 10px;
+    background:linear-gradient(transparent,#000c);
+    font:500 .75rem/1.4 var(--mono);
+    color:var(--ink)
+  }
+  .band-gallery-more {
+    margin-top:24px
+  }
+  .band-gallery-more[hidden] {
+    display:none
+  }
+  /* Visor ampliado */
+  .band-gallery-viewer {
+    width:min(1200px,100vw - 32px);
+    max-width:none;
+    max-height:none;
+    padding:0;
+    border:0;
+    background:transparent;
+    color:var(--ink);
+    overflow:visible
+  }
+  .band-gallery-viewer::backdrop {
+    background:#000000e6
+  }
+  .band-gallery-viewer figure {
+    margin:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center
+  }
+  .band-gallery-viewer img {
+    max-width:100%;
+    max-height:calc(100vh - 120px);
+    width:auto;
+    height:auto;
+    object-fit:contain
+  }
+  .band-gallery-viewer figcaption {
+    margin-top:12px;
+    font:.8rem/1.6 var(--mono)
+  }
+  .band-gallery-viewer figcaption span {
+    color:var(--muted);
+    margin-left:10px
+  }
+  .viewer-close,.viewer-step {
+    position:fixed;
+    width:46px;
+    height:46px;
+    border:1px solid #ffffff44;
+    border-radius:50%;
+    background:#000a;
+    color:white;
+    font-size:1.1rem;
+    cursor:pointer
+  }
+  .viewer-close:hover,.viewer-step:hover {
+    background:var(--accent)
+  }
+  .viewer-close {
+    top:16px;
+    right:16px
+  }
+  .viewer-step {
+    top:50%;
+    transform:translateY(-50%)
+  }
+  .viewer-prev {
+    left:16px
+  }
+  .viewer-next {
+    right:16px
+  }
+  @media(max-width:1199px) {
+    .band-gallery-grid {
+      grid-template-columns:repeat(3,1fr)
+    }
+  }
+  @media(max-width:767px) {
+    .band-gallery {
+      margin-top:55px
+    }
+    .band-gallery-grid {
+      grid-template-columns:repeat(2,1fr);
+      gap:8px
+    }
+    .viewer-step {
+      top:auto;
+      bottom:16px;
+      transform:none
+    }
+  }
+  @media(prefers-reduced-motion:reduce) {
+    .band-gallery-grid img {
+      transition:none
+    }
+  }
+}

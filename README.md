@@ -132,8 +132,9 @@ Patrones: **Repository** (`RepositorioEnMemoria`), **Facade/API pública** (`ind
 | `src/compartido/data/navegacion.ts` | Enlaces del menú principal |
 | `src/radiock/data/contenido.ts` | Pilares, actividades y pasos del proceso |
 | `src/eventos/data/eventos.ts` | Todos los eventos: fecha ISO, hora, venue, ciudad, bandas, cartel y miniatura |
-| `src/bandas/data/bandas.ts` | Nombre, logo, ciudad, género y redes de cada banda |
-| `src/comunidad/data/momentos.ts` | Fotografías, textos alternativos y pies de foto |
+| `src/bandas/data/bandas.ts` | Nombre, logo, ciudad, género, redes y fotos de cada banda. Cada banda tiene su carpeta `public/bandas/<id>/` con `logo.png` (fondo transparente u oscuro, a lo más 640×400) y `fotos/<id>-<n>.webp` (hasta 1600 px) con su `<id>-<n>-mini.webp` (hasta 640 px). El carrusel usa el logo y la galería de Comunidad, las fotos. Los originales están en `originales/bandas/` y en la carpeta de eventos de OneDrive; git los ignora |
+| `src/comunidad/data/momentos.ts` | Fotografías destacadas, textos alternativos y pies de foto |
+| `src/comunidad/ui/GaleriaBandas.astro` | Galería con las fotos de todas las bandas: filtro por banda, "Ver más" y visor ampliado (`hooks/useGaleria.ts`). Sin JavaScript se ven todas y cada una abre su versión grande |
 | `src/contacto/data/camposPresentacion.ts` | Campos del formulario de presentación de bandas |
 | `src/contacto/data/archivosPresentacion.ts` | Fotos, logos y canciones que se pueden adjuntar: cantidad, formatos y tamaños |
 | `src/contacto/constants/archivos.ts` | Límite total por envío (30 MB) |
@@ -200,7 +201,7 @@ Herramientas de desarrollo: `@astrojs/check`, TypeScript 5.6.2 (modo estricto), 
 | Archivo | Qué comprueba |
 | --- | --- |
 | `src/**/*.test.ts` | Agenda de eventos (próximos y anteriores según la fecha), textos de cada evento, fechas y zona horaria, repositorio, validación de fotos, logos y canciones, mensaje para redes y helpers |
-| `src/bandas/data/bandas.test.ts` | Ids únicos, logos que existen en `public/`, redes con `https` |
+| `src/bandas/data/bandas.test.ts` | Ids únicos, redes con `https`, logo y fotos (con miniatura, texto alternativo y medidas) en la carpeta de cada banda, y ningún archivo suelto en `public/bandas/` |
 | `backend/registro-locales/**/*.test.ts` | Backend de locales: fila en la pestaña `Locales` sin tocar Drive, obligatorios, longitudes, rechazo de archivos, fórmulas, campo trampa, límites por hora y por día, pausa, orden de carga, y que sus campos coinciden con los del sitio. Las imitaciones de Google de ambos backends están en `backend/pruebas/appsScriptFalso.ts` |
 | `backend/registro-bandas/**/*.test.ts` | Junto a cada módulo del backend. Todos los archivos del Apps Script se ejecutan juntos en Node con imitaciones de Drive y Hojas de cálculo: subcarpetas, filas, validaciones, contenido real de cada archivo (firmas), SVG con código o enlaces externos, campo trampa, límites de envío por hora y por día, pausa, fórmulas y nombres peligrosos. También comprueba que **sus límites coinciden con los del sitio**: si cambias uno y olvidas el otro, falla |
 | `tests/unit/arquitectura.test.ts` | Las reglas de capas y funcionalidades de este README. Si un import las rompe, indica el archivo y el import |
@@ -209,6 +210,7 @@ Herramientas de desarrollo: `@astrojs/check`, TypeScript 5.6.2 (modo estricto), 
 
 | Archivo | Qué comprueba |
 | --- | --- |
+| `galeria.spec.ts` | Galería de bandas: 12 fotos iniciales, "Ver más", filtro por banda, visor con flechas y Escape |
 | `navegacion.spec.ts` | Secciones y un solo H1, sin desbordamiento horizontal, menú móvil (Escape, foco, cerrar al navegar), carrusel, página de cada evento con sus textos, redirección `/evento` |
 | `registro-mensaje.spec.ts` | Formulario sin backend: obligatorios, mensaje generado, copiar al portapapeles, ocultar al editar |
 | `registro-local.spec.ts` | Registro de locales: sección propia, enlaces que llevan a ella, envío solo al Web App de locales, obligatorios, error del backend y mensaje sin backend |

@@ -1,0 +1,42 @@
+---
+// Galería de fotos de las bandas. Las fotos vienen de cada banda (public/bandas/<id>/fotos/).
+import '../styles/galeria.css';
+import { catalogoBandas } from '@/bandas';
+import { TEXTOS_GALERIA } from '../constants/galeria';
+const conFotos = catalogoBandas.todos().filter((banda) => banda.fotos.length > 0);
+const fotos = conFotos.flatMap((banda) => banda.fotos.map((foto) => ({ ...foto, banda })));
+---
+<div class="band-gallery" id="galeria" data-galeria>
+  <div class="band-gallery-heading">
+    <h3 id="gallery-title">Galería de bandas</h3>
+    <p class="band-gallery-count" data-galeria-conteo aria-live="polite">{TEXTOS_GALERIA.conteo(fotos.length, conFotos.length)}</p>
+  </div>
+  <div class="band-gallery-filters" role="group" aria-label="Filtrar fotos por banda" data-galeria-filtros hidden>
+    <button type="button" data-banda="" aria-pressed="true">{TEXTOS_GALERIA.todas}</button>
+    {conFotos.map((banda) => <button type="button" data-banda={banda.id} aria-pressed="false">{banda.nombre}</button>)}
+  </div>
+  <ul class="band-gallery-grid" data-galeria-lista>
+    {fotos.map((foto) => (
+      <li data-banda={foto.banda.id}>
+        <a href={foto.imagen} target="_blank" rel="noopener" data-galeria-foto data-titulo={foto.banda.nombre} data-ancho={foto.ancho} data-alto={foto.alto}>
+          <img src={foto.miniatura} alt={foto.alt} width={Math.round(foto.ancho * 640 / Math.max(foto.ancho, foto.alto))} height={Math.round(foto.alto * 640 / Math.max(foto.ancho, foto.alto))} loading="lazy" decoding="async" />
+          <span class="band-gallery-name">{foto.banda.nombre}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+  <button type="button" class="button-outline band-gallery-more" data-galeria-mas hidden></button>
+  <dialog class="band-gallery-viewer" data-galeria-visor aria-label="Foto ampliada">
+    <figure>
+      <img src="" alt="" />
+      <figcaption><strong data-visor-titulo></strong> <span data-visor-posicion></span></figcaption>
+    </figure>
+    <button type="button" class="viewer-close" data-visor-cerrar aria-label="Cerrar">✕</button>
+    <button type="button" class="viewer-step viewer-prev" data-visor-paso="-1" aria-label="Foto anterior">←</button>
+    <button type="button" class="viewer-step viewer-next" data-visor-paso="1" aria-label="Foto siguiente">→</button>
+  </dialog>
+</div>
+<script>
+  import { useGaleria } from '../hooks/useGaleria';
+  useGaleria(document.querySelector<HTMLElement>('[data-galeria]'));
+</script>
