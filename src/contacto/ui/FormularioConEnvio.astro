@@ -14,7 +14,8 @@ interface Props {
   intro: string;
   leyenda: string;
   boton: string;
-  nota: string;
+  /** Aviso bajo el formulario; si falta, no se muestra. */
+  nota?: string;
   /** Rótulo sobre las secciones de archivos (solo si el registro pide material). */
   material?: string;
   otro: string;
@@ -25,7 +26,7 @@ const { campos, archivos } = registros[tipo];
 <div class="registration" id={`registro-${tipo}`} data-registro={tipo} data-registro-url={url}>
   <h3>{titulo}</h3>
   <p>{intro} Los campos marcados con * son obligatorios.</p>
-  <form id={`form-${tipo}`} data-registro-formulario aria-describedby={`nota-${tipo}`}>
+  <form id={`form-${tipo}`} data-registro-formulario aria-describedby={nota ? `nota-${tipo}` : undefined}>
     <fieldset id={`campos-${tipo}`} data-registro-campos disabled>
       <legend class="sr-only">{leyenda}</legend>
       <div class="form-grid">
@@ -50,7 +51,7 @@ const { campos, archivos } = registros[tipo];
       <button type="submit" class="button-primary" data-registro-boton>{boton} ↗</button>
     </fieldset>
     <p role="status" class="form-status" data-registro-estado data-estado="inicial"></p>
-    <p class="form-note" id={`nota-${tipo}`}>{nota}</p>
+    {nota && <p class="form-note" id={`nota-${tipo}`}>{nota}</p>}
   </form>
   <noscript>
     <p class="form-note">Para enviar tu registro activa JavaScript, o escríbenos directamente por nuestras redes.</p>
