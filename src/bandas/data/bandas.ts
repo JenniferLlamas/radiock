@@ -7,6 +7,8 @@ export const bandas: readonly Banda[] = [
     { nombre: 'Facebook', url: 'https://www.facebook.com/bailarina.sin.cabeza' },
     { nombre: 'Instagram', url: 'https://www.instagram.com/bailarina.sin.cabeza/' },
   ] },
+  { id: 'infortunio', nombre: 'Infortunio', logo: '/bandas/infortunio/logo.png', redes: [] },
+  { id: 'bluesfire', nombre: 'Bluesfire', logo: '/bandas/bluesfire/logo.png', redes: [] },
   { id: 'jumpingbeans', nombre: 'Jumping Beans', logo: '/bandas/jumpingbeans/logo.png', redes: [
     { nombre: 'Instagram', url: 'https://www.instagram.com/losjumpingbeans/' },
   ] },

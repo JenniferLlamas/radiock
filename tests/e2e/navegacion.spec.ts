@@ -56,11 +56,17 @@ test.describe('página de inicio', () => {
     const carrusel = page.locator('#bandas [data-carrusel]');
     await carrusel.scrollIntoViewIfNeeded();
     const estado = carrusel.locator('[data-carrusel-estado]');
-    await expect(estado).toHaveText('Bandas 1–3 de 4');
+    // El total sale de las tarjetas: la prueba sigue valiendo al agregar o quitar bandas.
+    const total = await carrusel.locator('.artist').count();
+    expect(total).toBeGreaterThan(3);
+    await expect(estado).toHaveText(`Bandas 1–3 de ${total}`);
     await expect(page.getByRole('button', { name: 'Ver bandas anteriores' })).toBeDisabled();
-    await page.getByRole('button', { name: 'Ver bandas siguientes' }).click();
-    await expect(estado).toHaveText('Bandas 2–4 de 4');
-    await expect(page.getByRole('button', { name: 'Ver bandas siguientes' })).toBeDisabled();
+    const siguientes = page.getByRole('button', { name: 'Ver bandas siguientes' });
+    for (let primera = 2; primera <= total - 2; primera++) {
+      await siguientes.click();
+      await expect(estado).toHaveText(`Bandas ${primera}–${primera + 2} de ${total}`);
+    }
+    await expect(siguientes).toBeDisabled();
   });
 });
 
