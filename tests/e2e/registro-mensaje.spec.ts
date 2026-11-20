@@ -16,7 +16,7 @@ test.describe('formulario sin backend', () => {
   test('los obligatorios no aceptan solo espacios', async ({ page }) => {
     await page.getByLabel('Nombre de la banda *').fill('   ');
     await page.getByRole('button', { name: /Preparar mi presentación/ }).click();
-    await expect(page.locator('[data-presentacion-vista]')).toBeHidden();
+    await expect(page.locator('#registro-banda [data-presentacion-vista]')).toBeHidden();
     expect(await page.getByLabel('Nombre de la banda *').evaluate((e: HTMLInputElement) => e.validationMessage)).toBe('Completa este campo.');
   });
 
@@ -27,15 +27,15 @@ test.describe('formulario sin backend', () => {
     await page.getByLabel('Contacto *').fill('oblivion@ejemplo.com');
     await page.getByRole('button', { name: /Preparar mi presentación/ }).click();
 
-    const mensaje = page.locator('[data-presentacion-mensaje]');
+    const mensaje = page.locator('#registro-banda [data-presentacion-mensaje]');
     await expect(mensaje).toHaveValue('¡Hola, Radiock! Queremos compartir nuestra música original con ustedes.\n\nBanda: Oblivion\nCiudad: Tijuana\nGénero: Rock\nContacto: oblivion@ejemplo.com');
-    await expect(page.locator('#preview-heading')).toBeFocused();
+    await expect(page.locator('#encabezado-banda')).toBeFocused();
 
     await page.getByRole('button', { name: 'Copiar mensaje' }).click();
     await expect(page.getByRole('status').filter({ hasText: 'Mensaje copiado' })).toBeVisible();
     expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('Banda: Oblivion');
 
     await page.getByLabel('Ciudad *').fill('Ensenada');
-    await expect(page.locator('[data-presentacion-vista]')).toBeHidden();
+    await expect(page.locator('#registro-banda [data-presentacion-vista]')).toBeHidden();
   });
 });

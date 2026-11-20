@@ -1,0 +1,78 @@
+---
+// Modo con backend: envía los datos (y el material, si el registro lo pide) a su Web App de Apps Script.
+// Lo usan RegistroBanda y RegistroLocal; los textos llegan por props y el mensaje de éxito por el slot.
+import { MAX_BYTES_TOTAL } from '../constants/archivos';
+import { registros } from '../data/registros';
+import type { TipoRegistro } from '../domain/Registro';
+import { megas } from '../helpers/archivos';
+import CampoFormulario from './CampoFormulario.astro';
+import CampoArchivo from './CampoArchivo.astro';
+interface Props {
+  tipo: TipoRegistro;
+  url: string;
+  titulo: string;
+  intro: string;
+  leyenda: string;
+  boton: string;
+  nota: string;
+  /** Rótulo sobre las secciones de archivos (solo si el registro pide material). */
+  material?: string;
+  otro: string;
+}
+const { tipo, url, titulo, intro, leyenda, boton, nota, material, otro } = Astro.props;
+const { campos, archivos } = registros[tipo];
+---
+<div class="registration" id={`registro-${tipo}`} data-registro={tipo} data-registro-url={url}>
+  <h3>{titulo}</h3>
+  <p>{intro} Los campos marcados con * son obligatorios.</p>
+  <form id={`form-${tipo}`} data-registro-formulario aria-describedby={`nota-${tipo}`}>
+    <fieldset id={`campos-${tipo}`} data-registro-campos disabled>
+      <legend class="sr-only">{leyenda}</legend>
+      <div class="form-grid">
+        {campos.map((campo) => <CampoFormulario campo={campo} />)}
+      </div>
+      {archivos.length > 0 && (
+        <div class="band-material">
+          <div class="band-material-header">
+            <p class="eyebrow">{material}</p>
+            <div class="usage-meter" data-registro-medidor data-nivel="normal">
+              <span class="usage-meter-bar" aria-hidden="true"></span>
+              <span class="usage-meter-text" data-registro-medidor-texto>0 MB de {megas(MAX_BYTES_TOTAL)}</span>
+            </div>
+          </div>
+          {archivos.map((regla) => <CampoArchivo regla={regla} />)}
+        </div>
+      )}
+      <!-- Campo trampa contra bots: invisible y fuera del orden de tabulación. -->
+      <div class="trap-field" aria-hidden="true">
+        <label>Sitio web <input name="sitioWeb" tabindex="-1" autocomplete="off" /></label>
+      </div>
+      <button type="submit" class="button-primary" data-registro-boton>{boton} ↗</button>
+    </fieldset>
+    <p role="status" class="form-status" data-registro-estado data-estado="inicial"></p>
+    <p class="form-note" id={`nota-${tipo}`}>{nota}</p>
+  </form>
+  <noscript>
+    <p class="form-note">Para enviar tu registro activa JavaScript, o escríbenos directamente por nuestras redes.</p>
+  </noscript>
+  <div class="registration-success" data-registro-exito hidden>
+    <slot />
+    <button type="button" class="button-outline" data-registro-otro>{otro}</button>
+  </div>
+</div>
+<script>
+  import { registros } from '../data/registros';
+  import type { TipoRegistro } from '../domain/Registro';
+  import { useFormularioRegistro } from '../hooks/useFormularioRegistro';
+  import { useSelectoresArchivos } from '../hooks/useSelectorArchivos';
+  import { envioAppsScript } from '../services/envioAppsScript';
+  // Astro incluye este script una sola vez aunque haya varios formularios: se montan todos.
+  document.querySelectorAll<HTMLElement>('[data-registro]').forEach((raiz) => {
+    const registro = registros[raiz.dataset.registro as TipoRegistro];
+    const url = raiz.dataset.registroUrl;
+    if (!registro || !url) return;
+    // Primero los selectores: su "change" debe ejecutarse antes que el del formulario.
+    useSelectoresArchivos(raiz);
+    useFormularioRegistro(raiz, envioAppsScript(url), registro);
+  });
+</script>

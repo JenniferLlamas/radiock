@@ -1,12 +1,14 @@
 import { MENSAJES_COPIA } from '../constants/mensajes';
+import { registroBanda } from '../data/registros';
 import type { Portapapeles } from '../domain/Portapapeles';
+import type { Registro } from '../domain/Registro';
 import { componerPresentacion } from '../helpers/componerPresentacion';
 import { validarObligatorios } from '../helpers/validarObligatorios';
 import { portapapelesNavegador } from '../services/portapapeles';
 
 /** Activa el formulario sin backend (mensaje para redes) dentro de `raiz`. */
-export const useFormularioPresentacion = (raiz: HTMLElement | null, portapapeles?: Portapapeles): FormularioPresentacion | null =>
-  FormularioPresentacion.montar(raiz, portapapeles);
+export const useFormularioPresentacion = (raiz: HTMLElement | null, registro: Registro = registroBanda, portapapeles?: Portapapeles): FormularioPresentacion | null =>
+  FormularioPresentacion.montar(raiz, registro, portapapeles);
 
 /**
  * Controlador del formulario sin backend: valida, muestra la vista previa y copia el
@@ -22,9 +24,10 @@ export class FormularioPresentacion {
     private readonly botonCopiar: HTMLButtonElement | null,
     private readonly estado: HTMLElement | null,
     private readonly portapapeles: Portapapeles,
+    private readonly registro: Registro,
   ) {}
 
-  static montar(raiz: HTMLElement | null, portapapeles: Portapapeles = portapapelesNavegador): FormularioPresentacion | null {
+  static montar(raiz: HTMLElement | null, registro: Registro = registroBanda, portapapeles: Portapapeles = portapapelesNavegador): FormularioPresentacion | null {
     const buscar = <T extends Element>(selector: string) => raiz?.querySelector<T>(selector) ?? null;
     const formulario = buscar<HTMLFormElement>('[data-presentacion-formulario]');
     const campos = buscar<HTMLFieldSetElement>('[data-presentacion-campos]');
@@ -36,7 +39,7 @@ export class FormularioPresentacion {
       formulario, vistaPrevia,
       buscar('[data-presentacion-encabezado]'), mensaje,
       buscar('[data-presentacion-copiar]'), buscar('[data-presentacion-estado]'),
-      portapapeles,
+      portapapeles, registro,
     );
     instancia.escuchar();
     // Sin JavaScript los campos quedan desactivados: no habría forma de usar el mensaje.
@@ -57,7 +60,7 @@ export class FormularioPresentacion {
 
   private prepararMensaje(): void {
     const datos = new FormData(this.formulario);
-    this.mensaje.value = componerPresentacion((nombre) => datos.get(nombre)?.toString());
+    this.mensaje.value = componerPresentacion((nombre) => datos.get(nombre)?.toString(), this.registro.campos, this.registro.saludo);
     this.vistaPrevia.hidden = false;
     this.informar('');
     this.encabezadoVista?.focus();

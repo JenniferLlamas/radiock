@@ -22,7 +22,7 @@ export function envioAppsScript(url: string, leer: (archivo: Blob) => Promise<st
         respuesta = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ campos: solicitud.campos, archivos, sitioWeb: solicitud.sitioWeb }),
+          body: JSON.stringify({ tipo: solicitud.tipo, campos: solicitud.campos, archivos, sitioWeb: solicitud.sitioWeb }),
           redirect: 'follow',
         });
       } catch {

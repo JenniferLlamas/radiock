@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { archivosPresentacion } from '../data/archivosPresentacion';
+import { registroLocal } from '../data/registros';
 import { huellaArchivo, megas, pesoLegible, valorAccept } from './archivos';
 import { componerPresentacion } from './componerPresentacion';
 import { formatoTiempo } from './tiempo';
@@ -9,6 +10,13 @@ describe('componerPresentacion', () => {
     const datos: Record<string, string> = { contacto: 'x@y.z', banda: ' Oblivion ', ciudad: 'Tijuana', genero: 'Rock', instagram: '' };
     expect(componerPresentacion((campo) => datos[campo])).toBe(
       '¡Hola, Radiock! Queremos compartir nuestra música original con ustedes.\n\nBanda: Oblivion\nCiudad: Tijuana\nGénero: Rock\nContacto: x@y.z',
+    );
+  });
+
+  it('con los campos y el saludo de locales', () => {
+    const datos: Record<string, string> = { local: 'El Foro', responsable: 'Ana', ubicacion: 'Centro, Tijuana', contacto: '664 123 4567' };
+    expect(componerPresentacion((campo) => datos[campo], registroLocal.campos, registroLocal.saludo)).toBe(
+      '¡Hola, Radiock! Tenemos un espacio y nos gustaría recibir eventos de música original.\n\nLocal: El Foro\nResponsable: Ana\nUbicación: Centro, Tijuana\nContacto: 664 123 4567',
     );
   });
 });

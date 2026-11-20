@@ -34,7 +34,7 @@ test.describe('registro con archivos', () => {
     await expect(seccion(page, 'fotos').locator('[data-contador]')).toHaveText('0 de 3');
     await expect(seccion(page, 'logos').locator('[data-contador]')).toHaveText('0 de 2');
     await expect(seccion(page, 'canciones').locator('[data-contador]')).toHaveText('0 de 3');
-    await expect(page.locator('[data-registro-medidor-texto]')).toHaveText('0 MB de 30 MB');
+    await expect(page.locator('#registro-banda [data-registro-medidor-texto]')).toHaveText('0 MB de 30 MB');
     await expect(seccion(page, 'fotos').getByText('Arrastra tus fotos aquí')).toBeVisible();
   });
 
@@ -120,9 +120,9 @@ test.describe('registro con archivos', () => {
     const recibidas = await simularAppsScript(page);
     await llenarDatos(page);
     await elegir(page, 'canciones', [1, 2, 3].map((i) => relleno(`grande${i}.mp3`, 'audio/mpeg', 12)));
-    await expect(page.locator('[data-registro-medidor]')).toHaveAttribute('data-nivel', 'excedido');
+    await expect(page.locator('#registro-banda [data-registro-medidor]')).toHaveAttribute('data-nivel', 'excedido');
     await page.getByRole('button', { name: /Enviar registro/ }).click();
-    await expect(page.locator('[data-registro-estado]')).toHaveText('Entre todos, los archivos pesan más de 30 MB.');
+    await expect(page.locator('#registro-banda [data-registro-estado]')).toHaveText('Entre todos, los archivos pesan más de 30 MB.');
     expect(recibidas).toHaveLength(0);
   });
 
@@ -131,27 +131,28 @@ test.describe('registro con archivos', () => {
     await llenarDatos(page);
     const material = { fotos: [fotos.bailarina, fotos.stridulus], logos: [logos.svg], canciones: [wav('demo.wav'), wav('ensayo.wav', 2)] };
     for (const [nombre, archivos] of Object.entries(material)) await elegir(page, nombre as keyof typeof material, archivos);
-    await expect(page.locator('[data-registro-medidor-texto]')).toHaveText(/ de 30 MB$/);
+    await expect(page.locator('#registro-banda [data-registro-medidor-texto]')).toHaveText(/ de 30 MB$/);
 
     await page.getByRole('button', { name: /Enviar registro/ }).click();
-    await expect(page.locator('[data-registro-exito]')).toBeVisible();
-    await expect(page.locator('[data-registro-banda]')).toHaveText('Los Prueba');
+    await expect(page.locator('#registro-banda [data-registro-exito]')).toBeVisible();
+    await expect(page.locator('#registro-banda [data-registro-nombre]')).toHaveText('Los Prueba');
 
     expect(recibidas).toHaveLength(1);
     const [solicitud] = recibidas;
     expect(solicitud.tipoContenido).toMatch(/^text\/plain/); // petición CORS simple, sin preflight
     expect(solicitud.campos).toEqual({ banda: 'Los Prueba', ciudad: 'Tijuana', genero: 'Rock alternativo', instagram: '', youtube: '', contacto: 'losprueba@ejemplo.com' });
     expect(solicitud.sitioWeb).toBe('');
+    expect(solicitud.tipo).toBe('banda');
     const enviados = Object.entries(material).flatMap(([campo, archivos]) => archivos.map((a) => ({ campo, ...a })));
     expect(solicitud.archivos.map((a) => `${a.campo}:${a.nombre}:${a.tipo}`)).toEqual(enviados.map((a) => `${a.campo}:${a.name}:${a.mimeType}`));
     solicitud.archivos.forEach((archivo, i) => expect(archivo.bytes.equals(enviados[i].buffer), archivo.nombre).toBe(true));
 
     // "Registrar otra banda" deja el formulario limpio
     await page.getByRole('button', { name: 'Registrar otra banda' }).click();
-    await expect(page.locator('[data-registro-formulario]')).toBeVisible();
+    await expect(page.locator('#registro-banda [data-registro-formulario]')).toBeVisible();
     await expect(page.locator('.file-card')).toHaveCount(0);
     await expect(page.getByLabel('Nombre de la banda *')).toHaveValue('');
-    await expect(page.locator('[data-registro-medidor-texto]')).toHaveText('0 MB de 30 MB');
+    await expect(page.locator('#registro-banda [data-registro-medidor-texto]')).toHaveText('0 MB de 30 MB');
   });
 
   test('si el backend rechaza el registro, muestra el motivo y permite reintentar', async ({ page }) => {
@@ -160,18 +161,18 @@ test.describe('registro con archivos', () => {
     await llenarDatos(page);
     const boton = page.getByRole('button', { name: /Enviar registro/ });
     await boton.click();
-    await expect(page.locator('[data-registro-estado]')).toHaveText('Falta el campo Ciudad.');
+    await expect(page.locator('#registro-banda [data-registro-estado]')).toHaveText('Falta el campo Ciudad.');
     await expect(boton).toBeEnabled();
     await boton.click();
-    await expect(page.locator('[data-registro-exito]')).toBeVisible();
+    await expect(page.locator('#registro-banda [data-registro-exito]')).toBeVisible();
   });
 
   test('un bot que llena el campo trampa no ve diferencia, pero se marca', async ({ page }) => {
     const recibidas = await simularAppsScript(page);
     await llenarDatos(page);
-    await page.locator('input[name="sitioWeb"]').evaluate((e: HTMLInputElement) => { e.value = 'http://spam'; });
+    await page.locator('#registro-banda input[name="sitioWeb"]').evaluate((e: HTMLInputElement) => { e.value = 'http://spam'; });
     await page.getByRole('button', { name: /Enviar registro/ }).click();
-    await expect(page.locator('[data-registro-exito]')).toBeVisible();
+    await expect(page.locator('#registro-banda [data-registro-exito]')).toBeVisible();
     expect(recibidas[0].sitioWeb).toBe('http://spam');
   });
 });

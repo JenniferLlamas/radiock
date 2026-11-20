@@ -1,4 +1,4 @@
-/** Límites contra spam por hora y por día, limpieza de contadores y pausa (Limites.js). */
+/** Límites contra spam por hora y por día, limpieza de contadores y pausa (domain/cupo.js). */
 import { runInContext } from 'node:vm';
 import { describe, expect, it } from 'vitest';
 import { adjunto, campos, entorno, propiedadesFalsas } from '../pruebas/entornoAppsScript';

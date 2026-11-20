@@ -1,0 +1,56 @@
+---
+// Modo sin backend: prepara un mensaje para enviarlo por redes. Lo usan PresentacionPorMensaje y LocalPorMensaje.
+import { sitio } from '@/compartido';
+import { registros } from '../data/registros';
+import type { TipoRegistro } from '../domain/Registro';
+import CampoFormulario from './CampoFormulario.astro';
+interface Props {
+  tipo: TipoRegistro;
+  titulo: string;
+  intro: string;
+  leyenda: string;
+  boton: string;
+  /** Nombre accesible del mensaje listo para copiar. */
+  descripcionMensaje: string;
+}
+const { tipo, titulo, intro, leyenda, boton, descripcionMensaje } = Astro.props;
+const { campos } = registros[tipo];
+---
+<div class="registration" id={`registro-${tipo}`} data-presentacion={tipo}>
+  <h3>{titulo}</h3>
+  <p>{intro} Los campos marcados con * son obligatorios.</p>
+  <form id={`form-${tipo}`} data-presentacion-formulario aria-describedby={`nota-${tipo}`}>
+    <fieldset id={`campos-${tipo}`} data-presentacion-campos disabled>
+      <legend class="sr-only">{leyenda}</legend>
+      <div class="form-grid">
+        {campos.map((campo) => <CampoFormulario campo={campo} />)}
+      </div>
+      <button type="submit" class="button-primary">{boton} ↗</button>
+    </fieldset>
+    <p class="form-note" id={`nota-${tipo}`}>Tus datos no se envían ni se guardan en este sitio. Podrás revisar y copiar tu mensaje antes de compartirlo.</p>
+  </form>
+  <noscript>
+    <p class="form-note">Para preparar el mensaje activa JavaScript, o escríbenos directamente por nuestras redes.</p>
+  </noscript>
+  <div class="message-preview" id={`vista-${tipo}`} data-presentacion-vista hidden>
+    <p id={`encabezado-${tipo}`} data-presentacion-encabezado tabindex="-1">Tu mensaje está listo. Cópialo y envíalo a Radiock por mensaje directo.</p>
+    <label class="field" for={`mensaje-${tipo}`}>Tu mensaje</label>
+    <textarea id={`mensaje-${tipo}`} data-presentacion-mensaje readonly aria-label={descripcionMensaje}></textarea>
+    <div class="actions">
+      <button type="button" class="button-primary" data-presentacion-copiar>Copiar mensaje</button>
+      <a class="button-outline" href={sitio.redes.instagram} target="_blank" rel="noopener noreferrer">Abrir Instagram ↗</a>
+      <a class="text-link" href={sitio.redes.facebook} target="_blank" rel="noopener noreferrer">Facebook ↗</a>
+    </div>
+    <p role="status" data-presentacion-estado class="form-note"></p>
+  </div>
+</div>
+<script>
+  import { registros } from '../data/registros';
+  import type { TipoRegistro } from '../domain/Registro';
+  import { useFormularioPresentacion } from '../hooks/useFormularioPresentacion';
+  // Astro incluye este script una sola vez aunque haya varios formularios: se montan todos.
+  document.querySelectorAll<HTMLElement>('[data-presentacion]').forEach((raiz) => {
+    const registro = registros[raiz.dataset.presentacion as TipoRegistro];
+    if (registro) useFormularioPresentacion(raiz, registro);
+  });
+</script>

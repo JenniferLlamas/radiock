@@ -6,3 +6,6 @@ export const URL_REGISTRO = 'http://localhost:4402';
 
 /** URL ficticia del Web App; las pruebas la interceptan (appsScriptFalso.ts), nunca sale a internet. */
 export const URL_APPS_SCRIPT = 'https://apps-script.prueba/exec';
+
+/** URL ficticia del Web App de locales (otro proyecto de Apps Script); también se intercepta. */
+export const URL_APPS_SCRIPT_LOCALES = 'https://apps-script-locales.prueba/exec';

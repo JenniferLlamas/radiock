@@ -11,6 +11,9 @@ export const sitio = {
   // Vacía: el formulario prepara un mensaje para enviarlo por redes, sin backend.
   // La variable PUBLIC_REGISTRO_URL, si existe al compilar, tiene prioridad (útil para pruebas).
   urlRegistro: import.meta.env?.PUBLIC_REGISTRO_URL || '',
+  // Igual, para el registro de locales que prestan su espacio (backend/registro-locales).
+  // Es otro Web App, con su propia hoja: los registros de bandas y de locales no se mezclan.
+  urlRegistroLocales: import.meta.env?.PUBLIC_REGISTRO_LOCALES_URL || '',
   // Determina qué eventos son próximos y cuáles ya pasaron.
   zonaHoraria: 'America/Tijuana',
   // Una red sin URL no se muestra en el sitio.

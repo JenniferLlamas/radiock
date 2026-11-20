@@ -3,6 +3,7 @@ import { URL_APPS_SCRIPT } from './urls';
 
 export interface SolicitudRecibida {
   tipoContenido: string;
+  tipo: string;
   campos: Record<string, string>;
   sitioWeb: string;
   archivos: { campo: string; nombre: string; tipo: string; bytes: Buffer }[];
@@ -11,6 +12,8 @@ export interface SolicitudRecibida {
 interface Opciones {
   /** Respuesta del backend; por defecto { ok: true }. */
   responder?: (solicitud: SolicitudRecibida) => { ok: boolean; error?: string };
+  /** Web App que se imita; por defecto el de bandas. */
+  url?: string;
 }
 
 /**
@@ -23,10 +26,10 @@ interface Opciones {
  * navegador (fetch con redirect: 'follow'); lo que dependen de nuestro código —formato del
  * envío, CORS sin preflight, archivos y manejo de errores— sí queda cubierto.
  */
-export async function simularAppsScript(page: Page, { responder = () => ({ ok: true }) }: Opciones = {}) {
+export async function simularAppsScript(page: Page, { responder = () => ({ ok: true }), url = URL_APPS_SCRIPT }: Opciones = {}) {
   const recibidas: SolicitudRecibida[] = [];
   const cors = { 'access-control-allow-origin': '*' };
-  const origen = new URL(URL_APPS_SCRIPT).origin;
+  const origen = new URL(url).origin;
 
   await page.route(`${origen}/**`, async (ruta) => {
     const peticion = ruta.request();
@@ -39,6 +42,7 @@ export async function simularAppsScript(page: Page, { responder = () => ({ ok: t
       const cuerpo = JSON.parse(peticion.postData() ?? '{}');
       const solicitud: SolicitudRecibida = {
         tipoContenido: (await peticion.allHeaders())['content-type'] ?? '',
+        tipo: cuerpo.tipo,
         campos: cuerpo.campos,
         sitioWeb: cuerpo.sitioWeb,
         archivos: cuerpo.archivos.map((a: { campo: string; nombre: string; tipo: string; contenido: string }) => ({

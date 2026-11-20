@@ -6,10 +6,11 @@ import type { CampoPresentacion, LectorCampos } from '../domain/CampoPresentacio
 export function componerPresentacion(
   leer: LectorCampos,
   campos: readonly CampoPresentacion[] = camposPresentacion,
+  saludo: string = SALUDO_PRESENTACION,
 ): string {
   const lineas = campos
     .map((campo) => ({ campo, valor: (leer(campo.nombre) ?? '').trim() }))
     .filter(({ valor }) => valor)
     .map(({ campo, valor }) => `${campo.etiquetaMensaje}: ${valor}`);
-  return [SALUDO_PRESENTACION, '', ...lineas].join('\n');
+  return [saludo, '', ...lineas].join('\n');
 }

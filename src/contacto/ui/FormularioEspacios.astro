@@ -1,0 +1,20 @@
+---
+// Sección propia para locales que prestan su espacio para eventos. Va separada del registro de
+// bandas y tiene su propio backend (backend/registro-locales) y su propia URL.
+import '../styles/formulario.css';
+import { sitio } from '@/compartido';
+import RegistroLocal from './RegistroLocal.astro';
+import LocalPorMensaje from './LocalPorMensaje.astro';
+---
+<section class="contact-section" id="espacios" aria-labelledby="espacios-title">
+  <div class="contact-grid">
+    <div data-reveal>
+      <p class="eyebrow">09 / ABRE TUS PUERTAS</p>
+      <h2 id="espacios-title">Tu espacio también<br />puede impulsar<br />
+        <span class="accent">la música local.</span>
+      </h2>
+      <p>¿Tienes un bar, foro, café o espacio para música en vivo? Tu lugar recibe público nuevo y las bandas encuentran dónde compartir su música. Déjanos tus datos y organizamos juntos el próximo evento.</p>
+    </div>
+    {sitio.urlRegistroLocales ? <RegistroLocal url={sitio.urlRegistroLocales} /> : <LocalPorMensaje />}
+  </div>
+</section>

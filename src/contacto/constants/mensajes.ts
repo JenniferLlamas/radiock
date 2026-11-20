@@ -2,6 +2,8 @@
 
 export const SALUDO_PRESENTACION = '¡Hola, Radiock! Queremos compartir nuestra música original con ustedes.';
 
+export const SALUDO_LOCAL = '¡Hola, Radiock! Tenemos un espacio y nos gustaría recibir eventos de música original.';
+
 export const MENSAJE_OBLIGATORIO = 'Completa este campo.';
 
 /** Modo sin backend: copiar el mensaje para redes. */

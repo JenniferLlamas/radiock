@@ -1,3 +1,5 @@
+import type { TipoRegistro } from './Registro';
+
 /** Archivo elegido por la persona, junto al campo del formulario del que viene. */
 export interface ArchivoParaEnviar {
   readonly campo: string;
@@ -5,6 +7,7 @@ export interface ArchivoParaEnviar {
 }
 
 export interface SolicitudRegistro {
+  readonly tipo: TipoRegistro;
   readonly campos: Readonly<Record<string, string>>;
   readonly archivos: readonly ArchivoParaEnviar[];
   /** Campo trampa: vacío para personas, relleno por bots. */

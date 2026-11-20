@@ -1,61 +1,23 @@
 ---
-// Modo con backend: envía datos, imágenes y audio al Web App de Apps Script (Drive + hoja).
+// Registro de bandas con envío: datos, fotos, logos y canciones (backend/registro-bandas).
 import { sitio } from '@/compartido';
 import { MAX_BYTES_TOTAL } from '../constants/archivos';
-import { archivosPresentacion } from '../data/archivosPresentacion';
-import { camposPresentacion } from '../data/camposPresentacion';
 import { megas } from '../helpers/archivos';
-import CampoFormulario from './CampoFormulario.astro';
-import CampoArchivo from './CampoArchivo.astro';
+import FormularioConEnvio from './FormularioConEnvio.astro';
 interface Props { url: string }
 const { url } = Astro.props;
 ---
-<div class="registration" id="registro-banda" data-registro data-registro-url={url}>
-  <h3>Cuéntanos de tu banda.</h3>
-  <p>Completa tus datos y comparte tus fotos, logos y canciones. Los campos marcados con * son obligatorios.</p>
-  <form id="form-banda" data-registro-formulario aria-describedby="form-note">
-    <fieldset id="campos-banda" data-registro-campos disabled>
-      <legend class="sr-only">Registro de la banda</legend>
-      <div class="form-grid">
-        {camposPresentacion.map((campo) => <CampoFormulario campo={campo} />)}
-      </div>
-      <div class="band-material">
-        <div class="band-material-header">
-          <p class="eyebrow">MATERIAL DE LA BANDA</p>
-          <div class="usage-meter" data-registro-medidor data-nivel="normal">
-            <span class="usage-meter-bar" aria-hidden="true"></span>
-            <span class="usage-meter-text" data-registro-medidor-texto>0 MB de {megas(MAX_BYTES_TOTAL)}</span>
-          </div>
-        </div>
-        {archivosPresentacion.map((regla) => <CampoArchivo regla={regla} />)}
-      </div>
-      <!-- Campo trampa contra bots: invisible y fuera del orden de tabulación. -->
-      <div class="trap-field" aria-hidden="true">
-        <label>Sitio web <input name="sitioWeb" tabindex="-1" autocomplete="off" /></label>
-      </div>
-      <button type="submit" class="button-primary" data-registro-boton>Enviar registro ↗</button>
-    </fieldset>
-    <p role="status" class="form-status" data-registro-estado data-estado="inicial"></p>
-    <p class="form-note" id="form-note">Tus datos y archivos se guardan en el Drive de Radiock y solo los usa el equipo para contactarte. En total, los archivos pueden pesar hasta {megas(MAX_BYTES_TOTAL)}.</p>
-  </form>
-  <noscript>
-    <p class="form-note">Para enviar tu registro activa JavaScript, o escríbenos directamente por nuestras redes.</p>
-  </noscript>
-  <div class="registration-success" data-registro-exito hidden>
-    <p class="lead" tabindex="-1">¡Listo! Recibimos el registro de <strong data-registro-banda></strong>.</p>
-    <p>Revisaremos tu música y te escribiremos al contacto que nos dejaste. Mientras tanto, síguenos en <a class="text-link" href={sitio.redes.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a></p>
-    <button type="button" class="button-outline" data-registro-otro>Registrar otra banda</button>
-  </div>
-</div>
-<script>
-  import { useFormularioRegistro } from '../hooks/useFormularioRegistro';
-  import { useSelectoresArchivos } from '../hooks/useSelectorArchivos';
-  import { envioAppsScript } from '../services/envioAppsScript';
-  const raiz = document.querySelector<HTMLElement>('[data-registro]');
-  const url = raiz?.dataset.registroUrl;
-  if (raiz && url) {
-    // Primero los selectores: su "change" debe ejecutarse antes que el del formulario.
-    useSelectoresArchivos(raiz);
-    useFormularioRegistro(raiz, envioAppsScript(url));
-  }
-</script>
+<FormularioConEnvio
+  tipo="banda"
+  url={url}
+  titulo="Cuéntanos de tu banda."
+  intro="Completa tus datos y comparte tus fotos, logos y canciones."
+  leyenda="Registro de la banda"
+  material="MATERIAL DE LA BANDA"
+  boton="Enviar registro"
+  nota={`Tus datos y archivos se guardan en el Drive de Radiock y solo los usa el equipo para contactarte. En total, los archivos pueden pesar hasta ${megas(MAX_BYTES_TOTAL)}.`}
+  otro="Registrar otra banda"
+>
+  <p class="lead" tabindex="-1">¡Listo! Recibimos el registro de <strong data-registro-nombre></strong>.</p>
+  <p>Revisaremos tu música y te escribiremos al contacto que nos dejaste. Mientras tanto, síguenos en <a class="text-link" href={sitio.redes.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a></p>
+</FormularioConEnvio>

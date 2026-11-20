@@ -1,40 +1,12 @@
 ---
-// Modo sin backend: prepara un mensaje para que la banda lo envíe por redes.
-import { sitio } from '@/compartido';
-import { camposPresentacion } from '../data/camposPresentacion';
-import CampoFormulario from './CampoFormulario.astro';
+// Bandas sin backend: prepara la presentación para enviarla por redes.
+import FormularioPorMensaje from './FormularioPorMensaje.astro';
 ---
-<div class="registration" id="registro-banda" data-presentacion>
-  <h3>Cuéntanos de tu banda.</h3>
-  <p>Prepara tu presentación y compártela con Radiock por Instagram o Facebook. Los campos marcados con * son obligatorios.</p>
-  <form id="form-banda" data-presentacion-formulario aria-describedby="form-note">
-    <fieldset id="campos-banda" data-presentacion-campos disabled>
-      <legend class="sr-only">Presentación de la banda</legend>
-      <div class="form-grid">
-        {camposPresentacion.map((campo) => <CampoFormulario campo={campo} />)}
-      </div>
-      <button type="submit" class="button-primary">Preparar mi presentación ↗</button>
-    </fieldset>
-    <p class="form-note" id="form-note">Tus datos no se envían ni se guardan en este sitio. Podrás revisar y copiar tu mensaje antes de compartirlo.</p>
-  </form>
-  <noscript>
-    <p class="form-note">Para preparar el mensaje activa JavaScript, o escríbenos directamente por nuestras redes.</p>
-  </noscript>
-  <div class="message-preview" id="message-preview" data-presentacion-vista hidden>
-    <p id="preview-heading" data-presentacion-encabezado tabindex="-1">Tu presentación está lista. Cópiala y envíala a Radiock por mensaje directo.</p>
-    <label class="field" for="message-text">Tu mensaje</label>
-    <textarea id="message-text" data-presentacion-mensaje readonly aria-label="Presentación de tu banda lista para copiar">
-    </textarea>
-    <div class="actions">
-      <button type="button" class="button-primary" id="copy-message" data-presentacion-copiar>Copiar mensaje</button>
-      <a class="button-outline" href={sitio.redes.instagram} target="_blank" rel="noopener noreferrer">Abrir Instagram ↗</a>
-      <a class="text-link" href={sitio.redes.facebook} target="_blank" rel="noopener noreferrer">Facebook ↗</a>
-    </div>
-    <p role="status" id="copy-status" data-presentacion-estado class="form-note">
-    </p>
-  </div>
-</div>
-<script>
-  import { useFormularioPresentacion } from '../hooks/useFormularioPresentacion';
-  useFormularioPresentacion(document.querySelector<HTMLElement>('[data-presentacion]'));
-</script>
+<FormularioPorMensaje
+  tipo="banda"
+  titulo="Cuéntanos de tu banda."
+  intro="Prepara tu presentación y compártela con Radiock por Instagram o Facebook."
+  leyenda="Presentación de la banda"
+  boton="Preparar mi presentación"
+  descripcionMensaje="Presentación de tu banda lista para copiar"
+/>

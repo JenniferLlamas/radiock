@@ -162,6 +162,20 @@ En ambos modos, sin JavaScript los campos permanecen desactivados y las redes si
 
 El adaptador envía JSON como `text/plain`. Así es una petición CORS "simple", sin preflight, que Apps Script no admite. Para cambiar de backend (por ejemplo, a una función serverless) basta con otro adaptador que implemente `EnvioRegistro`; el formulario no cambia.
 
+## Registro de locales
+
+Los bares, foros y espacios que quieren prestar su lugar para eventos tienen **su propia sección** (`#espacios`, después del contacto) y **su propio backend**, separado del de bandas: otro proyecto de Apps Script, con su propia hoja y su propia URL. Pide nombre del local, responsable, ubicación y teléfono o correo; no recibe archivos.
+
+Igual que el de bandas, tiene dos modos según `urlRegistroLocales` (variable `PUBLIC_REGISTRO_LOCALES_URL`): con URL envía los datos a la hoja; sin URL prepara un mensaje para redes. Instalación: [`backend/registro-locales/README.md`](backend/registro-locales/README.md).
+
+Los dos registros comparten los controladores del formulario; cada uno se describe con un `Registro` (`src/contacto/domain/Registro.ts`) en `src/contacto/data/registros.ts`: campos, material, saludo del mensaje y `tipo` (`banda` o `local`).
+
+| Pieza | Archivo |
+| --- | --- |
+| Campos | `src/contacto/data/camposLocal.ts` (= `backend/registro-locales/data/campos.js`) |
+| Componentes | `FormularioEspacios.astro` (sección), `RegistroLocal.astro` (con envío), `LocalPorMensaje.astro` (mensaje); comparten `FormularioConEnvio.astro` y `FormularioPorMensaje.astro` con el registro de bandas |
+| Backend | `backend/registro-locales/`: mismas capas que el de bandas, solo con Hojas de cálculo |
+
 ## Desarrollo y validación
 
 | Comando | Uso |
@@ -187,15 +201,17 @@ Herramientas de desarrollo: `@astrojs/check`, TypeScript 5.6.2 (modo estricto), 
 | --- | --- |
 | `src/**/*.test.ts` | Agenda de eventos (próximos y anteriores según la fecha), textos de cada evento, fechas y zona horaria, repositorio, validación de fotos, logos y canciones, mensaje para redes y helpers |
 | `src/bandas/data/bandas.test.ts` | Ids únicos, logos que existen en `public/`, redes con `https` |
+| `backend/registro-locales/**/*.test.ts` | Backend de locales: fila en la pestaña `Locales` sin tocar Drive, obligatorios, longitudes, rechazo de archivos, fórmulas, campo trampa, límites por hora y por día, pausa, orden de carga, y que sus campos coinciden con los del sitio. Las imitaciones de Google de ambos backends están en `backend/pruebas/appsScriptFalso.ts` |
 | `backend/registro-bandas/**/*.test.ts` | Junto a cada módulo del backend. Todos los archivos del Apps Script se ejecutan juntos en Node con imitaciones de Drive y Hojas de cálculo: subcarpetas, filas, validaciones, contenido real de cada archivo (firmas), SVG con código o enlaces externos, campo trampa, límites de envío por hora y por día, pausa, fórmulas y nombres peligrosos. También comprueba que **sus límites coinciden con los del sitio**: si cambias uno y olvidas el otro, falla |
 | `tests/unit/arquitectura.test.ts` | Las reglas de capas y funcionalidades de este README. Si un import las rompe, indica el archivo y el import |
 
-**De interfaz (`npm run test:ui`)**: en `tests/e2e/`. Compilan dos versiones del sitio en `.e2e/`, una sin backend y otra con una URL de Apps Script ficticia, y las sirven con `astro preview`. Así se prueba lo mismo que se publica. Usan el Chrome instalado (no descargan navegadores) en dos tamaños: escritorio (1440 px) y móvil (Pixel 7). Una prueba también falla si la página lanza cualquier error de JavaScript.
+**De interfaz (`npm run test:ui`)**: en `tests/e2e/`. Compilan dos versiones del sitio en `.e2e/`, una sin backend y otra con URLs de Apps Script ficticias (una para bandas y otra para locales), y las sirven con `astro preview`. Así se prueba lo mismo que se publica. Usan el Chrome instalado (no descargan navegadores) en dos tamaños: escritorio (1440 px) y móvil (Pixel 7). Una prueba también falla si la página lanza cualquier error de JavaScript.
 
 | Archivo | Qué comprueba |
 | --- | --- |
 | `navegacion.spec.ts` | Secciones y un solo H1, sin desbordamiento horizontal, menú móvil (Escape, foco, cerrar al navegar), carrusel, página de cada evento con sus textos, redirección `/evento` |
 | `registro-mensaje.spec.ts` | Formulario sin backend: obligatorios, mensaje generado, copiar al portapapeles, ocultar al editar |
+| `registro-local.spec.ts` | Registro de locales: sección propia, enlaces que llevan a ella, envío solo al Web App de locales, obligatorios, error del backend y mensaje sin backend |
 | `registro-envio.spec.ts` | Registro con archivos: tres secciones, agregar por tandas, duplicados, máximos, quitar con foco, rechazos al agregar, arrastrar y soltar, vista previa de logos SVG y PNG, reproductor, tope de 30 MB, envío con los archivos byte a byte, error del backend con reintento, campo trampa, limpieza al registrar otra banda |
 
 El Apps Script se simula interceptando la red (`tests/e2e/soporte/appsScriptFalso.ts`), así que **las pruebas nunca escriben en tu Drive**. La simulación responde directamente con `200` en lugar de la redirección `302` del servicio real, porque Chrome no sigue una redirección simulada por Playwright entre dominios. Seguir la redirección lo hace el navegador; el formato del envío, el CORS y el manejo de errores sí quedan probados.
@@ -210,6 +226,7 @@ Si una prueba de interfaz falla, el reporte (`npm run test:ui:reporte`) incluye 
 - Ciudad, género y redes confirmadas de cada banda.
 - Fotografías de cada evento con autorización de uso y créditos. Las fotos actuales se presentan como archivo de bandas, sin atribuirlas a una fecha específica.
 - Publicar el Apps Script del registro y pegar su URL en `sitio.urlRegistro` (ver `backend/registro-bandas/README.md`).
+- Publicar el Apps Script de locales y poner su URL en `PUBLIC_REGISTRO_LOCALES_URL` (ver `backend/registro-locales/README.md`).
 
 ## Archivos de esta adaptación
 

@@ -1,8 +1,8 @@
 import { BYTES_AVISO_ENVIO_LENTO, MAX_BYTES_TOTAL, UMBRAL_MEDIDOR_ALTO } from '../constants/archivos';
 import { MENSAJES_REGISTRO } from '../constants/mensajes';
-import { archivosPresentacion } from '../data/archivosPresentacion';
-import { camposPresentacion } from '../data/camposPresentacion';
+import { registroBanda } from '../data/registros';
 import { ErrorRegistro, type ArchivoParaEnviar, type EnvioRegistro } from '../domain/EnvioRegistro';
+import type { Registro } from '../domain/Registro';
 import type { ArchivoAdjunto } from '../domain/ReglaArchivos';
 import { validarArchivos } from '../domain/validacionArchivos';
 import { megas, pesoLegible } from '../helpers/archivos';
@@ -11,12 +11,13 @@ import { validarObligatorios } from '../helpers/validarObligatorios';
 type Estado = 'inicial' | 'enviando' | 'error' | 'enviado';
 
 /** Activa el registro con envío dentro de `raiz`, usando el servicio de envío indicado. */
-export const useFormularioRegistro = (raiz: HTMLElement | null, envio: EnvioRegistro): FormularioRegistro | null =>
-  FormularioRegistro.montar(raiz, envio);
+export const useFormularioRegistro = (raiz: HTMLElement | null, envio: EnvioRegistro, registro: Registro = registroBanda): FormularioRegistro | null =>
+  FormularioRegistro.montar(raiz, envio, registro);
 
 /**
  * Controlador del registro con envío: valida datos y archivos, envía mediante el puerto
  * EnvioRegistro y muestra el resultado. No sabe nada de Google: el adaptador se inyecta.
+ * Sirve para cualquier Registro (bandas, locales): campos y archivos vienen de `registro`.
  */
 export class FormularioRegistro {
   private estadoActual: Estado = 'inicial';
@@ -28,9 +29,10 @@ export class FormularioRegistro {
     private readonly exito: HTMLElement,
     private readonly envio: EnvioRegistro,
     private readonly medidor: HTMLElement | null,
+    private readonly registro: Registro,
   ) {}
 
-  static montar(raiz: HTMLElement | null, envio: EnvioRegistro): FormularioRegistro | null {
+  static montar(raiz: HTMLElement | null, envio: EnvioRegistro, registro: Registro = registroBanda): FormularioRegistro | null {
     const buscar = <T extends Element>(selector: string) => raiz?.querySelector<T>(selector) ?? null;
     const formulario = buscar<HTMLFormElement>('[data-registro-formulario]');
     const campos = buscar<HTMLFieldSetElement>('[data-registro-campos]');
@@ -39,7 +41,7 @@ export class FormularioRegistro {
     const exito = buscar<HTMLElement>('[data-registro-exito]');
     if (!formulario || !campos || !boton || !estado || !exito) return null;
 
-    const instancia = new FormularioRegistro(formulario, boton, estado, exito, envio, buscar('[data-registro-medidor]'));
+    const instancia = new FormularioRegistro(formulario, boton, estado, exito, envio, buscar('[data-registro-medidor]'), registro);
     instancia.escuchar();
     instancia.actualizarMedidor();
     campos.disabled = false;
@@ -82,7 +84,7 @@ export class FormularioRegistro {
 
   /** Marca el campo de archivos como inválido para que el navegador lo señale junto al campo. */
   private validarArchivosDe(entrada: HTMLInputElement, avisar = true): void {
-    const regla = archivosPresentacion.filter((r) => r.nombre === entrada.name);
+    const regla = this.registro.archivos.filter((r) => r.nombre === entrada.name);
     const propios = this.archivos().filter((a) => a.campo === entrada.name).map(FormularioRegistro.adjunto);
     const [error] = validarArchivos(propios, regla, Number.POSITIVE_INFINITY);
     entrada.setCustomValidity(error ?? '');
@@ -95,21 +97,21 @@ export class FormularioRegistro {
     if (!this.formulario.reportValidity()) return;
 
     const archivos = this.archivos();
-    const errores = validarArchivos(archivos.map(FormularioRegistro.adjunto));
+    const errores = validarArchivos(archivos.map(FormularioRegistro.adjunto), this.registro.archivos);
     if (errores.length) {
       this.cambiarEstado('error', errores.join(' '));
       return;
     }
 
     const datos = new FormData(this.formulario);
-    const campos = Object.fromEntries(camposPresentacion.map(({ nombre }) => [nombre, String(datos.get(nombre) ?? '').trim()]));
+    const campos = Object.fromEntries(this.registro.campos.map(({ nombre }) => [nombre, String(datos.get(nombre) ?? '').trim()]));
     const total = archivos.reduce((suma, { archivo }) => suma + archivo.size, 0);
     this.cambiarEstado('enviando', total > BYTES_AVISO_ENVIO_LENTO
       ? MENSAJES_REGISTRO.enviandoArchivos(archivos.length)
       : MENSAJES_REGISTRO.enviando);
 
     try {
-      await this.envio.enviar({ campos, archivos, sitioWeb: String(datos.get('sitioWeb') ?? '') });
+      await this.envio.enviar({ tipo: this.registro.tipo, campos, archivos, sitioWeb: String(datos.get('sitioWeb') ?? '') });
     } catch (error) {
       this.cambiarEstado('error', error instanceof ErrorRegistro
         ? error.message
@@ -117,8 +119,8 @@ export class FormularioRegistro {
       return;
     }
 
-    const banda = this.exito.querySelector('[data-registro-banda]');
-    if (banda) banda.textContent = campos.banda;
+    const nombre = this.exito.querySelector('[data-registro-nombre]');
+    if (nombre) nombre.textContent = campos[this.registro.campoNombre] ?? '';
     this.formulario.reset();
     this.formulario.hidden = true;
     this.exito.hidden = false;
