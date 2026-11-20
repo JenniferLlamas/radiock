@@ -2,7 +2,7 @@
 
 Recibe el formulario "Cuéntanos de tu banda" del sitio y guarda todo en **tu** Google Drive:
 
-- Una **carpeta por registro** (`2026-11-18 20.00 — Nombre de la banda`) con una subcarpeta por tipo de material: `Fotos/`, `Logos/` y `Canciones/`. Solo se crean las subcarpetas de lo que la banda envió.
+- Una **carpeta por registro** (`2026-11-18 20.00 — Nombre de la banda`) con una subcarpeta por tipo de material: `Fotos/`, `Logos/` y `Canciones/`. Solo se crean las subcarpetas de lo que la banda envió. Cada archivo se guarda con el nombre de la banda, su tipo y un número dentro de su sección, en lugar del nombre original: `Oblivion - Foto 1.jpg`, `Oblivion - Logo 1.png`, `Oblivion - Canción 2.mp3`. La extensión sale del formato del archivo.
 - Una **fila por registro** en una hoja de cálculo: fecha, datos de la banda, una columna de enlaces por tipo (Fotos, Logos, Canciones) y el enlace a la carpeta.
 
 El script se ejecuta con tu cuenta, así que no hace falta servidor ni pagar hosting. El sitio sigue siendo estático.
@@ -38,7 +38,7 @@ backend/registro-bandas/
   constants/
     configuracion.js        IDs de carpeta y hoja, zona horaria, tope por envío, límites contra spam, pausa
     mensajes.js             Respuestas generales para la banda
-    formatos.js             Variantes de tipos MIME y referencias permitidas en SVG
+    formatos.js             Variantes de tipos MIME, extensión de cada formato y referencias permitidas en SVG
   data/
     campos.js               Campos de texto (= src/contacto/data/camposPresentacion.ts)
     archivos.js             Fotos, logos y canciones (= src/contacto/data/archivosPresentacion.ts)
@@ -49,6 +49,7 @@ backend/registro-bandas/
   helpers/
     texto.js                Nombres seguros, textos sin fórmulas, megas
     bytes.js                Bytes → texto, tipo canónico
+    nombresArchivo.js       "Banda - Foto 1.jpg": nombre de cada archivo en Drive
   services/                 Adaptadores de Google
     almacenamiento.js       Drive (carpetas y archivos) y Hojas de cálculo (fila)
     propiedades.js          Propiedades del script: pausa y contadores

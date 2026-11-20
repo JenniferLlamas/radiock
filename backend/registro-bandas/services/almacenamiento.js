@@ -18,7 +18,10 @@ function guardarRegistro_(registro) {
     // La subcarpeta solo se crea si la banda envió archivos de ese tipo.
     const destino = subcarpetas[archivo.campo]
       || (subcarpetas[archivo.campo] = carpeta.createFolder(ARCHIVOS[archivo.campo].etiqueta));
-    const blob = Utilities.newBlob(archivo.bytes, archivo.tipo, archivo.nombre);
+    // "Oblivion - Foto 1.jpg": banda + tipo + número dentro de su sección, en lugar del nombre original.
+    const numero = enlaces[archivo.campo].length + 1;
+    const nombre = nombreArchivo_(registro.campos.banda, ARCHIVOS[archivo.campo].singular, numero, archivo.tipo, archivo.nombre);
+    const blob = Utilities.newBlob(archivo.bytes, archivo.tipo, nombre);
     enlaces[archivo.campo].push(destino.createFile(blob).getUrl());
   });
 

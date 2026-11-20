@@ -1,9 +1,9 @@
 /** Flujo completo de doPost/doGet: registro válido, validaciones y protecciones. */
 import { describe, expect, it } from 'vitest';
-import { adjunto, campos, entorno, MODULOS, modulosEnCarpeta, plano } from '../pruebas/entornoAppsScript';
+import { adjunto, adjuntoCon, campos, entorno, MODULOS, modulosEnCarpeta, plano } from '../pruebas/entornoAppsScript';
 
 describe('backend: registro válido', () => {
-  it('crea subcarpetas Fotos/Logos/Canciones y una fila con una columna por tipo', () => {
+  it('crea subcarpetas Fotos/Logos/Canciones, nombra cada archivo con la banda y un número, y añade una fila', () => {
     const { post, carpetas, archivos, filas } = entorno();
     expect(post({ campos, sitioWeb: '', archivos: [
       adjunto('fotos', 'vivo.jpg', 'image/jpeg', 2000),
@@ -15,14 +15,15 @@ describe('backend: registro válido', () => {
     expect(carpetas[0].nombre).toBe('2026-11-18 20.00 — Oblivion');
     expect(carpetas[0].subcarpetas.map((s) => s.nombre)).toEqual(['Fotos', 'Logos', 'Canciones']);
     expect(archivos).toEqual([
-      { carpeta: 'Fotos', nombre: 'vivo.jpg', tipo: 'image/jpeg', bytes: 2000 },
-      { carpeta: 'Logos', nombre: 'logo.svg', tipo: 'image/svg+xml', bytes: 300 },
-      { carpeta: 'Canciones', nombre: 'a.mp3', tipo: 'audio/mpeg', bytes: 5000 },
-      { carpeta: 'Canciones', nombre: 'b.wav', tipo: 'audio/wav', bytes: 4000 },
+      { carpeta: 'Fotos', nombre: 'Oblivion - Foto 1.jpg', tipo: 'image/jpeg', bytes: 2000 },
+      { carpeta: 'Logos', nombre: 'Oblivion - Logo 1.svg', tipo: 'image/svg+xml', bytes: 300 },
+      { carpeta: 'Canciones', nombre: 'Oblivion - Canción 1.mp3', tipo: 'audio/mpeg', bytes: 5000 },
+      { carpeta: 'Canciones', nombre: 'Oblivion - Canción 2.wav', tipo: 'audio/wav', bytes: 4000 },
     ]);
     expect(filas[0]).toEqual(['Fecha', 'Banda', 'Ciudad', 'Género', 'Instagram', 'YouTube', 'Contacto', 'Fotos', 'Logos', 'Canciones', 'Carpeta']);
     expect(filas[1].slice(7, 10)).toEqual([
-      'https://drive/archivo/vivo.jpg', 'https://drive/archivo/logo.svg', 'https://drive/archivo/a.mp3\nhttps://drive/archivo/b.wav',
+      'https://drive/archivo/Oblivion - Foto 1.jpg', 'https://drive/archivo/Oblivion - Logo 1.svg',
+      'https://drive/archivo/Oblivion - Canción 1.mp3\nhttps://drive/archivo/Oblivion - Canción 2.wav',
     ]);
   });
 
@@ -63,13 +64,32 @@ describe('backend: protección', () => {
     expect(r.error).toContain('suman más de 30 MB');
   });
 
-  it('neutraliza fórmulas en la hoja y rutas en los nombres de archivo', () => {
-    const { post, archivos, filas } = entorno();
-    post({ campos: { ...campos, contacto: '=IMPORTXML("http://x","//a")', genero: '+1' },
+  it('neutraliza fórmulas en la hoja y rutas en los nombres de archivo y de carpeta', () => {
+    const { post, archivos, carpetas, filas } = entorno();
+    post({ campos: { ...campos, banda: '../AC/DC', contacto: '=IMPORTXML("http://x","//a")', genero: '+1' },
       archivos: [adjunto('fotos', '../../etc/passwd.png', 'image/png')] });
     expect(filas[1][6]).toBe(`'=IMPORTXML("http://x","//a")`);
     expect(filas[1][3]).toBe("'+1");
-    expect(archivos[0].nombre).toBe('_.._etc_passwd.png');
+    expect(carpetas[0].nombre).toBe('2026-11-18 20.00 — _AC_DC');
+    expect(archivos[0].nombre).toBe('_AC_DC - Foto 1.png');
+  });
+
+  it('la extensión sale del formato y el número sigue dentro de cada sección', () => {
+    const { post, archivos } = entorno();
+    expect(post({ campos, archivos: [
+      adjunto('fotos', 'sin-extension', 'image/webp'),
+      adjunto('fotos', 'FOTO.JPEG', 'image/jpeg'),
+      adjunto('logos', 'logo.png', 'image/png'),
+      // audio/x-m4a es una variante de audio/mp4: se guarda como .m4a
+      adjuntoCon('canciones', 'tema', 'audio/x-m4a', Buffer.from('\0\0\0\x20ftypM4A \0\0\0\0', 'latin1')),
+    ] }).ok).toBe(true);
+    expect(archivos.map((a) => a.nombre)).toEqual(['Oblivion - Foto 1.webp', 'Oblivion - Foto 2.jpg', 'Oblivion - Logo 1.png', 'Oblivion - Canción 1.m4a']);
+  });
+
+  it('con un nombre de banda muy largo conserva el tipo, el número y la extensión', () => {
+    const { post, archivos } = entorno();
+    post({ campos: { ...campos, banda: 'B'.repeat(120) }, archivos: [adjunto('canciones', 'a.mp3', 'audio/mpeg')] });
+    expect(archivos[0].nombre).toBe(`${'B'.repeat(80)} - Canción 1.mp3`);
   });
 
   it('JSON inválido devuelve un error genérico y doGet confirma el despliegue', () => {

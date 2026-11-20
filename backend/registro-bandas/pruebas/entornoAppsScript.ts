@@ -19,6 +19,7 @@ export const MODULOS = [
   'data/archivos.js',
   'helpers/texto.js',
   'helpers/bytes.js',
+  'helpers/nombresArchivo.js',
   'domain/contenidoArchivos.js',
   'domain/validacion.js',
   'domain/cupo.js',
