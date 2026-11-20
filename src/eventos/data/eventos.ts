@@ -51,4 +51,15 @@ export const eventos: readonly Evento[] = [
     miniatura: '/eventos/radiock-fest-vol-4.webp',
     bandas: ['Instinto Animal', 'Eternika', 'Oblivion', 'Jumping Beans', 'Voces sin Rostro', 'The Aprils', 'Euphoric Forms', 'Inside Joke'],
   },
+  {
+    id: 'radiock-fest-vol-5',
+    titulo: 'Radiock Fest Vol. 5',
+    fecha: '2025-08-30',
+    hora: '17:00',
+    venue: 'Border Psycho Brewery · Av. Revolución 821, Zona Centro',
+    ciudad: 'Tijuana, B.C.',
+    cartel: '/eventos/cartel-radiock-fest-vol-5.webp',
+    miniatura: '/eventos/radiock-fest-vol-5.webp',
+    bandas: ['Morfina', 'Cadejo', 'Infortunio', 'Inside Joke', 'Antarex', 'Daire', 'Westwolf', 'Oblivion'],
+  },
 ];

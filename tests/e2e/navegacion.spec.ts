@@ -74,7 +74,8 @@ test.describe('eventos', () => {
   test('cada evento del archivo enlaza a su propia página', async ({ page }) => {
     await page.goto(URL_SITIO);
     const enlaces = page.locator('#eventos-anteriores').getByRole('link', { name: 'Ver el evento' });
-    await expect(enlaces).toHaveCount(4);
+    await expect(enlaces).toHaveCount(5);
+    await expect(enlaces.last()).toHaveAttribute('href', '/eventos/radiock-fest-vol-5');
     await expect(enlaces.nth(2)).toHaveAttribute('href', '/eventos/radiock-fest-vol-3');
     await enlaces.nth(2).click();
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Radiock Fest Vol. 3');
