@@ -49,6 +49,6 @@ export const eventos: readonly Evento[] = [
     ciudad: 'Tijuana, B.C.',
     cartel: '/eventos/cartel-radiock-fest-vol-4.webp',
     miniatura: '/eventos/radiock-fest-vol-4.webp',
-    bandas: ['5to Tripulante', 'Eternika', 'Volka', 'Oblivion', 'Bluesfire', 'Bailarina sin cabeza', 'WestWolf', 'Voces sin rostro'],
+    bandas: ['Instinto Animal', 'Eternika', 'Oblivion', 'Jumping Beans', 'Voces sin Rostro', 'The Aprils', 'Euphoric Forms', 'Inside Joke'],
   },
 ];
