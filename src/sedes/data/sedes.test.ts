@@ -1,4 +1,5 @@
 import { existsSync, readdirSync } from 'node:fs';
+import sharp from 'sharp';
 import { describe, expect, it } from 'vitest';
 import { eventos } from '../../eventos/data/eventos';
 import { sedes } from './sedes';
@@ -15,6 +16,13 @@ describe('datos de sedes', () => {
     for (const sede of sedes) {
       expect(sede.logo, sede.nombre).toBe(`/sedes/${sede.id}/logo.webp`);
       expect(existsSync(`public${sede.logo}`), sede.logo).toBe(true);
+    }
+  });
+
+  it('cada logo usa el lienzo estándar de 600×360 con transparencia', async () => {
+    for (const sede of sedes) {
+      const { width, height, hasAlpha } = await sharp(`public${sede.logo}`).metadata();
+      expect({ width, height, hasAlpha }, sede.logo).toEqual({ width: 600, height: 360, hasAlpha: true });
     }
   });
 

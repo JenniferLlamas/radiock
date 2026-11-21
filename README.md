@@ -134,7 +134,7 @@ Patrones: **Repository** (`RepositorioEnMemoria`), **Facade/API pública** (`ind
 | `src/radiock/data/contenido.ts` | Pilares, actividades y pasos del proceso |
 | `src/eventos/data/eventos.ts` | Todos los eventos: fecha ISO, hora, venue, ciudad, bandas, cartel y miniatura |
 | `src/bandas/data/bandas.ts` | Nombre, logo, ciudad, género, redes y fotos de cada banda. Cada banda tiene su carpeta `public/bandas/<id>/` con `logo.png` (fondo transparente u oscuro, a lo más 640×400) y `fotos/<id>-<n>.webp` (hasta 1600 px) con su `<id>-<n>-mini.webp` (hasta 640 px). El carrusel usa el logo y la galería de Comunidad, las fotos. Los originales están en `originales/bandas/` y en la carpeta de eventos de OneDrive; git los ignora |
-| `src/sedes/data/sedes.ts` | Nombre, ubicación, logo y Radiock Fest que recibió cada lugar. Cada sede tiene su carpeta `public/sedes/<id>/` con `logo.webp` (fondo transparente, a lo más 640×400). Los originales están en `originales/sedes/`; git los ignora |
+| `src/sedes/data/sedes.ts` | Nombre, ubicación, logo y Radiock Fest que recibió cada lugar. Cada sede tiene su carpeta `public/sedes/<id>/` con `logo.webp` (fondo transparente, lienzo estándar de 600×360 con el logo centrado y de tamaño visual parecido). Los originales están en `originales/sedes/`; git los ignora |
 | `src/comunidad/data/momentos.ts` | Fotografías destacadas, textos alternativos y pies de foto |
 | `src/comunidad/ui/GaleriaBandas.astro` | Galería con las fotos de todas las bandas: filtro por banda, "Ver más" y visor ampliado (`hooks/useGaleria.ts`). Sin JavaScript se ven todas y cada una abre su versión grande |
 | `src/contacto/data/camposPresentacion.ts` | Campos del formulario de presentación de bandas |
