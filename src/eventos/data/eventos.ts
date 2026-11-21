@@ -62,4 +62,15 @@ export const eventos: readonly Evento[] = [
     miniatura: '/eventos/radiock-fest-vol-5.webp',
     bandas: ['Morfina', 'Cadejo', 'Infortunio', 'Inside Joke', 'Antarex', 'Daire', 'Westwolf', 'Oblivion'],
   },
+  {
+    id: 'radiock-fest-vol-6',
+    titulo: 'Radiock Fest Vol. 6',
+    fecha: '2026-12-05',
+    hora: '17:00',
+    venue: 'Border Psycho Cantina · Av. Revolución 821, Zona Centro',
+    ciudad: 'Tijuana, B.C.',
+    cartel: '/eventos/cartel-radiock-fest-vol-6.webp',
+    miniatura: '/eventos/radiock-fest-vol-6.webp',
+    bandas: ['Daz Fontana', 'Efecto Espiral', 'Cuarta Coordenada', 'Oblivion', 'Querida Hayley', 'Rick Hartbroke'],
+  },
 ];

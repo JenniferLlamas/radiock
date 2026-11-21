@@ -8,15 +8,15 @@ const agendaEl = (hoy: string) => new AgendaEventos(new RepositorioEnMemoria(eve
 const ids = (lista: { id: string }[]) => lista.map((e) => e.id);
 
 describe('AgendaEventos', () => {
-  it('con la fecha actual del proyecto, todos los fest ya pasaron', () => {
-    const agenda = agendaEl('2026-11-18');
-    expect(agenda.proximos()).toEqual([]);
+  it('antes de Vol. 6, solo Vol. 6 es próximo', () => {
+    const agenda = agendaEl('2026-11-20');
+    expect(ids(agenda.proximos())).toEqual(['radiock-fest-vol-6']);
     expect(ids(agenda.anteriores())).toEqual(['radiock-fest-vol-1', 'radiock-fest-vol-2', 'radiock-fest-vol-3', 'radiock-fest-vol-4', 'radiock-fest-vol-5']);
   });
 
   it('el día del evento todavía cuenta como próximo', () => {
     const agenda = agendaEl('2025-04-05');
-    expect(ids(agenda.proximos())).toEqual(['radiock-fest-vol-3', 'radiock-fest-vol-4', 'radiock-fest-vol-5']);
+    expect(ids(agenda.proximos())).toEqual(['radiock-fest-vol-3', 'radiock-fest-vol-4', 'radiock-fest-vol-5', 'radiock-fest-vol-6']);
     expect(ids(agenda.anteriores())).toEqual(['radiock-fest-vol-1', 'radiock-fest-vol-2']);
   });
 

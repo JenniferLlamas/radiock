@@ -84,6 +84,20 @@ test.describe('eventos', () => {
     await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /ocho bandas de música original reunidas el 5 de abril de 2025 en Ranas Bar, Tijuana, B\.C\.$/);
   });
 
+  test('Radiock Fest Vol. 6 se enlaza desde la portada y tiene su página con el cartel', async ({ page }) => {
+    // Antes del 5 de diciembre de 2026 aparece como próximo; después, en el archivo. Ambos enlazan igual.
+    await page.goto(URL_SITIO);
+    await page.locator('#eventos a[href="/eventos/radiock-fest-vol-6"]').first().click();
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Radiock Fest Vol. 6');
+    await expect(page.getByText('Seis propuestas originales. Un mismo escenario.')).toBeVisible();
+    await expect(page.getByText('Border Psycho Cantina · Av. Revolución 821, Zona Centro')).toBeVisible();
+    for (const banda of ['Daz Fontana', 'Efecto Espiral', 'Cuarta Coordenada', 'Oblivion', 'Querida Hayley', 'Rick Hartbroke']) {
+      await expect(page.getByRole('listitem').filter({ hasText: banda })).toBeVisible();
+    }
+    const cartel = page.getByRole('img', { name: 'Cartel original de Radiock Fest Vol. 6 con sus seis bandas participantes' });
+    await expect.poll(() => cartel.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
+  });
+
   test('el enlace antiguo /evento redirige a Radiock Fest Vol. 1', async ({ page }) => {
     await page.goto(`${URL_SITIO}/evento`);
     await expect(page).toHaveURL(/\/eventos\/radiock-fest-vol-1\/?$/);
