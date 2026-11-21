@@ -1,11 +1,12 @@
 ---
 import { formatearFecha } from '@/compartido';
-import { rutaEvento, type Evento } from '../domain/Evento';
+import { medidasCartel, rutaEvento, type Evento } from '../domain/Evento';
 interface Props { evento: Evento }
 const { evento } = Astro.props;
+const { ancho, alto } = medidasCartel(evento);
 ---
-<article class="event-card">
-  <img src={evento.cartel} alt={'Cartel de ' + evento.titulo} width="600" height="800" loading="lazy" />
+<article class="event-card" data-evento-proximo data-id={evento.id} data-fecha={evento.fecha}>
+  <img src={evento.cartel} alt={'Cartel de ' + evento.titulo} width={ancho} height={alto} loading="lazy" />
   <time datetime={evento.fecha}>{formatearFecha(evento.fecha)}</time>
   <h3>{evento.titulo}</h3>
   <p>{evento.venue} / {evento.ciudad}</p>

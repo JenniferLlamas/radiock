@@ -1,20 +1,24 @@
 ---
 import '../styles/detalle-evento.css';
-import type { EstadoEvento, Evento } from '../domain/Evento';
+import { medidasCartel, type EstadoEvento, type Evento } from '../domain/Evento';
 import { textosEvento } from '../helpers/textosEvento';
 interface Props { evento: Evento; estado: EstadoEvento }
 const { evento, estado } = Astro.props;
 const textos = textosEvento(evento, estado);
+// Si se compiló como próximo y su fecha pasa, useEstadoEventoEnVivo cambia a estos textos.
+const finalizado = textosEvento(evento, 'finalizado');
+const alFinalizar = (texto: string) => (estado === 'proximo' ? texto : undefined);
+const { ancho, alto } = medidasCartel(evento);
 ---
-<section class="event-detail" id="inicio" aria-labelledby="event-title">
+<section class="event-detail" id="inicio" aria-labelledby="event-title" data-evento-fecha={evento.fecha}>
   <a class="text-link" href="/#eventos">← Volver a eventos</a>
-  <p class="eyebrow" style="margin-top:40px">{textos.antetitulo}</p>
+  <p class="eyebrow" style="margin-top:40px" data-texto-finalizado={alFinalizar(finalizado.antetitulo)}>{textos.antetitulo}</p>
   <h1 id="event-title">{evento.titulo}</h1>
   <p class="lead">{textos.lema}</p>
   <div class="event-detail-grid">
-    <img src={evento.cartel} width="1000" height="1545" alt={textos.altCartel} />
+    <img src={evento.cartel} width={ancho} height={alto} alt={textos.altCartel} />
     <div>
-      <span class="status">{textos.estado}</span>
+      <span class="status" data-texto-finalizado={alFinalizar(finalizado.estado)}>{textos.estado}</span>
       <h2>Música local.<br />Un encuentro real.</h2>
       <p>Una fecha para encontrarnos, descubrir nuevas propuestas y abrir espacio a la música original.</p>
       <dl>

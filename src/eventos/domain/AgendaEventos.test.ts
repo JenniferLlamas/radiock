@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { RepositorioEnMemoria } from '@/compartido';
 import { eventos } from '../data/eventos';
 import { AgendaEventos } from './AgendaEventos';
-import { estadoEvento, imagenArchivo, rutaEvento } from './Evento';
+import { estadoEvento, imagenArchivo, medidasCartel, rutaEvento, yaPaso } from './Evento';
 
 const agendaEl = (hoy: string) => new AgendaEventos(new RepositorioEnMemoria(eventos), () => hoy);
 const ids = (lista: { id: string }[]) => lista.map((e) => e.id);
@@ -30,6 +30,18 @@ describe('AgendaEventos', () => {
 });
 
 describe('Evento', () => {
+  it('yaPaso: el día del evento todavía no ha pasado; al día siguiente sí', () => {
+    expect(yaPaso('2026-12-05', '2026-12-04')).toBe(false);
+    expect(yaPaso('2026-12-05', '2026-12-05')).toBe(false);
+    expect(yaPaso('2026-12-05', '2026-12-06')).toBe(true);
+  });
+
+  it('medidasCartel: usa las del evento o 1000×1545 por defecto', () => {
+    const [vol1] = eventos;
+    expect(medidasCartel(vol1)).toEqual({ ancho: 1000, alto: 1545 });
+    expect(medidasCartel({ ...vol1, cartelMedidas: { ancho: 1080, alto: 1080 } })).toEqual({ ancho: 1080, alto: 1080 });
+  });
+
   const [vol1] = eventos;
   it('calcula estado, ruta e imagen del archivo', () => {
     expect(estadoEvento(vol1, '2024-08-10')).toBe('proximo');

@@ -140,7 +140,7 @@ Patrones: **Repository** (`RepositorioEnMemoria`), **Facade/API pública** (`ind
 | `src/contacto/constants/archivos.ts` | Límite total por envío (30 MB) |
 | `src/contacto/constants/mensajes.ts` | Textos fijos del formulario (saludo, estados del envío, avisos) |
 
-Los eventos pasados y futuros van en la misma lista. La agenda los separa en próximos o anteriores al comparar su fecha con el día actual en `America/Tijuana`; el día del evento todavía cuenta como próximo. Cada evento genera `/eventos/<id>`, con título, descripción y textos derivados de sus datos. Como el sitio es estático, la clasificación se calcula al compilar: después de un evento hay que volver a publicar para que pase al archivo. La compilación falla si una fecha no tiene formato `YYYY-MM-DD` o si un `id` está repetido. Las fechas se formatean en UTC para evitar que cambien de día según la zona horaria. `miniatura` es opcional; si falta, se utiliza el cartel. Las ciudades y géneros de bandas no confirmados se omiten. La participación en el primer festival proviene del cartel existente; las redes de Oblivion proceden de las plantillas originales.
+Los eventos pasados y futuros van en la misma lista. La agenda los separa en próximos o anteriores al comparar su fecha con el día actual en `America/Tijuana`; el día del evento todavía cuenta como próximo. Cada evento genera `/eventos/<id>`, con título, descripción y textos derivados de sus datos. La clasificación se calcula al compilar y se vuelve a revisar en el navegador de quien visita (`eventos/hooks/useAgendaEnVivo.ts`): al día siguiente de su fecha, un evento pasa solo a "Eventos anteriores" y su página cambia a "Evento finalizado", sin volver a compilar. Si no queda ningún próximo, aparece el aviso de la siguiente fecha. Sin JavaScript se ve lo que se decidió al compilar. La compilación falla si una fecha no tiene formato `YYYY-MM-DD` o si un `id` está repetido. Las fechas se formatean en UTC para evitar que cambien de día según la zona horaria. `miniatura` es opcional; si falta, se utiliza el cartel. `cartelMedidas` indica las medidas del cartel cuando no es vertical de 1000×1545 (por ejemplo, un póster cuadrado de Instagram). Las ciudades y géneros de bandas no confirmados se omiten. La participación en el primer festival proviene del cartel existente; las redes de Oblivion proceden de las plantillas originales.
 
 ## Registro de bandas
 
@@ -210,6 +210,7 @@ Herramientas de desarrollo: `@astrojs/check`, TypeScript 5.6.2 (modo estricto), 
 
 | Archivo | Qué comprueba |
 | --- | --- |
+| `agenda.spec.ts` | Con el reloj del navegador simulado: el evento sigue en próximos el mismo día, al día siguiente pasa al archivo (al final, en orden) y aparece el aviso; su página cambia a "Evento finalizado" |
 | `galeria.spec.ts` | Galería de bandas: 12 fotos iniciales, "Ver más", filtro por banda, visor con flechas y Escape |
 | `navegacion.spec.ts` | Secciones y un solo H1, sin desbordamiento horizontal, menú móvil (Escape, foco, cerrar al navegar), carrusel, página de cada evento con sus textos, redirección `/evento` |
 | `registro-mensaje.spec.ts` | Formulario sin backend: obligatorios, mensaje generado, copiar al portapapeles, ocultar al editar |

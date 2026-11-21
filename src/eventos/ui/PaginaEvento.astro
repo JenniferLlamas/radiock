@@ -12,5 +12,9 @@ const { tituloPagina, descripcion } = textosEvento(evento, estado);
 ---
 <EstructuraSitio title={tituloPagina} description={descripcion}>
   <PortadaEvento evento={evento} estado={estado} />
-  {estado === 'finalizado' && <GaleriaEvento evento={evento} />}
+  <GaleriaEvento evento={evento} oculta={estado === 'proximo'} />
 </EstructuraSitio>
+<script>
+  import { useEstadoEventoEnVivo } from '../hooks/useAgendaEnVivo';
+  useEstadoEventoEnVivo(document.querySelector<HTMLElement>('[data-evento-fecha]'));
+</script>

@@ -70,6 +70,7 @@ export const eventos: readonly Evento[] = [
     venue: 'Border Psycho Cantina · Av. Revolución 821, Zona Centro',
     ciudad: 'Tijuana, B.C.',
     cartel: '/eventos/cartel-radiock-fest-vol-6.webp',
+    cartelMedidas: { ancho: 1080, alto: 1080 },
     miniatura: '/eventos/radiock-fest-vol-6.webp',
     bandas: ['Daz Fontana', 'Efecto Espiral', 'Cuarta Coordenada', 'Oblivion', 'Querida Hayley', 'Rick Hartbroke'],
   },

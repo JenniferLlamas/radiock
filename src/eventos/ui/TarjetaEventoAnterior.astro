@@ -1,10 +1,14 @@
 ---
 import { formatearFecha } from '@/compartido';
 import { imagenArchivo, rutaEvento, type Evento } from '../domain/Evento';
-interface Props { evento: Evento }
-const { evento } = Astro.props;
+interface Props {
+  evento: Evento;
+  /** Evento aún próximo al compilar: queda oculto hasta que pase su fecha (useAgendaEnVivo). */
+  oculto?: boolean;
+}
+const { evento, oculto = false } = Astro.props;
 ---
-<article class="past-event">
+<article class="past-event" data-evento-archivo data-id={evento.id} hidden={oculto}>
   <img src={imagenArchivo(evento)} alt={'Cartel de ' + evento.titulo} width="600" height="255" loading="lazy" />
   <div>
     <p class="eyebrow">ARCHIVO / {formatearFecha(evento.fecha)}</p>
