@@ -1,0 +1,21 @@
+---
+// Boleto del próximo evento con su contador, para la portada (sustituye al boleto "Acceso a la escena").
+import '../styles/cuenta-regresiva.css';
+import { rutaEvento, type Evento } from '../domain/Evento';
+import { fechaCorta, horaLegible } from '../helpers/cuentaRegresiva';
+import CuentaRegresiva from './CuentaRegresiva.astro';
+interface Props {
+  evento: Evento;
+  /** Clase de posición que pone la página que lo usa. */
+  class?: string;
+}
+const { evento, class: clase } = Astro.props;
+---
+<div class:list={['event-ticket', clase]} data-aviso-evento data-fecha={evento.fecha}>
+  <span class="event-ticket-tag">PRÓXIMO EVENTO</span>
+  <strong class="event-ticket-title">{evento.titulo}</strong>
+  <span class="event-ticket-when">{fechaCorta(evento.fecha)}{evento.hora && ` · ${horaLegible(evento.hora)}`}</span>
+  <span class="event-ticket-place">{evento.venue.split(' · ')[0]}</span>
+  <CuentaRegresiva evento={evento} />
+  <a class="event-ticket-link" href={rutaEvento(evento)}>Ver detalles <span aria-hidden="true">↗</span></a>
+</div>

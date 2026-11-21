@@ -1,0 +1,29 @@
+---
+// Barra de aviso arriba de todo con el próximo evento y cuánto falta. Si no hay, no se muestra.
+// Se oculta sola al día siguiente del evento (useCuentaRegresiva).
+import '../styles/cuenta-regresiva.css';
+import { rutaEvento } from '../domain/Evento';
+import { fechaCorta, horaLegible } from '../helpers/cuentaRegresiva';
+import { agendaEventos } from '../services/agenda';
+import CuentaRegresiva from './CuentaRegresiva.astro';
+interface Props {
+  /** Id del evento cuya página se está viendo: ahí la barra sobra. */
+  excepto?: string;
+}
+const { excepto } = Astro.props;
+const evento = agendaEventos.proximos().find((e) => e.id !== excepto);
+const lugar = evento?.venue.split(' · ')[0];
+---
+{evento && (
+  <aside class="event-bar" aria-label="Próximo evento" data-aviso-evento data-fecha={evento.fecha}>
+    <div class="event-bar-inner">
+      <span class="event-bar-tag">PRÓXIMO EVENTO</span>
+      <a class="event-bar-title" href={rutaEvento(evento)}>
+        <strong>{evento.titulo}</strong>
+        <span class="event-bar-when">{fechaCorta(evento.fecha)}{evento.hora && ` · ${horaLegible(evento.hora)}`} · {lugar}</span>
+      </a>
+      <CuentaRegresiva evento={evento} variante="compacta" />
+      <a class="event-bar-link" href={rutaEvento(evento)}>Ver detalles <span aria-hidden="true">→</span></a>
+    </div>
+  </aside>
+)}

@@ -1,0 +1,174 @@
+/* Próximo evento: contador (CuentaRegresiva), barra de aviso (AvisoProximoEvento) y boleto de la portada (BoletoProximoEvento) */
+@layer funcionalidades {
+  [data-aviso-evento][hidden],[data-sin-aviso][hidden],.countdown [hidden] {
+    display:none!important
+  }
+
+  /* Contador */
+  .countdown-date {
+    margin:0;
+    font:500 .875rem/1.5 var(--mono)
+  }
+  .countdown-units {
+    display:flex;
+    gap:8px
+  }
+  .countdown-value {
+    font-variant-numeric:tabular-nums
+  }
+  .countdown-started {
+    margin:0;
+    font-weight:700;
+    color:var(--yellow)
+  }
+  .countdown--grande .countdown-unit {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:10px 4px 8px;
+    border:1px solid #ffffff2e;
+    background:#0000004d
+  }
+  .countdown--grande .countdown-value {
+    font-size:clamp(1.5rem,2.4vw,2rem);
+    font-weight:900;
+    line-height:1;
+    letter-spacing:-.03em
+  }
+  .countdown--grande .countdown-label {
+    margin-top:6px;
+    font:.625rem/1 var(--mono);
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:#ffffffb3
+  }
+  .countdown--compacta .countdown-units {
+    gap:6px;
+    font:500 .8rem/1 var(--mono)
+  }
+  .countdown--compacta .countdown-unit {
+    display:inline-flex;
+    align-items:baseline;
+    gap:1px
+  }
+  .countdown--compacta .countdown-value {
+    font-weight:700
+  }
+  .countdown--compacta .countdown-label {
+    opacity:.8
+  }
+  .countdown--compacta .countdown-started,.countdown--compacta .countdown-date {
+    font-size:.8rem
+  }
+
+  /* Página del evento */
+  .event-detail-countdown {
+    max-width:420px;
+    margin:18px 0 6px
+  }
+
+  /* Barra de aviso arriba del encabezado */
+  .event-bar {
+    background:var(--accent);
+    color:white
+  }
+  .event-bar-inner {
+    @apply shell;
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:6px 18px;
+    min-height:44px;
+    padding-block:8px;
+    font-size:.85rem
+  }
+  .event-bar-tag {
+    font:600 .7rem/1 var(--mono);
+    letter-spacing:.1em;
+    padding:5px 8px;
+    border:1px solid #ffffff80;
+    border-radius:3px
+  }
+  .event-bar-title {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    gap:2px 10px;
+    color:white;
+    text-decoration:none
+  }
+  .event-bar-when {
+    opacity:.9
+  }
+  .event-bar .countdown {
+    margin-left:auto
+  }
+  .event-bar-link {
+    color:white;
+    font-weight:700;
+    white-space:nowrap
+  }
+  .event-bar-link:hover,.event-bar-title:hover strong {
+    text-decoration:underline
+  }
+
+  /* Boleto de la portada (mismo estilo que el boleto "Acceso a la escena") */
+  .event-ticket {
+    width:290px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    border:1px solid #f5c4c4;
+    background:#2b1313cc;
+    backdrop-filter:blur(10px);
+    padding:20px;
+    transform:rotate(4deg);
+    box-shadow:0 18px 40px #0009
+  }
+  .event-ticket-tag {
+    font:600 .7rem/1 var(--mono);
+    letter-spacing:.1em;
+    color:var(--yellow)
+  }
+  .event-ticket-title {
+    font-size:1.5rem;
+    line-height:1.05;
+    font-weight:900;
+    letter-spacing:-.04em;
+    margin-top:6px
+  }
+  .event-ticket-when {
+    font-weight:700
+  }
+  .event-ticket-when::first-letter {
+    text-transform:uppercase
+  }
+  .event-ticket-place {
+    font-size:.85rem;
+    color:#ffffffc7
+  }
+  .event-ticket .countdown {
+    margin-block:10px 4px;
+    padding-top:12px;
+    border-top:1px dashed #ffffff66
+  }
+  .event-ticket-link {
+    font:600 .8rem/1.4 var(--mono);
+    color:white;
+    align-self:flex-start
+  }
+
+  @media(max-width:767px) {
+    .event-bar-inner {
+      gap:6px 12px;
+      padding-block:10px
+    }
+    .event-bar-when {
+      font-size:.8rem
+    }
+    .event-bar .countdown {
+      margin-left:0
+    }
+  }
+}

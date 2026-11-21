@@ -1,0 +1,36 @@
+---
+// Contador hasta el inicio de un evento (hooks/useCuentaRegresiva.ts). Sin JavaScript muestra la fecha.
+import '../styles/cuenta-regresiva.css';
+import { formatearFecha, sitio } from '@/compartido';
+import type { Evento } from '../domain/Evento';
+import { horaLegible, inicioEvento } from '../helpers/cuentaRegresiva';
+interface Props {
+  evento: Evento;
+  /** grande: cuatro casillas (portada y página del evento); compacta: una línea (barra de aviso). */
+  variante?: 'grande' | 'compacta';
+}
+const { evento, variante = 'grande' } = Astro.props;
+const unidades = [
+  ['dias', 'días', 'd'],
+  ['horas', 'horas', 'h'],
+  ['minutos', 'min', 'm'],
+  ['segundos', 'seg', 's'],
+] as const;
+const hora = evento.hora ? ` · ${horaLegible(evento.hora)}` : '';
+---
+<div class:list={['countdown', `countdown--${variante}`]} data-cuenta-regresiva data-inicio={inicioEvento(evento, sitio.zonaHoraria)}>
+  <p class="countdown-date" data-cuenta-fecha>{formatearFecha(evento.fecha)}{hora}</p>
+  <div class="countdown-units" data-cuenta-unidades role="timer" hidden>
+    {unidades.map(([clave, etiqueta, corta]) => (
+      <span class="countdown-unit" aria-hidden="true">
+        <span class="countdown-value" data-unidad={clave}>--</span>
+        <span class="countdown-label">{variante === 'compacta' ? corta : etiqueta}</span>
+      </span>
+    ))}
+  </div>
+  <p class="countdown-started" data-cuenta-empezo hidden>¡Ya empezó! Te esperamos en {evento.venue.split(' · ')[0]}.</p>
+</div>
+<script>
+  import { useCuentaRegresiva } from '../hooks/useCuentaRegresiva';
+  useCuentaRegresiva();
+</script>

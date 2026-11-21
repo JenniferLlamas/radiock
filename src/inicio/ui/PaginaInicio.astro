@@ -3,12 +3,13 @@
 import { EstructuraSitio } from '@/compartido/ui';
 import { QueEsRadiock, HistoriaRadiock, PropositoRadiock, RaicesRadiock, ActividadesRadiock } from '@/radiock';
 import { ParticipaRadiock, LlamadoFinal, FormularioContacto, FormularioEspacios } from '@/contacto';
-import { EventosOrganizados } from '@/eventos';
+import { AvisoProximoEvento, EventosOrganizados } from '@/eventos';
 import { BandasLocales } from '@/bandas';
 import { ComunidadRadiock } from '@/comunidad';
 import PresentacionRadiock from './PresentacionRadiock.astro';
 ---
 <EstructuraSitio>
+  <AvisoProximoEvento slot="aviso" />
   <PresentacionRadiock />
   <QueEsRadiock />
   <HistoriaRadiock />

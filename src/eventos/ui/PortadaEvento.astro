@@ -2,6 +2,7 @@
 import '../styles/detalle-evento.css';
 import { medidasCartel, type EstadoEvento, type Evento } from '../domain/Evento';
 import { textosEvento } from '../helpers/textosEvento';
+import CuentaRegresiva from './CuentaRegresiva.astro';
 interface Props { evento: Evento; estado: EstadoEvento }
 const { evento, estado } = Astro.props;
 const textos = textosEvento(evento, estado);
@@ -19,6 +20,7 @@ const { ancho, alto } = medidasCartel(evento);
     <img src={evento.cartel} width={ancho} height={alto} alt={textos.altCartel} />
     <div>
       <span class="status" data-texto-finalizado={alFinalizar(finalizado.estado)}>{textos.estado}</span>
+      {estado === 'proximo' && <div class="event-detail-countdown" data-aviso-evento data-fecha={evento.fecha}><CuentaRegresiva evento={evento} /></div>}
       <h2>Música local.<br />Un encuentro real.</h2>
       <p>Una fecha para encontrarnos, descubrir nuevas propuestas y abrir espacio a la música original.</p>
       <dl>

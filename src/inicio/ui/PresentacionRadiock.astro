@@ -1,5 +1,8 @@
 ---
 import '../styles/presentacion.css';
+import { agendaEventos, BoletoProximoEvento } from '@/eventos';
+// Si hay un evento próximo, su boleto (con contador) ocupa el lugar del boleto "Acceso a la escena".
+const proximo = agendaEventos.proximos()[0];
 ---
 <section class="hero" id="inicio" aria-labelledby="hero-title">
   <div class="hero-photo">
@@ -24,7 +27,8 @@ import '../styles/presentacion.css';
     <a class="hero-collab" href="#registro-local">Tengo un espacio / Quiero colaborar <span aria-hidden="true">↗</span>
     </a>
   </div>
-  <div class="hero-ticket">
+  {proximo && <BoletoProximoEvento evento={proximo} class="hero-event-ticket" />}
+  <div class="hero-ticket" data-sin-aviso hidden={proximo !== undefined}>
     <span class="eyebrow">ACCESO A LA ESCENA</span>
     <strong>100%<br />ORIGINAL</strong>
     <span>DESDE LA RAÍZ.</span>

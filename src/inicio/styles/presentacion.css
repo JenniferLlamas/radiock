@@ -85,6 +85,13 @@
     color:#ccc;
     z-index:1
   }
+  /* Boleto del próximo evento (BoletoProximoEvento, de Eventos): mismo lugar que el boleto de la escena. */
+  .hero-event-ticket {
+    position:absolute;
+    right:7%;
+    bottom:110px;
+    z-index:1
+  }
   .hero-ticket {
     position:absolute;
     right:8%;
@@ -150,8 +157,19 @@
       right:5%;
       bottom:115px
     }
+    .hero-event-ticket {
+      right:4%;
+      bottom:95px;
+      width:260px
+    }
     .hero-photo {
       left:25%
+    }
+  }
+  /* En tableta el boleto taparía los botones; ahí basta la barra de aviso de arriba. */
+  @media(max-width:1099px) {
+    .hero .hero-event-ticket {
+      display:none
     }
   }
   @media(max-width:767px) {
@@ -198,7 +216,7 @@
     .hero-collab {
       font-size:.875rem
     }
-    .hero-ticket,.photo-credit {
+    .hero-ticket,.hero .hero-event-ticket,.photo-credit {
       display:none
     }
     .hero-bottom {

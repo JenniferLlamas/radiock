@@ -3,6 +3,7 @@ import { EstructuraSitio } from '@/compartido/ui';
 import type { Evento } from '../domain/Evento';
 import { agendaEventos } from '../services/agenda';
 import PortadaEvento from './PortadaEvento.astro';
+import AvisoProximoEvento from './AvisoProximoEvento.astro';
 import GaleriaEvento from './GaleriaEvento.astro';
 import { textosEvento } from '../helpers/textosEvento';
 interface Props { evento: Evento }
@@ -11,6 +12,7 @@ const estado = agendaEventos.estado(evento);
 const { tituloPagina, descripcion } = textosEvento(evento, estado);
 ---
 <EstructuraSitio title={tituloPagina} description={descripcion}>
+  <AvisoProximoEvento slot="aviso" excepto={evento.id} />
   <PortadaEvento evento={evento} estado={estado} />
   <GaleriaEvento evento={evento} oculta={estado === 'proximo'} />
 </EstructuraSitio>
