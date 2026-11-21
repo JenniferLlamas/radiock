@@ -74,14 +74,13 @@ test.describe('página de inicio', () => {
     });
   }
 
-  test('sedes: agradecen y enlazan a los Radiock Fest que recibieron', async ({ page }) => {
+  test('sedes: tarjetas con solo el logo, agradecimiento y enlace al formulario de locales', async ({ page }) => {
     await page.goto(URL_SITIO);
     const sedes = page.locator('#sedes');
-    await expect(sedes.getByRole('heading', { level: 2 })).toHaveText(/Espacios que le dieron\s*escenario a Radiock/);
-    const hops = sedes.locator('.venue-card').filter({ hasText: 'República de Hops' });
-    await expect(hops.getByText('GRACIAS POR RECIBIRNOS')).toBeAttached();
-    await expect(hops.getByRole('link')).toHaveText(['Vol. 1', 'Vol. 4']);
-    await expect(hops.getByRole('link', { name: 'Vol. 4' })).toHaveAttribute('href', '/eventos/radiock-fest-vol-4');
+    await expect(sedes.getByRole('heading', { level: 2 })).toHaveText(/Espacios que le dieron\s*escenario/);
+    const tarjetas = sedes.locator('.venue-card');
+    await expect(tarjetas.first().locator('img')).toHaveAttribute('alt', 'Logo de República de Hops (Pasaje Revolución, Zona Centro), sede de Radiock Fest Vol. 1 y Radiock Fest Vol. 4');
+    expect(await tarjetas.evaluateAll((ts) => ts.every((t) => t.children.length === 1 && t.textContent!.trim() === ''))).toBe(true);
     await expect(sedes.getByRole('link', { name: /Ofrecer mi espacio/ })).toHaveAttribute('href', '#registro-local');
   });
 });

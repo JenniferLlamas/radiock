@@ -1,25 +1,18 @@
 ---
+// Tarjeta de sede: solo el logo. El nombre, la ubicación y los eventos van en el texto alternativo.
 import '../styles/tarjeta-sede.css';
-import { agendaEventos, rutaEvento } from '@/eventos';
+import { agendaEventos } from '@/eventos';
 import type { Sede } from '../domain/Sede';
 interface Props {
   sede: Sede;
 }
 const { sede } = Astro.props;
-const eventos = sede.eventos.map((id) => agendaEventos.porId(id)).filter((evento) => evento !== undefined);
+const ediciones = sede.eventos
+  .map((id) => agendaEventos.porId(id)?.titulo)
+  .filter((titulo) => titulo !== undefined);
+const listaEdiciones = new Intl.ListFormat('es', { type: 'conjunction' }).format(ediciones);
+const alt = `Logo de ${sede.nombre} (${sede.ubicacion}), sede de ${listaEdiciones}`;
 ---
 <article class="venue-card" data-reveal>
-  <div class="venue-logo">
-    <img src={sede.logo} alt={`Logo de ${sede.nombre}`} width="320" height="200" loading="lazy" />
-  </div>
-  <div class="venue-copy">
-    <p class="venue-thanks">GRACIAS POR RECIBIRNOS</p>
-    <h3>{sede.nombre}</h3>
-    <p class="venue-place">{sede.ubicacion}</p>
-    <ul class="venue-editions" aria-label={`Radiock Fest en ${sede.nombre}`}>
-      {eventos.map((evento) => (
-        <li><a href={rutaEvento(evento)}>{evento.titulo.replace('Radiock Fest ', '')}</a></li>
-      ))}
-    </ul>
-  </div>
+  <img src={sede.logo} alt={alt} width="320" height="200" loading="lazy" />
 </article>

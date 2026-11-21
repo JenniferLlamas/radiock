@@ -11,10 +11,7 @@
     gap:20px 32px;
     margin-top:36px;
     padding:26px 28px;
-    border:1px solid #f5c4c455;
-    border-left:4px solid var(--accent);
-    border-radius:12px;
-    background:linear-gradient(100deg,#b71c1c26,#18181900 70%)
+    border:1px solid var(--line);
   }
   .venue-gratitude p {
     max-width:62ch;

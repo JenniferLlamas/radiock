@@ -1,79 +1,33 @@
-/* Tarjeta de sede: logo y agradecimiento con los Radiock Fest que recibió */
+/* Tarjeta de sede: solo el logo */
 @layer funcionalidades {
   .venue-card {
-    display:flex;
-    flex-direction:column;
-    border:1px solid var(--line);
-    border-radius:12px;
-    overflow:hidden;
-    background:var(--panel);
-    transition:border-color .2s,transform .2s
-  }
-  .venue-card:hover,.venue-card:focus-within {
-    border-color:#716d6d;
-    transform:translateY(-4px)
-  }
-  .venue-logo {
-    height:210px;
-    padding:28px;
+    height:240px;
+    padding:32px;
     display:flex;
     align-items:center;
     justify-content:center;
-    background:radial-gradient(circle at 50% 45%,#2a2526,#141415 75%)
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:radial-gradient(circle at 50% 45%,#2a2526,#141415 75%);
+    transition:border-color .2s,transform .2s
   }
-  .venue-logo img {
+  .venue-card:hover {
+    border-color:#716d6d;
+    transform:translateY(-4px)
+  }
+  .venue-card img {
     width:100%;
     height:100%;
     object-fit:contain
   }
-  .venue-copy {
-    flex:1;
-    padding:20px 22px 22px;
-    border-top:1px dashed var(--line)
-  }
-  .venue-thanks {
-    font:600 .7rem/1 var(--mono);
-    letter-spacing:.1em;
-    color:var(--yellow);
-    margin-bottom:10px
-  }
-  .venue-copy h3 {
-    font-size:1.25rem;
-    line-height:1.2
-  }
-  .venue-place {
-    margin-top:4px;
-    font-size:.875rem;
-    color:var(--muted)
-  }
-  .venue-editions {
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    margin-top:16px
-  }
-  .venue-editions a {
-    display:inline-block;
-    padding:5px 10px;
-    border:1px solid #f5c4c466;
-    border-radius:4px;
-    color:#ffe5e5;
-    font:500 .75rem/1.5 var(--mono);
-    text-decoration:none
-  }
-  .venue-editions a:hover {
-    background:var(--accent);
-    border-color:var(--accent);
-    color:#fff
-  }
   @media(max-width:767px) {
-    .venue-logo {
-      height:160px;
-      padding:20px
+    .venue-card {
+      height:180px;
+      padding:24px
     }
   }
   @media(prefers-reduced-motion:reduce) {
-    .venue-card:hover,.venue-card:focus-within {
+    .venue-card:hover {
       transform:none
     }
   }
