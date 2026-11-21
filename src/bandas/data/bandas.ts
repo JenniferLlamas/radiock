@@ -54,11 +54,6 @@ export const bandas: readonly Banda[] = [
     foto('eternika', 'eternika-1', 'Eternika tocando en vivo en Sci-Hop Brewing', 960, 960),
     foto('eternika', 'eternika-2', 'Guitarristas de Eternika en el escenario con luz roja', 1600, 1066),
   ] },
-  { id: 'bisonz', nombre: 'Bisonz', logo: '/bandas/bisonz/logo.png', redes: [], fotos: [] },
-  { id: '5to-tripulante', nombre: '5to Tripulante', logo: '/bandas/5to-tripulante/logo.png', redes: [], fotos: [
-    foto('5to-tripulante', '5to-tripulante-1', '5to Tripulante tocando en un escenario al aire libre', 1600, 1200),
-    foto('5to-tripulante', '5to-tripulante-2', '5to Tripulante en vivo frente a cortinas rojas', 960, 540),
-  ] },
   { id: 'volka', nombre: 'Volka', logo: '/bandas/volka/logo.png', redes: [], fotos: [
     foto('volka', 'volka-1', 'Integrantes de Volka posando en un bar', 1600, 1200),
   ] },
