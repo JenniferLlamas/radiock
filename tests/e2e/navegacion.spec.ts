@@ -6,7 +6,7 @@ test.describe('página de inicio', () => {
     await page.goto(URL_SITIO);
     await expect(page).toHaveTitle('Radiock | Música local. Escenarios reales.');
     await expect(page.locator('h1')).toHaveCount(1);
-    for (const id of ['inicio', 'radiock', 'eventos', 'bandas', 'comunidad', 'contacto']) {
+    for (const id of ['inicio', 'radiock', 'eventos', 'bandas', 'sedes', 'comunidad', 'contacto']) {
       await expect(page.locator(`#${id}`), `sección #${id}`).toBeAttached();
     }
     const desborde = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
@@ -50,23 +50,39 @@ test.describe('página de inicio', () => {
     await expect(page).toHaveURL(/#bandas$/);
   });
 
-  test('carrusel de bandas: flechas, estado anunciado y límite final', async ({ page, isMobile }) => {
-    test.skip(isMobile, 'en escritorio se ven 3 tarjetas a la vez y el estado es predecible');
+  for (const { seccion, tarjeta, singular, plural } of [
+    { seccion: 'bandas', tarjeta: '.artist', singular: 'bandas', plural: 'Bandas' },
+    { seccion: 'sedes', tarjeta: '.venue-card', singular: 'sedes', plural: 'Sedes' },
+  ]) {
+    test(`carrusel de ${seccion}: flechas, estado anunciado y límite final`, async ({ page, isMobile }) => {
+      test.skip(isMobile, 'en escritorio se ven 3 tarjetas a la vez y el estado es predecible');
+      await page.goto(URL_SITIO);
+      const carrusel = page.locator(`#${seccion} [data-carrusel]`);
+      await carrusel.scrollIntoViewIfNeeded();
+      const estado = carrusel.locator('[data-carrusel-estado]');
+      // El total sale de las tarjetas: la prueba sigue valiendo al agregar o quitar elementos.
+      const total = await carrusel.locator(tarjeta).count();
+      expect(total).toBeGreaterThan(3);
+      await expect(estado).toHaveText(`${plural} 1–3 de ${total}`);
+      await expect(page.getByRole('button', { name: `Ver ${singular} anteriores` })).toBeDisabled();
+      const siguientes = page.getByRole('button', { name: `Ver ${singular} siguientes` });
+      for (let primera = 2; primera <= total - 2; primera++) {
+        await siguientes.click();
+        await expect(estado).toHaveText(`${plural} ${primera}–${primera + 2} de ${total}`);
+      }
+      await expect(siguientes).toBeDisabled();
+    });
+  }
+
+  test('sedes: agradecen y enlazan a los Radiock Fest que recibieron', async ({ page }) => {
     await page.goto(URL_SITIO);
-    const carrusel = page.locator('#bandas [data-carrusel]');
-    await carrusel.scrollIntoViewIfNeeded();
-    const estado = carrusel.locator('[data-carrusel-estado]');
-    // El total sale de las tarjetas: la prueba sigue valiendo al agregar o quitar bandas.
-    const total = await carrusel.locator('.artist').count();
-    expect(total).toBeGreaterThan(3);
-    await expect(estado).toHaveText(`Bandas 1–3 de ${total}`);
-    await expect(page.getByRole('button', { name: 'Ver bandas anteriores' })).toBeDisabled();
-    const siguientes = page.getByRole('button', { name: 'Ver bandas siguientes' });
-    for (let primera = 2; primera <= total - 2; primera++) {
-      await siguientes.click();
-      await expect(estado).toHaveText(`Bandas ${primera}–${primera + 2} de ${total}`);
-    }
-    await expect(siguientes).toBeDisabled();
+    const sedes = page.locator('#sedes');
+    await expect(sedes.getByRole('heading', { level: 2 })).toHaveText(/Espacios que le dieron\s*escenario a Radiock/);
+    const hops = sedes.locator('.venue-card').filter({ hasText: 'República de Hops' });
+    await expect(hops.getByText('GRACIAS POR RECIBIRNOS')).toBeAttached();
+    await expect(hops.getByRole('link')).toHaveText(['Vol. 1', 'Vol. 4']);
+    await expect(hops.getByRole('link', { name: 'Vol. 4' })).toHaveAttribute('href', '/eventos/radiock-fest-vol-4');
+    await expect(sedes.getByRole('link', { name: /Ofrecer mi espacio/ })).toHaveAttribute('href', '#registro-local');
   });
 });
 

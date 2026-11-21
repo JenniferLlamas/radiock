@@ -1,4 +1,4 @@
-import { comportamientoDesplazamiento, consultaMovimientoReducido } from '@/compartido';
+import { comportamientoDesplazamiento, consultaMovimientoReducido } from '../helpers/preferencias';
 import { AvanceAutomatico } from '../helpers/AvanceAutomatico';
 import { ESPERA_DESPLAZAMIENTO_MS, TOLERANCIA_PX, UMBRAL_VISIBILIDAD } from '../constants/carrusel';
 

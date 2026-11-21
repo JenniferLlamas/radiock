@@ -10,5 +10,3 @@ export const INTERVALO_AVANCE_MS = 4000;
 /** Parte del carrusel que debe verse en pantalla para que avance solo. */
 export const UMBRAL_VISIBILIDAD = 0.25;
 
-/** Textos del estado anunciado: "Banda 2 de 4" / "Bandas 1–3 de 4". */
-export const ETIQUETAS_CARRUSEL_BANDAS = { singular: 'Banda', plural: 'Bandas' } as const;

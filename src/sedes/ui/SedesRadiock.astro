@@ -1,0 +1,38 @@
+---
+// Lugares que han prestado su espacio para un Radiock Fest, en carrusel, con un agradecimiento.
+import '../styles/sedes.css';
+import { directorioSedes } from '../services/directorio';
+import TarjetaSede from './TarjetaSede.astro';
+const sedes = directorioSedes.todos();
+---
+<section class="venues-section" id="sedes" aria-labelledby="venues-title">
+  <div class="shell">
+    <div class="section-heading" data-reveal>
+      <div>
+        <p class="eyebrow">07 / GRACIAS POR ABRIRNOS LA PUERTA</p>
+        <h2 id="venues-title">Espacios que le dieron<br />escenario a <span class="accent">Radiock.</span></h2>
+      </div>
+      <p>Sin un lugar no hay concierto. Estos espacios confiaron en la música local y nos prestaron su escenario, su sonido y su noche. A cada uno: gracias.</p>
+    </div>
+    <div class="venue-carousel" data-carrusel role="region" aria-roledescription="carrusel" aria-label="Sedes de Radiock">
+      <div class="carousel-track" id="venue-carousel-track" data-carrusel-pista tabindex="0" aria-label="Tarjetas de sedes. Usa las flechas para recorrerlas.">
+        {sedes.map((sede) => <TarjetaSede sede={sede} />)}
+      </div>
+      <div class="carousel-controls" data-carrusel-controles hidden>
+        <p class="carousel-status" data-carrusel-estado aria-live="polite" aria-atomic="true"></p>
+        <div class="carousel-buttons">
+          <button type="button" class="carousel-arrow" data-direccion="-1" aria-label="Ver sedes anteriores" aria-controls="venue-carousel-track">←</button>
+          <button type="button" class="carousel-arrow" data-direccion="1" aria-label="Ver sedes siguientes" aria-controls="venue-carousel-track">→</button>
+        </div>
+      </div>
+    </div>
+    <div class="venue-gratitude" data-reveal>
+      <p><strong>Gracias por creer en la escena.</strong> Cada Radiock Fest ha sido posible porque un espacio decidió abrir sus puertas a bandas que apenas empiezan.</p>
+      <a class="button-outline" href="#registro-local">Ofrecer mi espacio →</a>
+    </div>
+  </div>
+</section>
+<script>
+  import { useCarrusel } from '@/compartido/hooks';
+  useCarrusel(document.querySelector<HTMLElement>('#sedes [data-carrusel]'), { singular: 'Sede', plural: 'Sedes' });
+</script>

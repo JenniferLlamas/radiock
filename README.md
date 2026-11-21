@@ -21,12 +21,13 @@ src/
     helpers/textosEvento.ts      #   Títulos, descripción y textos derivados de cada evento
     services/agenda.ts           #   Composición: repositorio + reloj → agendaEventos
     styles/  ui/  index.ts
-  bandas/                        # Catálogo, tarjetas, carrusel y convocatoria
-    constants/carrusel.ts        #   Intervalo, tolerancias y etiquetas del carrusel
+  bandas/                        # Catálogo, tarjetas en carrusel y convocatoria
     data/bandas.ts  domain/Banda.ts
-    helpers/AvanceAutomatico.ts  #   Temporizador reutilizable
-    hooks/useCarrusel.ts         #   Carrusel accesible
     services/catalogo.ts         #   Composición: repositorio de bandas
+    styles/  ui/  index.ts
+  sedes/                         # Lugares que prestaron su espacio, en carrusel, con agradecimiento
+    data/sedes.ts  domain/Sede.ts
+    services/directorio.ts       #   Composición: repositorio de sedes
     styles/  ui/  index.ts
   contacto/                      # Participación, contacto y registro de bandas
     constants/                   #   archivos.ts (límites en MB), mensajes.ts (textos fijos)
@@ -40,13 +41,13 @@ src/
   radiock/                       # Historia y propósito: data/ domain/ helpers/ styles/ ui/ index.ts
   inicio/                        # Hero y composición de la landing: styles/ ui/ index.ts
   compartido/                    # Núcleo común
-    constants/                   #   sitio.ts (SEO, redes, zona horaria, urlRegistro), redesSociales, interfaz, fechas
+    constants/                   #   sitio.ts (SEO, redes, zona horaria, urlRegistro), redesSociales, interfaz, fechas, carrusel
     data/navegacion.ts           #   Enlaces del menú
     domain/                      #   Repositorio, EnlaceExterno, EnlaceNavegacion, FechaIso
-    helpers/                     #   fechas, numeros, redesSociales, rutas, preferencias
-    hooks/                       #   useMenuPrincipal, useAparicion
+    helpers/                     #   fechas, numeros, redesSociales, rutas, preferencias, AvanceAutomatico (temporizador del carrusel)
+    hooks/                       #   useMenuPrincipal, useAparicion, useCarrusel (carrusel accesible de bandas y sedes)
     services/                    #   RepositorioEnMemoria
-    styles/                      #   tailwind.css, componentes.mjs (shell, section, button), base.css, encabezado, pie y redes
+    styles/                      #   tailwind.css, componentes.mjs (shell, section, button), base.css, carrusel.css, encabezado, pie y redes
     ui/                          #   Documento, navegación, footer, lista de redes
     index.ts                     #   API pública en TypeScript puro (sin componentes)
   pages/                         # Rutas de Astro: / y /eventos/[id]
@@ -133,6 +134,7 @@ Patrones: **Repository** (`RepositorioEnMemoria`), **Facade/API pública** (`ind
 | `src/radiock/data/contenido.ts` | Pilares, actividades y pasos del proceso |
 | `src/eventos/data/eventos.ts` | Todos los eventos: fecha ISO, hora, venue, ciudad, bandas, cartel y miniatura |
 | `src/bandas/data/bandas.ts` | Nombre, logo, ciudad, género, redes y fotos de cada banda. Cada banda tiene su carpeta `public/bandas/<id>/` con `logo.png` (fondo transparente u oscuro, a lo más 640×400) y `fotos/<id>-<n>.webp` (hasta 1600 px) con su `<id>-<n>-mini.webp` (hasta 640 px). El carrusel usa el logo y la galería de Comunidad, las fotos. Los originales están en `originales/bandas/` y en la carpeta de eventos de OneDrive; git los ignora |
+| `src/sedes/data/sedes.ts` | Nombre, ubicación, logo y Radiock Fest que recibió cada lugar. Cada sede tiene su carpeta `public/sedes/<id>/` con `logo.webp` (fondo transparente, a lo más 640×400). Los originales están en `originales/sedes/`; git los ignora |
 | `src/comunidad/data/momentos.ts` | Fotografías destacadas, textos alternativos y pies de foto |
 | `src/comunidad/ui/GaleriaBandas.astro` | Galería con las fotos de todas las bandas: filtro por banda, "Ver más" y visor ampliado (`hooks/useGaleria.ts`). Sin JavaScript se ven todas y cada una abre su versión grande |
 | `src/contacto/data/camposPresentacion.ts` | Campos del formulario de presentación de bandas |
@@ -202,6 +204,7 @@ Herramientas de desarrollo: `@astrojs/check`, TypeScript 5.6.2 (modo estricto), 
 | --- | --- |
 | `src/**/*.test.ts` | Agenda de eventos (próximos y anteriores según la fecha), textos de cada evento, fechas y zona horaria, repositorio, validación de fotos, logos y canciones, mensaje para redes y helpers |
 | `src/bandas/data/bandas.test.ts` | Ids únicos, redes con `https`, logo y fotos (con miniatura, texto alternativo y medidas) en la carpeta de cada banda, y ningún archivo suelto en `public/bandas/` |
+| `src/sedes/data/sedes.test.ts` | Ids únicos, logo en la carpeta de cada sede, cada evento existe y se hizo en ese lugar, y todo evento realizado tiene su sede |
 | `backend/registro-locales/**/*.test.ts` | Backend de locales: fila en la pestaña `Locales` sin tocar Drive, obligatorios, longitudes, rechazo de archivos, fórmulas, campo trampa, límites por hora y por día, pausa, orden de carga, y que sus campos coinciden con los del sitio. Las imitaciones de Google de ambos backends están en `backend/pruebas/appsScriptFalso.ts` |
 | `backend/registro-bandas/**/*.test.ts` | Junto a cada módulo del backend. Todos los archivos del Apps Script se ejecutan juntos en Node con imitaciones de Drive y Hojas de cálculo: subcarpetas, filas, validaciones, contenido real de cada archivo (firmas), SVG con código o enlaces externos, campo trampa, límites de envío por hora y por día, pausa, fórmulas y nombres peligrosos. También comprueba que **sus límites coinciden con los del sitio**: si cambias uno y olvidas el otro, falla |
 | `tests/unit/arquitectura.test.ts` | Las reglas de capas y funcionalidades de este README. Si un import las rompe, indica el archivo y el import |
@@ -213,7 +216,7 @@ Herramientas de desarrollo: `@astrojs/check`, TypeScript 5.6.2 (modo estricto), 
 | `cuenta-regresiva.spec.ts` | Con el reloj simulado: barra y boleto con el tiempo que falta y avanzando cada segundo, "¡Ya empezó!" a la hora de inicio, ambos ocultos al día siguiente, y contador en la página del evento |
 | `agenda.spec.ts` | Con el reloj del navegador simulado: el evento sigue en próximos el mismo día, al día siguiente pasa al archivo (al final, en orden) y aparece el aviso; su página cambia a "Evento finalizado" |
 | `galeria.spec.ts` | Galería de bandas: 12 fotos iniciales, "Ver más", filtro por banda, visor con flechas y Escape |
-| `navegacion.spec.ts` | Secciones y un solo H1, sin desbordamiento horizontal, menú móvil (Escape, foco, cerrar al navegar), carrusel, página de cada evento con sus textos, redirección `/evento` |
+| `navegacion.spec.ts` | Secciones y un solo H1, sin desbordamiento horizontal, menú móvil (Escape, foco, cerrar al navegar), carruseles de bandas y sedes, agradecimiento de sedes con enlaces a sus eventos, página de cada evento con sus textos, redirección `/evento` |
 | `registro-mensaje.spec.ts` | Formulario sin backend: obligatorios, mensaje generado, copiar al portapapeles, ocultar al editar |
 | `registro-local.spec.ts` | Registro de locales: sección propia, enlaces que llevan a ella, envío solo al Web App de locales, obligatorios, error del backend y mensaje sin backend |
 | `registro-envio.spec.ts` | Registro con archivos: tres secciones, agregar por tandas, duplicados, máximos, quitar con foco, rechazos al agregar, arrastrar y soltar, vista previa de logos SVG y PNG, reproductor, tope de 30 MB, envío con los archivos byte a byte, error del backend con reintento, campo trampa, limpieza al registrar otra banda |

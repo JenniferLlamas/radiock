@@ -45,7 +45,7 @@ export const eventos: readonly Evento[] = [
     titulo: 'Radiock Fest Vol. 4',
     fecha: '2025-06-28',
     hora: '19:00',
-    venue: 'Republica de Hops · Pasaje Revolución',
+    venue: 'República de Hops · Pasaje Revolución',
     ciudad: 'Tijuana, B.C.',
     cartel: '/eventos/cartel-radiock-fest-vol-4.webp',
     miniatura: '/eventos/radiock-fest-vol-4.webp',

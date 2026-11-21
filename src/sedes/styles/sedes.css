@@ -1,0 +1,40 @@
+/* 07 / Sedes: sección y agradecimiento. El carrusel está en compartido (carrusel.css). */
+@layer funcionalidades {
+  .venues-section {
+    @apply section;
+    border-top:1px solid var(--line)
+  }
+  .venue-gratitude {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px 32px;
+    margin-top:36px;
+    padding:26px 28px;
+    border:1px solid #f5c4c455;
+    border-left:4px solid var(--accent);
+    border-radius:12px;
+    background:linear-gradient(100deg,#b71c1c26,#18181900 70%)
+  }
+  .venue-gratitude p {
+    max-width:62ch;
+    color:var(--muted);
+    line-height:1.65
+  }
+  .venue-gratitude strong {
+    display:block;
+    margin-bottom:4px;
+    font-size:1.2rem;
+    color:var(--ink)
+  }
+  .venue-gratitude .button-outline {
+    flex-shrink:0
+  }
+  @media(max-width:767px) {
+    .venue-gratitude {
+      flex-direction:column;
+      align-items:flex-start;
+      padding:22px 20px
+    }
+  }
+}

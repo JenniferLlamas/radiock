@@ -14,7 +14,7 @@ const bandas = catalogoBandas.todos();
       <p>Distintas voces. Una misma escena.<br />Conoce los proyectos que han tocado en los Radiock Fest.</p>
     </div>
     <div class="band-carousel" data-carrusel role="region" aria-roledescription="carrusel" aria-label="Bandas participantes">
-      <div class="artists" id="band-carousel-track" data-carrusel-pista tabindex="0" aria-label="Tarjetas de bandas. Usa las flechas para recorrerlas.">
+      <div class="carousel-track" id="band-carousel-track" data-carrusel-pista tabindex="0" aria-label="Tarjetas de bandas. Usa las flechas para recorrerlas.">
         {bandas.map((banda) => <TarjetaBanda banda={banda} />)}
       </div>
       <div class="carousel-controls" data-carrusel-controles hidden>
@@ -28,7 +28,6 @@ const bandas = catalogoBandas.todos();
   </div>
 </section>
 <script>
-  import { useCarrusel } from '../hooks/useCarrusel';
-  import { ETIQUETAS_CARRUSEL_BANDAS } from '../constants/carrusel';
-  useCarrusel(document.querySelector<HTMLElement>('#bandas [data-carrusel]'), ETIQUETAS_CARRUSEL_BANDAS);
+  import { useCarrusel } from '@/compartido/hooks';
+  useCarrusel(document.querySelector<HTMLElement>('#bandas [data-carrusel]'), { singular: 'Banda', plural: 'Bandas' });
 </script>
